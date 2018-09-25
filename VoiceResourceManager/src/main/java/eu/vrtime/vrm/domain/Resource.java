@@ -7,7 +7,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 import eu.vrtime.vrm.domain.shared.AbstractBaseEntity;
 import eu.vrtime.vrm.domain.shared.ResourceStatus;
@@ -19,7 +18,7 @@ public class Resource extends AbstractBaseEntity {
 	@JoinColumn(name = "parent")
 	private Softswitch parent;
 
-	@Column(name = "identifier", nullable = false, updatable = true)
+	@Column(name = "identifier", nullable = false, updatable = true, unique = true)
 	private String identifier;
 
 	@Column(name = "session_manager", nullable = false, updatable = true)
@@ -67,11 +66,15 @@ public class Resource extends AbstractBaseEntity {
 		this.status = status;
 	}
 
+	public String toStringOid() {
+		return oid.toString();
+	}
+
 	@Override
 	public String toString() {
-		return "Resource [parent=" + parent + ", identifier=" + identifier + ", sessionManager=" + sessionManager
-				+ ", status=" + status + ", oid=" + oid + ", createDate=" + createDate + ", lastModified="
-				+ lastModified + "]";
+		return "Resource [oid=" + toStringOid() + ", parent=" + parent.toStringOid() + ", identifier=" + identifier
+				+ ", sessionManager=" + sessionManager + ", status=" + status + ", oid=" + oid + ", createDate="
+				+ createDate + ", lastModified=" + lastModified + "]";
 	}
 
 	Resource() {

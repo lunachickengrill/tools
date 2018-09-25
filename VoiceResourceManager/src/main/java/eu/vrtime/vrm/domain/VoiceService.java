@@ -8,21 +8,29 @@ import javax.persistence.OneToOne;
 import eu.vrtime.vrm.domain.shared.AbstractBaseEntity;
 
 @Entity
-public class Service extends AbstractBaseEntity {
+public class VoiceService extends AbstractBaseEntity {
 
-	@Column(name = "service_id", nullable = false, updatable = true)
+	@Column(name = "service_id", nullable = false, updatable = true, unique = true)
 	private String serviceId;
 
-	@Column(name = "directory_number", nullable = false, updatable = true)
+	@Column(name = "customer_id", nullable = false, updatable = true, unique = false)
+	private String customerId;
+
+	@Column(name = "directory_number", nullable = false, updatable = true, unique = true)
 	private String directoryNumber;
 
 	@OneToOne
 	@JoinColumn(name = "resourceId")
 	public Resource resource;
 
-	public Service(String serviceId, String directoryNumber) {
+	public VoiceService(String serviceId, String customerId, String directoryNumber) {
 		this.serviceId = serviceId;
+		this.customerId = customerId;
 		this.directoryNumber = directoryNumber;
+	}
+
+	public Long getOid() {
+		return oid;
 	}
 
 	public String getServiceId() {
@@ -31,6 +39,14 @@ public class Service extends AbstractBaseEntity {
 
 	public void setServiceId(String serviceId) {
 		this.serviceId = serviceId;
+	}
+
+	public String getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
 	}
 
 	public String getDirectoryNumber() {
@@ -49,13 +65,17 @@ public class Service extends AbstractBaseEntity {
 		this.resource = resource;
 	}
 
-	@Override
-	public String toString() {
-		return "Service [serviceId=" + serviceId + ", directoryNumber=" + directoryNumber + ", resource=" + resource
-				+ ", oid=" + oid + ", createDate=" + createDate + ", lastModified=" + lastModified + "]";
+	public String toStringOid() {
+		return oid.toString();
 	}
 
-	Service() {
+	@Override
+	public String toString() {
+		return "VoiceService [oid=" + toStringOid() + ", serviceId=" + serviceId + ", customerId=" + customerId
+				+ ", directoryNumber=" + directoryNumber + ", resource=" + resource.toStringOid() + "]";
+	}
+
+	VoiceService() {
 
 	}
 

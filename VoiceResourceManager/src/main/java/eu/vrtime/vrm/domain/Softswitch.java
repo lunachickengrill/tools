@@ -28,13 +28,17 @@ public class Softswitch extends AbstractBaseEntity {
 	@Column(name = "description", nullable = true, updatable = true)
 	private String description;
 
-//	@OneToMany(mappedBy = "softswitch")
-//	private List<Resource> resources = new ArrayList<>();
+	@OneToMany(mappedBy = "parent")
+	private List<Resource> resources = new ArrayList<>();
 
 	public Softswitch(String switchId, String name, SoftswitchStatus status) {
 		this.switchId = switchId;
 		this.name = name;
 		this.status = status;
+	}
+
+	public Long getOid() {
+		return oid;
 	}
 
 	public String getSwitchId() {
@@ -75,6 +79,24 @@ public class Softswitch extends AbstractBaseEntity {
 
 	public Date getLastModified() {
 		return this.lastModified;
+	}
+
+	public String toStringOid() {
+		return oid.toString();
+	}
+
+	public List<Resource> getResources() {
+		return resources;
+	}
+
+	public void setResources(List<Resource> resourcess) {
+		this.resources = resources;
+	}
+
+	@Override
+	public String toString() {
+		return "Softswitch [oid=" + toStringOid() + ", switchId=" + switchId + ", name=" + name + ", status=" + status
+				+ ", description=" + description + "]";
 	}
 
 	Softswitch() {

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import eu.vrtime.vrm.domain.Softswitch;
 
 @Repository
-@Transactional
 public interface SoftswitchRepository extends JpaRepository<Softswitch, Long> {
 
 	public Optional<Softswitch> findByOid(Long oid);
