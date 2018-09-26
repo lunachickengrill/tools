@@ -6,6 +6,7 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import eu.vrtime.vrm.domain.Resource;
@@ -13,7 +14,6 @@ import eu.vrtime.vrm.domain.Softswitch;
 import eu.vrtime.vrm.domain.shared.ResourceStatus;
 
 @Repository
-@Transactional
 public interface ResourceRepository extends JpaRepository<Resource, Long> {
 
 	public Optional<Resource> findTopByStatusOrderByOid(ResourceStatus status);
@@ -30,8 +30,8 @@ public interface ResourceRepository extends JpaRepository<Resource, Long> {
 
 	public List<Resource> findByParent(Softswitch parent);
 
+	public long countByStatus(ResourceStatus status);
+	
 	public void flush();
-
-
 
 }
