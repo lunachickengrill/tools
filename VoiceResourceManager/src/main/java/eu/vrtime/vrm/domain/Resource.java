@@ -20,7 +20,7 @@ public class Resource extends AbstractBaseEntity {
 	private static final long serialVersionUID = 6150543763294953271L;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "sessionmanager", nullable = false, updatable = true, unique = false)
+	@JoinColumn(name = "FK_SESSIONMANAGER", nullable = false, updatable = true, unique = false)
 	private SessionManager sessionManager;
 
 	@Column(name = "identifier", nullable = false, updatable = true, unique = true)
@@ -29,8 +29,7 @@ public class Resource extends AbstractBaseEntity {
 	@Enumerated(EnumType.STRING)
 	private ResourceStatus status;
 
-	public Resource(SessionManager sessionManager, String identifier, ResourceStatus status) {
-		this.sessionManager = sessionManager;
+	public Resource(String identifier, ResourceStatus status) {
 		this.identifier = identifier;
 		this.status = status;
 	}

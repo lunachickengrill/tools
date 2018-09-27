@@ -1,7 +1,9 @@
 package eu.vrtime.vrm.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
@@ -24,7 +26,7 @@ public class VoiceService extends AbstractBaseEntity {
 	@Column(name = "directory_number", nullable = false, updatable = true, unique = true)
 	private String directoryNumber;
 
-	@OneToOne
+	@OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
 	@JoinColumn(name = "resourceId")
 	public Resource resource;
 

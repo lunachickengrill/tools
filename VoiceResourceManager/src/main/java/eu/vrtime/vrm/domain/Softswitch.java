@@ -6,11 +6,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+
+import org.hibernate.engine.internal.Cascade;
 
 import eu.vrtime.vrm.domain.shared.AbstractBaseEntity;
 import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
@@ -35,7 +39,7 @@ public class Softswitch extends AbstractBaseEntity {
 	@Column(name = "description", nullable = true, updatable = true, unique = false)
 	private String description;
 
-	@OneToMany(mappedBy = "softswitch")
+	@OneToMany(mappedBy = "softswitch", fetch = FetchType.LAZY, cascade=CascadeType.ALL)
 	private Set<SessionManager> sessionManagers = new HashSet<>();
 
 	public Softswitch(String switchId, String name, SoftswitchStatus status) {
@@ -93,6 +97,7 @@ public class Softswitch extends AbstractBaseEntity {
 	}
 
 	public void addSessionManager(SessionManager sessionManager) {
+		sessionManager.setSoftswitch(this);
 		this.sessionManagers.add(sessionManager);
 	}
 

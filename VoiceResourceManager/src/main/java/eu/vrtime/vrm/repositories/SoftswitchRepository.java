@@ -12,6 +12,8 @@ import eu.vrtime.vrm.domain.Softswitch;
 
 @Repository
 public interface SoftswitchRepository extends JpaRepository<Softswitch, Long> {
+	
+	public Optional<Softswitch> findBySwitchId(String switchId);
 
 	public Optional<Softswitch> findByOid(Long oid);
 

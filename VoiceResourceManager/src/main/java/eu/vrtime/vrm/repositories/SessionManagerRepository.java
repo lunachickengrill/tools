@@ -1,6 +1,7 @@
 package eu.vrtime.vrm.repositories;
 
 import java.util.Optional;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -11,11 +12,10 @@ import eu.vrtime.vrm.domain.SessionManager;
 import eu.vrtime.vrm.domain.Softswitch;
 
 @Repository
-@Transactional
 public interface SessionManagerRepository extends JpaRepository<SessionManager, Long>{
 	
-	public Optional<SessionManager> findBySmId(Integer smId);
+	public Optional<SessionManager> findBySmId(String smId);
 	
-	public Optional<SessionManager> findBySoftswitch(Softswitch softswitch);
+	public Set<SessionManager> findBySoftswitch(Softswitch softswitch);
 
 }

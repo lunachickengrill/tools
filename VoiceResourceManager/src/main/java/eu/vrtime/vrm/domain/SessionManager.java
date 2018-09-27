@@ -3,6 +3,7 @@ package eu.vrtime.vrm.domain;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -21,24 +22,25 @@ public class SessionManager extends AbstractBaseEntity {
 	private static final long serialVersionUID = -6648727384134852057L;
 
 	@Column(name = "sm_id", nullable = false, updatable = true, unique = true)
-	private Integer smId;
+	private String smId;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "softswitch", nullable=false, updatable = true, unique = false)
+	@JoinColumn(name = "FK_SOFTSWITCH", nullable = false, updatable = true, unique = false)
 	private Softswitch softswitch;
 
-	@OneToMany(mappedBy = "sessionManager")
+	@OneToMany(mappedBy = "sessionManager",fetch = FetchType.LAZY, cascade=CascadeType.ALL)
 	private Set<Resource> resources = new HashSet<>();
 
-	public SessionManager(Integer smId) {
+	public SessionManager(final String smId, final Softswitch softswitch) {
 		this.smId = smId;
+		this.softswitch = softswitch;
 	}
 
-	public Integer getSmId() {
+	public String getSmId() {
 		return smId;
 	}
 
-	public void setSmId(Integer smId) {
+	public void setSmId(String smId) {
 		this.smId = smId;
 	}
 
@@ -58,6 +60,11 @@ public class SessionManager extends AbstractBaseEntity {
 		this.resources = resources;
 	}
 	
+	public void addResource(Resource resource) {
+		resource.setSessionManager(this);
+		resources.add(resource);
+	}
+
 	public String toStringOid() {
 		return this.oid.toString();
 	}
