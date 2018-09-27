@@ -17,10 +17,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import eu.vrtime.vrm.VoiceResourceManagerApplication;
 import eu.vrtime.vrm.domain.Resource;
+import eu.vrtime.vrm.domain.SessionManager;
 import eu.vrtime.vrm.domain.Softswitch;
 import eu.vrtime.vrm.domain.VoiceService;
 import eu.vrtime.vrm.domain.shared.ResourceStatus;
 import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
+import eu.vrtime.vrm.repositories.SessionManagerRepository;
+import eu.vrtime.vrm.repositories.SoftswitchRepository;
 import eu.vrtime.vrm.service.BasicSoftswitchService;
 
 @RunWith(SpringRunner.class)
@@ -43,7 +46,14 @@ public class VoiceResourceManagerApplicationTests extends BaseTest {
 
 	@Autowired
 	private BasicSoftswitchService softswitchService;
+	
+	@Autowired
+	private SoftswitchRepository softswitchRepository;
+	
+	@Autowired
+	private SessionManagerRepository sessionManagerRepository;
 
+	
 	@Before
 	public void init() {
 
@@ -59,45 +69,39 @@ public class VoiceResourceManagerApplicationTests extends BaseTest {
 	}
 
 	@Test
-	public void createSoftswitch() {
+	public void createStructure() {
 
-		Softswitch dbSw = softswitchService.createSoftswitch(SWID_3, SWNAME_3, SWSTATUS_3);
+		Softswitch dbSw = softswitchService.createSoftswitch(SWID_1, SWNAME_1, SWSTATUS_1);
 		assertNotNull("softswitch not created", dbSw);
+		
+		SessionManager sm1 = new SessionManager(1);
+		SessionManager sm2 = new SessionManager(2);
+		
+		dbSw.addSessionManager(sm1);
+		dbSw.addSessionManager(sm2);
+		
+		sm1.setSoftswitch(dbSw);
+		sm2.setSoftswitch(dbSw);
+		
+
+		SessionManager dbSm1 = sessionManagerRepository.saveAndFlush(sm1);
+		SessionManager dbSm2 = sessionManagerRepository.saveAndFlush(sm2);
+		assertNotNull(dbSm1);
+		assertNotNull(dbSm2);
+		
+		dbSw = softswitchRepository.saveAndFlush(dbSw);
+		
+		Optional<SessionManager> dbSm = sessionManagerRepository.findBySmId(1);
+		assertNotNull(dbSm.get());
+		
+	
+		Set<Resource> resources = fillResources(dbSm.get());
+		
+		dbSm.get().setResources(resources);
+		
+
 	}
 
-	@Test
-	public void countResources() {
 
-		assertTrue(resourceRepository.count() > 0);
-
-	}
-
-	 @Test
-	 public void getFirstFreeResource() {
-	
-	 Optional<Resource> dbResource =
-	 resourceRepository.findTopByStatusOrderByOid(ResourceStatus.FREE);
-	 assertTrue(dbResource.isPresent());
-
-	 }
-
-	 @Test
-	 public void addService() {
-	
-	 VoiceService voice = new VoiceService("VOIP00001","99119911", "012334434");
-	 Optional<Resource> dbResource =
-	 resourceRepository.findTopByStatusOrderByOid(ResourceStatus.FREE);
-	 assertTrue(dbResource.isPresent());
-	
-	 Resource res = dbResource.get();
-	 res.setStatus(ResourceStatus.ALLOCATED);
-	 res = resourceRepository.save(res);
-	 voice.setResource(res);
-	 VoiceService dbService = serviceRepository.saveAndFlush(voice);
-	 assertTrue(dbService.getResource() != null);
-	 assertTrue(dbService.getResource().getStatus().equals(ResourceStatus.ALLOCATED));
-	 System.out.println(dbService.toString());
-	
-	 }
 
 }

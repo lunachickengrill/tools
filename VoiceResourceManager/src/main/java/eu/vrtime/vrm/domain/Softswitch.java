@@ -2,7 +2,9 @@ package eu.vrtime.vrm.domain;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,29 +18,30 @@ import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
 @Entity
 public class Softswitch extends AbstractBaseEntity {
 
-	@Column(name = "switch_id", nullable = false, updatable = false)
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3940445073324274980L;
+
+	@Column(name = "switch_id", nullable = false, updatable = false, unique = true)
 	private String switchId;
 
-	@Column(name = "name", nullable = false, updatable = true)
+	@Column(name = "name", nullable = false, updatable = true, unique = false)
 	private String name;
 
 	@Enumerated(EnumType.STRING)
 	private SoftswitchStatus status;
 
-	@Column(name = "description", nullable = true, updatable = true)
+	@Column(name = "description", nullable = true, updatable = true, unique = false)
 	private String description;
 
-	@OneToMany(mappedBy = "parent")
-	private List<Resource> resources = new ArrayList<>();
+	@OneToMany(mappedBy = "softswitch")
+	private Set<SessionManager> sessionManagers = new HashSet<>();
 
 	public Softswitch(String switchId, String name, SoftswitchStatus status) {
 		this.switchId = switchId;
 		this.name = name;
 		this.status = status;
-	}
-
-	public Long getOid() {
-		return oid;
 	}
 
 	public String getSwitchId() {
@@ -81,16 +84,20 @@ public class Softswitch extends AbstractBaseEntity {
 		return this.lastModified;
 	}
 
+	public Set<SessionManager> getSessionManagers() {
+		return sessionManagers;
+	}
+
+	public void setSessionManagers(Set<SessionManager> sessionManagers) {
+		this.sessionManagers = sessionManagers;
+	}
+
+	public void addSessionManager(SessionManager sessionManager) {
+		this.sessionManagers.add(sessionManager);
+	}
+
 	public String toStringOid() {
 		return oid.toString();
-	}
-
-	public List<Resource> getResources() {
-		return resources;
-	}
-
-	public void setResources(List<Resource> resourcess) {
-		this.resources = resources;
 	}
 
 	@Override

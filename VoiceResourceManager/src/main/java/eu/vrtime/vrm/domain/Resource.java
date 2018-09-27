@@ -14,23 +14,24 @@ import eu.vrtime.vrm.domain.shared.ResourceStatus;
 @Entity
 public class Resource extends AbstractBaseEntity {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6150543763294953271L;
+
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "parent")
-	private Softswitch parent;
+	@JoinColumn(name = "sessionmanager", nullable = false, updatable = true, unique = false)
+	private SessionManager sessionManager;
 
 	@Column(name = "identifier", nullable = false, updatable = true, unique = true)
 	private String identifier;
 
-	@Column(name = "session_manager", nullable = false, updatable = true)
-	private long sessionManager;
-
 	@Enumerated(EnumType.STRING)
 	private ResourceStatus status;
 
-	public Resource(final Softswitch parent, String identifier, long sessionManager, ResourceStatus status) {
-		this.parent = parent;
-		this.identifier = identifier;
+	public Resource(SessionManager sessionManager, String identifier, ResourceStatus status) {
 		this.sessionManager = sessionManager;
+		this.identifier = identifier;
 		this.status = status;
 	}
 
@@ -42,19 +43,11 @@ public class Resource extends AbstractBaseEntity {
 		this.identifier = identifier;
 	}
 
-	public Softswitch getParent() {
-		return parent;
-	}
-
-	public void setParent(Softswitch parent) {
-		this.parent = parent;
-	}
-
-	public long getSessionManager() {
+	public SessionManager getSessionManager() {
 		return sessionManager;
 	}
 
-	public void setSessionManager(long sessionManager) {
+	public void setSessionManager(SessionManager sessionManager) {
 		this.sessionManager = sessionManager;
 	}
 
@@ -72,9 +65,9 @@ public class Resource extends AbstractBaseEntity {
 
 	@Override
 	public String toString() {
-		return "Resource [oid=" + toStringOid() + ", parent=" + parent.toStringOid() + ", identifier=" + identifier
-				+ ", sessionManager=" + sessionManager + ", status=" + status + ", oid=" + oid + ", createDate="
-				+ createDate + ", lastModified=" + lastModified + "]";
+		return "Resource [oid=" + toStringOid() + ", identifier=" + identifier + ", sessionManager="
+				+ sessionManager.toStringOid() + ", status=" + status + ", oid=" + oid + ", createDate=" + createDate
+				+ ", lastModified=" + lastModified + "]";
 	}
 
 	Resource() {

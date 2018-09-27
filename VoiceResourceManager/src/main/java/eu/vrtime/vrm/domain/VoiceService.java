@@ -10,6 +10,11 @@ import eu.vrtime.vrm.domain.shared.AbstractBaseEntity;
 @Entity
 public class VoiceService extends AbstractBaseEntity {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6895257404688974719L;
+
 	@Column(name = "service_id", nullable = false, updatable = true, unique = true)
 	private String serviceId;
 
@@ -27,10 +32,6 @@ public class VoiceService extends AbstractBaseEntity {
 		this.serviceId = serviceId;
 		this.customerId = customerId;
 		this.directoryNumber = directoryNumber;
-	}
-
-	public Long getOid() {
-		return oid;
 	}
 
 	public String getServiceId() {

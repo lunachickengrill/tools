@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import eu.vrtime.vrm.domain.Resource;
+import eu.vrtime.vrm.domain.SessionManager;
 import eu.vrtime.vrm.domain.Softswitch;
 import eu.vrtime.vrm.domain.shared.ResourceStatus;
 
@@ -28,7 +29,7 @@ public interface ResourceRepository extends JpaRepository<Resource, Long> {
 
 	public List<Resource> findBySessionManager(long sessionManager);
 
-	public List<Resource> findByParent(Softswitch parent);
+	public List<Resource> findBySessionManager(SessionManager sessionManager);
 
 	public long countByStatus(ResourceStatus status);
 	

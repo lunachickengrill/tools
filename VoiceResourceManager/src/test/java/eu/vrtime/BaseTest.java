@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.vrtime.vrm.domain.Resource;
+import eu.vrtime.vrm.domain.SessionManager;
 import eu.vrtime.vrm.domain.Softswitch;
 import eu.vrtime.vrm.domain.shared.ResourceStatus;
 import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
@@ -31,20 +32,18 @@ public class BaseTest {
 	@Autowired
 	protected VoiceServiceRepository serviceRepository;
 
-
 	protected void deleteAll() {
 		serviceRepository.deleteAll();
 		resourceRepository.deleteAll();
 		switchRepository.deleteAll();
 	}
 
-
 	protected void fillSoftswitch() {
 		switchRepository.saveAndFlush(CS2K);
 		switchRepository.saveAndFlush(NGCP);
 	}
 
-	protected void fillLens() {
+	protected Set<Resource> fillResources(SessionManager sessionManager) {
 		String prefix = "SS ";
 		Integer end = 10;
 		Integer point = 0;
@@ -57,14 +56,11 @@ public class BaseTest {
 			len = prefix + len;
 			System.out.println(len);
 
-			cs2kResources.add(new Resource(CS2K, len, 1, ResourceStatus.FREE));
+			cs2kResources.add(new Resource(sessionManager, len, ResourceStatus.FREE));
 			point++;
 		}
 
-		for (Resource r : cs2kResources) {
-			resourceRepository.saveAndFlush(r);
-		}
-
+		return cs2kResources;
 	}
 
 	private static String padLeftZeros(String str, int n) {

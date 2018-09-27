@@ -1,5 +1,6 @@
 package eu.vrtime.vrm.domain.shared;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -17,7 +18,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class AbstractBaseEntity {
+public class AbstractBaseEntity implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6764265482164843304L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,5 +39,9 @@ public class AbstractBaseEntity {
 	@LastModifiedDate
 	@Temporal(TemporalType.TIMESTAMP)
 	protected Date lastModified;
+	
+	public Long getOid() {
+		return oid;
+	}
 
 }
