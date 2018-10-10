@@ -22,7 +22,6 @@ import eu.vrtime.vrm.repositories.SoftswitchRepository;
 import eu.vrtime.vrm.repositories.VoiceServiceRepository;
 
 @Service
-
 public class BasicInfrastructureServiceImpl implements BasicInfrastructureService {
 
 	private SoftswitchRepository switchRepository;
@@ -57,22 +56,24 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	public void addSessionManager(final String smId, final Softswitch softswitch) {
 		Long oid = softswitch.getOid();
 		Optional<Softswitch> dbSw = switchRepository.findById(oid);
-		if (dbSw.isPresent()) {
-			Softswitch sw = dbSw.get();
-			SessionManager sm = new SessionManager(smId, sw);
-			sessionManagerRepository.saveAndFlush(sm);
-
+		if (!dbSw.isPresent()) {
+			// TODO throw exception
 		}
+
+		Softswitch sw = dbSw.get();
+		SessionManager sm = new SessionManager(smId, sw);
+		sessionManagerRepository.saveAndFlush(sm);
 
 	}
 
 	@Override
 	@Transactional
-	public SessionManager getSuitableSessionManager() {
+	public SessionManager getSessionManagerWithMaxFreeResources() {
 
 		List<ResourceCountingResult> result = resourceRepository.queryResouces();
 		result.sort(Comparator.comparing(ResourceCountingResult::getCnt).reversed());
 		Optional<ResourceCountingResult> sm = result.stream().findFirst();
+
 		if (!sm.isPresent()) {
 			// TODO throw exception
 		}
@@ -85,38 +86,31 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	@Transactional
 	public void addResource(final String smId, final Resource resource) {
 		Optional<SessionManager> dbSm = sessionManagerRepository.findBySmId(smId);
-		if (dbSm.isPresent()) {
-			SessionManager sm = dbSm.get();
-			sm.addResource(resource);
-			resource.setSessionManager(sm);
-			resourceRepository.saveAndFlush(resource);
-		}
-	}
 
-	@Override
-	@Transactional
-	public void addVoiceService(final String resourceId, final VoiceService voiceService) {
-		Optional<Resource> dbResource = resourceRepository.findByIdentifier(resourceId);
-		if (dbResource.isPresent()) {
-			Resource r = dbResource.get();
-			voiceService.setResource(r);
-			serviceRepository.saveAndFlush(voiceService);
+		if (!dbSm.isPresent()) {
+			// TODO throw exception
 		}
+
+		SessionManager sm = dbSm.get();
+		sm.addResource(resource);
+		resource.setSessionManager(sm);
+		resourceRepository.saveAndFlush(resource);
 
 	}
 
+
 	@Override
 	@Transactional
-	public Resource getFirstAvailableResource(Softswitch softswitch) {
+	public Resource getFirstFreeeResourceBySessionManager(SessionManager sessionManager) {
+		Optional<Resource> r = resourceRepository.findTopByStatusAndSessionManagerOrderByOid(ResourceStatus.FREE,
+				sessionManager);
+
+		if (!r.isPresent()) {
+			// TODO throw exception
+		}
+
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	@Transactional
-	public void addAdditionalLineResource(String serviceId) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

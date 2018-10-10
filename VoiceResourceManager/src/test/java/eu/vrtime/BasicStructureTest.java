@@ -1,8 +1,5 @@
 package eu.vrtime;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Comparator;
@@ -14,24 +11,13 @@ import java.util.Set;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.internal.matchers.GreaterThan;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import eu.vrtime.vrm.VoiceResourceManagerApplication;
 import eu.vrtime.vrm.domain.Resource;
 import eu.vrtime.vrm.domain.SessionManager;
 import eu.vrtime.vrm.domain.Softswitch;
 import eu.vrtime.vrm.domain.VoiceService;
 import eu.vrtime.vrm.domain.shared.ResourceCountingResult;
 import eu.vrtime.vrm.domain.shared.ResourceStatus;
-import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
-import eu.vrtime.vrm.repositories.SessionManagerRepository;
-import eu.vrtime.vrm.repositories.SoftswitchRepository;
-import eu.vrtime.vrm.service.BasicInfrastructureService;
-
 
 public class BasicStructureTest extends BaseTest {
 
@@ -54,12 +40,12 @@ public class BasicStructureTest extends BaseTest {
 	@Test
 	public void testCreateStructure() {
 
-		domainService.addSoftswitch(SWID_1, SWNAME_1, SWSTATUS_1);
+		infraService.addSoftswitch(SWID_1, SWNAME_1, SWSTATUS_1);
 		Optional<Softswitch> dbSw = switchRepository.findBySwitchId(SWID_1);
 		assertTrue(dbSw.isPresent());
 
-		domainService.addSessionManager(SMID_1, dbSw.get());
-		domainService.addSessionManager(SMID_2, dbSw.get());
+		infraService.addSessionManager(SMID_1, dbSw.get());
+		infraService.addSessionManager(SMID_2, dbSw.get());
 
 		Optional<SessionManager> dbSm1 = sessionManagerRepository.findBySmId(SMID_1);
 		assertTrue(dbSm1.isPresent());
@@ -74,21 +60,18 @@ public class BasicStructureTest extends BaseTest {
 		assertTrue(resource.isPresent());
 
 		VoiceService voiceService = new VoiceService(SID_1, CUSTID_1, DN_1);
-		domainService.addVoiceService(resource.get().getIdentifier(), voiceService);
+		resourceService.allocateResourceForVoiceService(resource.get().getIdentifier(), voiceService);
 
 		Optional<VoiceService> dbService = serviceRepository.findByCustomerId(CUSTID_1);
 		assertTrue(dbService.isPresent());
-		
+
 		List<ResourceCountingResult> result = resourceRepository.queryResouces();
-		assertTrue(result.size()>0);
-		
+		assertTrue(result.size() > 0);
+
 		result.sort(Comparator.comparing(ResourceCountingResult::getCnt).reversed());
-		
+
 		result.stream().forEach(System.out::println);
 
 	}
-	
-	
-
 
 }

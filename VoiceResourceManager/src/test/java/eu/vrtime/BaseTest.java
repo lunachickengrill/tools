@@ -3,8 +3,6 @@ package eu.vrtime;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.transaction.Transactional;
-
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,15 +10,15 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import eu.vrtime.vrm.VoiceResourceManagerApplication;
 import eu.vrtime.vrm.domain.Resource;
-import eu.vrtime.vrm.domain.SessionManager;
 import eu.vrtime.vrm.domain.Softswitch;
 import eu.vrtime.vrm.domain.shared.ResourceStatus;
 import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
 import eu.vrtime.vrm.repositories.ResourceRepository;
 import eu.vrtime.vrm.repositories.SessionManagerRepository;
+import eu.vrtime.vrm.repositories.SoftswitchRepository;
 import eu.vrtime.vrm.repositories.VoiceServiceRepository;
 import eu.vrtime.vrm.service.BasicInfrastructureService;
-import eu.vrtime.vrm.repositories.SoftswitchRepository;
+import eu.vrtime.vrm.service.BasicResourceManagementService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = VoiceResourceManagerApplication.class)
@@ -61,7 +59,10 @@ public class BaseTest {
 	protected VoiceServiceRepository serviceRepository;
 
 	@Autowired
-	protected BasicInfrastructureService domainService;
+	protected BasicInfrastructureService infraService;
+	
+	@Autowired
+	protected BasicResourceManagementService resourceService;
 
 	protected void deleteAll() {
 		serviceRepository.deleteAll();
@@ -95,13 +96,13 @@ public class BaseTest {
 
 	public void generateResources() {
 		Set<Resource> resources1 = fillResources(10, 100);
-		resources1.stream().forEach(resource -> domainService.addResource(SMID_1, resource));
+		resources1.stream().forEach(resource -> infraService.addResource(SMID_1, resource));
 
 		Set<Resource> resources2 = fillResources(20, 100);
-		resources2.stream().forEach(resource -> domainService.addResource(SMID_2, resource));
+		resources2.stream().forEach(resource -> infraService.addResource(SMID_2, resource));
 
 		Set<Resource> resources3 = fillResources(30, 200);
-		resources3.stream().forEach(resource -> domainService.addResource(SMID_2, resource));
+		resources3.stream().forEach(resource -> infraService.addResource(SMID_2, resource));
 	}
 
 }

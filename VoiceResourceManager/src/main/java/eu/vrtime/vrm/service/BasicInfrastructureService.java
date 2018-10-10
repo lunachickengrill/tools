@@ -13,14 +13,10 @@ public interface BasicInfrastructureService {
 	public void addSessionManager(String smId, Softswitch softswitch);
 	
 	public void addResource(String smId,Resource resource);
-	
-	public void addVoiceService(String resourceId, VoiceService voiceService);
 
-	public SessionManager getSuitableSessionManager();
+	public SessionManager getSessionManagerWithMaxFreeResources();
 
-	public Resource getFirstAvailableResource(Softswitch softswitch);
-
-	public void addAdditionalLineResource(String serviceId);
+	public Resource getFirstFreeeResourceBySessionManager(SessionManager sessionManager);
 
 	public void lockResource(Resource resource);
 
