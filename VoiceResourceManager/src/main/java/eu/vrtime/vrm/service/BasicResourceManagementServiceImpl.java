@@ -43,6 +43,7 @@ public class BasicResourceManagementServiceImpl implements BasicResourceManageme
 	}
 
 	@Override
+	@Transactional
 	public void freeResouceForVoiceService() {
 		// TODO Auto-generated method stub
 
