@@ -5,8 +5,12 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
+import eu.vrtime.vrm.VoiceResourceManagerApplication;
 import eu.vrtime.vrm.domain.Resource;
 import eu.vrtime.vrm.domain.SessionManager;
 import eu.vrtime.vrm.domain.Softswitch;
@@ -15,9 +19,11 @@ import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
 import eu.vrtime.vrm.repositories.ResourceRepository;
 import eu.vrtime.vrm.repositories.SessionManagerRepository;
 import eu.vrtime.vrm.repositories.VoiceServiceRepository;
-import eu.vrtime.vrm.service.BasicDomainService;
+import eu.vrtime.vrm.service.BasicInfrastructureService;
 import eu.vrtime.vrm.repositories.SoftswitchRepository;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = VoiceResourceManagerApplication.class)
 public class BaseTest {
 
 	public static final String SWID_1 = "1";
@@ -55,7 +61,7 @@ public class BaseTest {
 	protected VoiceServiceRepository serviceRepository;
 
 	@Autowired
-	protected BasicDomainService domainService;
+	protected BasicInfrastructureService domainService;
 
 	protected void deleteAll() {
 		serviceRepository.deleteAll();
@@ -68,15 +74,14 @@ public class BaseTest {
 		switchRepository.saveAndFlush(NGCP);
 	}
 
-	protected Set<Resource> fillResources(Integer range) {
+	protected Set<Resource> fillResources(Integer range, Integer end) {
 		Set<Resource> cs2kResources = new HashSet<>();
 		String prefix = "SS ";
-       Integer end =  1022;
-       Integer start = 0;
-		while (start <= end) {
+		Integer start = 0;
+		while (start < end) {
 			String len = new String(start.toString());
 			len = padLeftZeros(len, 8);
-			len = prefix + " "+ range + " " + len;
+			len = prefix + " " + range + " " + len;
 			cs2kResources.add(new Resource(len, ResourceStatus.FREE));
 			start++;
 		}
@@ -86,6 +91,17 @@ public class BaseTest {
 
 	private static String padLeftZeros(String str, int n) {
 		return String.format("%1$" + n + "s", str).replace(' ', '0');
+	}
+
+	public void generateResources() {
+		Set<Resource> resources1 = fillResources(10, 100);
+		resources1.stream().forEach(resource -> domainService.addResource(SMID_1, resource));
+
+		Set<Resource> resources2 = fillResources(20, 100);
+		resources2.stream().forEach(resource -> domainService.addResource(SMID_2, resource));
+
+		Set<Resource> resources3 = fillResources(30, 200);
+		resources3.stream().forEach(resource -> domainService.addResource(SMID_2, resource));
 	}
 
 }

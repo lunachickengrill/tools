@@ -1,5 +1,7 @@
 package eu.vrtime.vrm.service;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -11,6 +13,7 @@ import eu.vrtime.vrm.domain.Resource;
 import eu.vrtime.vrm.domain.SessionManager;
 import eu.vrtime.vrm.domain.Softswitch;
 import eu.vrtime.vrm.domain.VoiceService;
+import eu.vrtime.vrm.domain.shared.ResourceCountingResult;
 import eu.vrtime.vrm.domain.shared.ResourceStatus;
 import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
 import eu.vrtime.vrm.repositories.ResourceRepository;
@@ -19,8 +22,8 @@ import eu.vrtime.vrm.repositories.SoftswitchRepository;
 import eu.vrtime.vrm.repositories.VoiceServiceRepository;
 
 @Service
-@Transactional
-public class BasicDomainServiceImpl implements BasicDomainService {
+
+public class BasicInfrastructureServiceImpl implements BasicInfrastructureService {
 
 	private SoftswitchRepository switchRepository;
 
@@ -31,7 +34,7 @@ public class BasicDomainServiceImpl implements BasicDomainService {
 	private VoiceServiceRepository serviceRepository;
 
 	@Autowired
-	public BasicDomainServiceImpl(final SoftswitchRepository switchRepository,
+	public BasicInfrastructureServiceImpl(final SoftswitchRepository switchRepository,
 			final SessionManagerRepository sessionManagerRepository, final ResourceRepository resourceRepository,
 			final VoiceServiceRepository serviceRepository) {
 		this.switchRepository = switchRepository;
@@ -42,6 +45,7 @@ public class BasicDomainServiceImpl implements BasicDomainService {
 	}
 
 	@Override
+	@Transactional
 	public void addSoftswitch(String switchId, String name, SoftswitchStatus status) {
 		Softswitch sw = new Softswitch(switchId, name, status);
 		switchRepository.saveAndFlush(sw);
@@ -49,6 +53,7 @@ public class BasicDomainServiceImpl implements BasicDomainService {
 	}
 
 	@Override
+	@Transactional
 	public void addSessionManager(final String smId, final Softswitch softswitch) {
 		Long oid = softswitch.getOid();
 		Optional<Softswitch> dbSw = switchRepository.findById(oid);
@@ -62,12 +67,22 @@ public class BasicDomainServiceImpl implements BasicDomainService {
 	}
 
 	@Override
-	public Softswitch getSuitableSoftswitch() {
-		Long count = resourceRepository.countByStatus(ResourceStatus.FREE);
-		return null;
+	@Transactional
+	public SessionManager getSuitableSessionManager() {
+
+		List<ResourceCountingResult> result = resourceRepository.queryResouces();
+		result.sort(Comparator.comparing(ResourceCountingResult::getCnt).reversed());
+		Optional<ResourceCountingResult> sm = result.stream().findFirst();
+		if (!sm.isPresent()) {
+			// TODO throw exception
+		}
+
+		return sm.get().getSessionManager();
+
 	}
 
 	@Override
+	@Transactional
 	public void addResource(final String smId, final Resource resource) {
 		Optional<SessionManager> dbSm = sessionManagerRepository.findBySmId(smId);
 		if (dbSm.isPresent()) {
@@ -79,6 +94,7 @@ public class BasicDomainServiceImpl implements BasicDomainService {
 	}
 
 	@Override
+	@Transactional
 	public void addVoiceService(final String resourceId, final VoiceService voiceService) {
 		Optional<Resource> dbResource = resourceRepository.findByIdentifier(resourceId);
 		if (dbResource.isPresent()) {
@@ -90,18 +106,21 @@ public class BasicDomainServiceImpl implements BasicDomainService {
 	}
 
 	@Override
+	@Transactional
 	public Resource getFirstAvailableResource(Softswitch softswitch) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
+	@Transactional
 	public void addAdditionalLineResource(String serviceId) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
+	@Transactional
 	public void lockResource(Resource resource) {
 		// TODO Auto-generated method stub
 

@@ -1,11 +1,12 @@
 package eu.vrtime.vrm.service;
 
 import eu.vrtime.vrm.domain.Resource;
+import eu.vrtime.vrm.domain.SessionManager;
 import eu.vrtime.vrm.domain.Softswitch;
 import eu.vrtime.vrm.domain.VoiceService;
 import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
 
-public interface BasicDomainService {
+public interface BasicInfrastructureService {
 
 	public void addSoftswitch(String switchId, String name, SoftswitchStatus status);
 	
@@ -15,7 +16,7 @@ public interface BasicDomainService {
 	
 	public void addVoiceService(String resourceId, VoiceService voiceService);
 
-	public Softswitch getSuitableSoftswitch();
+	public SessionManager getSuitableSessionManager();
 
 	public Resource getFirstAvailableResource(Softswitch softswitch);
 
