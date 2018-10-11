@@ -1,4 +1,4 @@
-package eu.vrtime.vrm.services;
+package eu.vrtime.vrm.infra.services;
 
 import java.util.Optional;
 
@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import eu.vrtime.vrm.domain.Resource;
 import eu.vrtime.vrm.domain.VoiceService;
-import eu.vrtime.vrm.repositories.ResourceRepository;
-import eu.vrtime.vrm.repositories.VoiceServiceRepository;
+import eu.vrtime.vrm.infra.repositories.ResourceRepository;
+import eu.vrtime.vrm.infra.repositories.VoiceServiceRepository;
 
 @Service
 public class BasicResourceManagementServiceImpl implements BasicResourceManagementService {

@@ -1,4 +1,4 @@
-package eu.vrtime.vrm.repositories;
+package eu.vrtime.vrm.infra.repositories;
 
 import java.util.Optional;
 import java.util.Set;

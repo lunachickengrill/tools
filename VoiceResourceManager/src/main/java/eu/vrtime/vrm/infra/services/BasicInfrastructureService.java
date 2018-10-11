@@ -1,4 +1,4 @@
-package eu.vrtime.vrm.services;
+package eu.vrtime.vrm.infra.services;
 
 import eu.vrtime.vrm.domain.Resource;
 import eu.vrtime.vrm.domain.SessionManager;

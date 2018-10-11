@@ -13,12 +13,12 @@ import eu.vrtime.vrm.domain.Resource;
 import eu.vrtime.vrm.domain.Softswitch;
 import eu.vrtime.vrm.domain.shared.ResourceStatus;
 import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
-import eu.vrtime.vrm.repositories.ResourceRepository;
-import eu.vrtime.vrm.repositories.SessionManagerRepository;
-import eu.vrtime.vrm.repositories.SoftswitchRepository;
-import eu.vrtime.vrm.repositories.VoiceServiceRepository;
-import eu.vrtime.vrm.services.BasicInfrastructureService;
-import eu.vrtime.vrm.services.BasicResourceManagementService;
+import eu.vrtime.vrm.infra.repositories.ResourceRepository;
+import eu.vrtime.vrm.infra.repositories.SessionManagerRepository;
+import eu.vrtime.vrm.infra.repositories.SoftswitchRepository;
+import eu.vrtime.vrm.infra.repositories.VoiceServiceRepository;
+import eu.vrtime.vrm.infra.services.BasicInfrastructureService;
+import eu.vrtime.vrm.infra.services.BasicResourceManagementService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = VoiceResourceManagerApplication.class)

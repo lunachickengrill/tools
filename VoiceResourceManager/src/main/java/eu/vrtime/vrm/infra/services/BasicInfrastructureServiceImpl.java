@@ -1,4 +1,4 @@
-package eu.vrtime.vrm.services;
+package eu.vrtime.vrm.infra.services;
 
 import java.util.Comparator;
 import java.util.List;
@@ -16,10 +16,10 @@ import eu.vrtime.vrm.domain.VoiceService;
 import eu.vrtime.vrm.domain.shared.ResourceCountingResult;
 import eu.vrtime.vrm.domain.shared.ResourceStatus;
 import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
-import eu.vrtime.vrm.repositories.ResourceRepository;
-import eu.vrtime.vrm.repositories.SessionManagerRepository;
-import eu.vrtime.vrm.repositories.SoftswitchRepository;
-import eu.vrtime.vrm.repositories.VoiceServiceRepository;
+import eu.vrtime.vrm.infra.repositories.ResourceRepository;
+import eu.vrtime.vrm.infra.repositories.SessionManagerRepository;
+import eu.vrtime.vrm.infra.repositories.SoftswitchRepository;
+import eu.vrtime.vrm.infra.repositories.VoiceServiceRepository;
 
 @Service
 public class BasicInfrastructureServiceImpl implements BasicInfrastructureService {
