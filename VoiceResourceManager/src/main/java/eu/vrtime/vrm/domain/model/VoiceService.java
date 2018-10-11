@@ -1,4 +1,4 @@
-package eu.vrtime.vrm.domain;
+package eu.vrtime.vrm.domain.model;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;

@@ -1,4 +1,4 @@
-package eu.vrtime.vrm.infra.services;
+package eu.vrtime.vrm.services;
 
 import java.util.Optional;
 
@@ -7,10 +7,11 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import eu.vrtime.vrm.domain.Resource;
-import eu.vrtime.vrm.domain.VoiceService;
-import eu.vrtime.vrm.infra.repositories.ResourceRepository;
-import eu.vrtime.vrm.infra.repositories.VoiceServiceRepository;
+import eu.vrtime.vrm.domain.model.Resource;
+import eu.vrtime.vrm.domain.model.VoiceService;
+import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
+import eu.vrtime.vrm.repositories.ResourceRepository;
+import eu.vrtime.vrm.repositories.VoiceServiceRepository;
 
 @Service
 public class BasicResourceManagementServiceImpl implements BasicResourceManagementService {
@@ -23,8 +24,8 @@ public class BasicResourceManagementServiceImpl implements BasicResourceManageme
 
 	@Override
 	@Transactional
-	public void allocateResourceForVoiceService(final String resourceId, final VoiceService voiceService) {
-		Optional<Resource> dbResource = resourceRepository.findByIdentifier(resourceId);
+	public void allocateResourceForVoiceService(final ResourceIdentifier identifier, final VoiceService voiceService) {
+		Optional<Resource> dbResource = resourceRepository.findByIdentifier(identifier);
 
 		if (!dbResource.isPresent()) {
 			// TODO throw exception

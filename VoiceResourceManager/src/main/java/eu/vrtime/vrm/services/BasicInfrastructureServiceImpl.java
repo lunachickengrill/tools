@@ -1,4 +1,4 @@
-package eu.vrtime.vrm.infra.services;
+package eu.vrtime.vrm.services;
 
 import java.util.Comparator;
 import java.util.List;
@@ -9,17 +9,17 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import eu.vrtime.vrm.domain.Resource;
-import eu.vrtime.vrm.domain.SessionManager;
-import eu.vrtime.vrm.domain.Softswitch;
-import eu.vrtime.vrm.domain.VoiceService;
+import eu.vrtime.vrm.domain.model.Resource;
+import eu.vrtime.vrm.domain.model.SessionManager;
+import eu.vrtime.vrm.domain.model.Softswitch;
+import eu.vrtime.vrm.domain.model.VoiceService;
 import eu.vrtime.vrm.domain.shared.ResourceCountingResult;
 import eu.vrtime.vrm.domain.shared.ResourceStatus;
 import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
-import eu.vrtime.vrm.infra.repositories.ResourceRepository;
-import eu.vrtime.vrm.infra.repositories.SessionManagerRepository;
-import eu.vrtime.vrm.infra.repositories.SoftswitchRepository;
-import eu.vrtime.vrm.infra.repositories.VoiceServiceRepository;
+import eu.vrtime.vrm.repositories.ResourceRepository;
+import eu.vrtime.vrm.repositories.SessionManagerRepository;
+import eu.vrtime.vrm.repositories.SoftswitchRepository;
+import eu.vrtime.vrm.repositories.VoiceServiceRepository;
 
 @Service
 public class BasicInfrastructureServiceImpl implements BasicInfrastructureService {

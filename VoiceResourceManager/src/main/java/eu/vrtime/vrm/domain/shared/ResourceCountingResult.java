@@ -2,7 +2,7 @@ package eu.vrtime.vrm.domain.shared;
 
 import java.io.Serializable;
 
-import eu.vrtime.vrm.domain.SessionManager;
+import eu.vrtime.vrm.domain.model.SessionManager;
 
 public class ResourceCountingResult implements Serializable {
 

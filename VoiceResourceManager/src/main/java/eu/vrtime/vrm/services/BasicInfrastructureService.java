@@ -1,9 +1,9 @@
-package eu.vrtime.vrm.infra.services;
+package eu.vrtime.vrm.services;
 
-import eu.vrtime.vrm.domain.Resource;
-import eu.vrtime.vrm.domain.SessionManager;
-import eu.vrtime.vrm.domain.Softswitch;
-import eu.vrtime.vrm.domain.VoiceService;
+import eu.vrtime.vrm.domain.model.Resource;
+import eu.vrtime.vrm.domain.model.SessionManager;
+import eu.vrtime.vrm.domain.model.Softswitch;
+import eu.vrtime.vrm.domain.model.VoiceService;
 import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
 
 public interface BasicInfrastructureService {

@@ -1,4 +1,4 @@
-package eu.vrtime.vrm.domain;
+package eu.vrtime.vrm.domain.model;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,19 +13,16 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.metamodel.IdentifiableType;
 
 import org.hibernate.engine.internal.Cascade;
 
 import eu.vrtime.vrm.domain.shared.AbstractBaseEntity;
+import eu.vrtime.vrm.domain.shared.Identity;
 import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
 
 @Entity
 public class Softswitch extends AbstractBaseEntity {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3940445073324274980L;
 
 	@Column(name = "switch_id", nullable = false, updatable = false, unique = true)
 	private String switchId;
@@ -39,7 +36,7 @@ public class Softswitch extends AbstractBaseEntity {
 	@Column(name = "description", nullable = true, updatable = true, unique = false)
 	private String description;
 
-	@OneToMany(mappedBy = "softswitch", fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	@OneToMany(mappedBy = "softswitch", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<SessionManager> sessionManagers = new HashSet<>();
 
 	public Softswitch(String switchId, String name, SoftswitchStatus status) {

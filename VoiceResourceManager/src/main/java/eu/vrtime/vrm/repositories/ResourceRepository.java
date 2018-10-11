@@ -1,4 +1,4 @@
-package eu.vrtime.vrm.infra.repositories;
+package eu.vrtime.vrm.repositories;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,9 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import eu.vrtime.vrm.domain.Resource;
-import eu.vrtime.vrm.domain.SessionManager;
+import eu.vrtime.vrm.domain.model.Resource;
+import eu.vrtime.vrm.domain.model.SessionManager;
 import eu.vrtime.vrm.domain.shared.ResourceCountingResult;
+import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
 import eu.vrtime.vrm.domain.shared.ResourceStatus;
 
 @Repository
@@ -19,7 +20,7 @@ public interface ResourceRepository extends JpaRepository<Resource, Long> {
 
 	public Optional<Resource> findByOid(Long oid);
 	
-	public Optional<Resource> findByIdentifier(String identifier);
+	public Optional<Resource> findByIdentifier(ResourceIdentifier identifier);
 
 	public void delete(Resource resource);
 

@@ -25,7 +25,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @EnableSpringDataWebSupport
 @EnableJpaAuditing
 public class PersistenceConfig {
-	private static final String[] ENTITY_PACKAGES = { "eu.vrtime.vrm.domain" };
+	private static final String[] ENTITY_PACKAGES = { "eu.vrtime.vrm.domain.model" };
 
 	/**
 	 * DataSource properties

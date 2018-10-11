@@ -9,16 +9,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import eu.vrtime.vrm.VoiceResourceManagerApplication;
-import eu.vrtime.vrm.domain.Resource;
-import eu.vrtime.vrm.domain.Softswitch;
+import eu.vrtime.vrm.domain.model.Resource;
+import eu.vrtime.vrm.domain.model.Softswitch;
+import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
 import eu.vrtime.vrm.domain.shared.ResourceStatus;
 import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
-import eu.vrtime.vrm.infra.repositories.ResourceRepository;
-import eu.vrtime.vrm.infra.repositories.SessionManagerRepository;
-import eu.vrtime.vrm.infra.repositories.SoftswitchRepository;
-import eu.vrtime.vrm.infra.repositories.VoiceServiceRepository;
-import eu.vrtime.vrm.infra.services.BasicInfrastructureService;
-import eu.vrtime.vrm.infra.services.BasicResourceManagementService;
+import eu.vrtime.vrm.repositories.ResourceRepository;
+import eu.vrtime.vrm.repositories.SessionManagerRepository;
+import eu.vrtime.vrm.repositories.SoftswitchRepository;
+import eu.vrtime.vrm.repositories.VoiceServiceRepository;
+import eu.vrtime.vrm.services.BasicInfrastructureService;
+import eu.vrtime.vrm.services.BasicResourceManagementService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = VoiceResourceManagerApplication.class)
@@ -83,7 +84,8 @@ public class BaseTest {
 			String len = new String(start.toString());
 			len = padLeftZeros(len, 8);
 			len = prefix + " " + range + " " + len;
-			cs2kResources.add(new Resource(len, ResourceStatus.FREE));
+			ResourceIdentifier ri = new ResourceIdentifier(len);
+			cs2kResources.add(new Resource(ri, ResourceStatus.FREE));
 			start++;
 		}
 

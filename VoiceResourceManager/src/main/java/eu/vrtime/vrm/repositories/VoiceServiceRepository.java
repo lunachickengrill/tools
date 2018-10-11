@@ -1,12 +1,12 @@
-package eu.vrtime.vrm.infra.repositories;
+package eu.vrtime.vrm.repositories;
 
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import eu.vrtime.vrm.domain.Resource;
-import eu.vrtime.vrm.domain.VoiceService;
+import eu.vrtime.vrm.domain.model.Resource;
+import eu.vrtime.vrm.domain.model.VoiceService;
 
 @Repository
 public interface VoiceServiceRepository extends JpaRepository<VoiceService, Long> {
