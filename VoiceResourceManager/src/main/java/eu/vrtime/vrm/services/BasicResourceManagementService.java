@@ -1,4 +1,4 @@
-package eu.vrtime.vrm.service;
+package eu.vrtime.vrm.services;
 
 import eu.vrtime.vrm.domain.VoiceService;
 

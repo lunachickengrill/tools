@@ -17,8 +17,8 @@ import eu.vrtime.vrm.repositories.ResourceRepository;
 import eu.vrtime.vrm.repositories.SessionManagerRepository;
 import eu.vrtime.vrm.repositories.SoftswitchRepository;
 import eu.vrtime.vrm.repositories.VoiceServiceRepository;
-import eu.vrtime.vrm.service.BasicInfrastructureService;
-import eu.vrtime.vrm.service.BasicResourceManagementService;
+import eu.vrtime.vrm.services.BasicInfrastructureService;
+import eu.vrtime.vrm.services.BasicResourceManagementService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = VoiceResourceManagerApplication.class)
