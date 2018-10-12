@@ -68,9 +68,6 @@ public class VoiceService extends AbstractBaseEntity {
 		this.resource = resource;
 	}
 
-	public String toStringOid() {
-		return oid.toString();
-	}
 
 	@Override
 	public String toString() {

@@ -18,7 +18,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class AbstractBaseEntity implements Identity<AbstractBaseEntity> {
+public class AbstractBaseEntity implements Serializable {
 
 	/**
 	 * 
@@ -43,26 +43,11 @@ public class AbstractBaseEntity implements Identity<AbstractBaseEntity> {
 	public Long getOid() {
 		return oid;
 	}
-
-	@Override
-	public boolean sameIdentityAs(AbstractBaseEntity other) {
-		return other != null && oid.equals(other.oid);
+	
+	public String toStringOid() {
+		return oid.toString();
 	}
 
-	@Override
-	public int hashCode() {
-		return oid.hashCode();
-	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null || getClass() != obj.getClass())
-			return false;
-		final AbstractBaseEntity other = (AbstractBaseEntity) obj;
-
-		return sameIdentityAs(other);
-	}
 
 }

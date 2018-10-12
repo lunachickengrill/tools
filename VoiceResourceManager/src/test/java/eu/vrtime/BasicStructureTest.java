@@ -1,5 +1,7 @@
 package eu.vrtime;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Comparator;
@@ -72,6 +74,14 @@ public class BasicStructureTest extends BaseTest {
 
 		result.stream().forEach(System.out::println);
 
+	}
+	
+	@Test
+	public void testGetOidPrePesist() {
+		
+		Softswitch sw = new Softswitch(SWID_2, SWNAME_2, SWSTATUS_2);
+		assertNull(sw.getOid());
+		
 	}
 
 }

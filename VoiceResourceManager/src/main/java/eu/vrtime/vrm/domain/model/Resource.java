@@ -61,10 +61,6 @@ public class Resource extends AbstractBaseEntity {
 		this.status = status;
 	}
 
-	public String toStringOid() {
-		return oid.toString();
-	}
-
 	@Override
 	public String toString() {
 		return "Resource [oid=" + toStringOid() + ", identifier=" + identifier.getIdentifier() + ", sessionManager="

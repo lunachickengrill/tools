@@ -98,9 +98,6 @@ public class Softswitch extends AbstractBaseEntity {
 		this.sessionManagers.add(sessionManager);
 	}
 
-	public String toStringOid() {
-		return oid.toString();
-	}
 
 	@Override
 	public String toString() {
