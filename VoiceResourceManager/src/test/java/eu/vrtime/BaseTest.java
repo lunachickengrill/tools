@@ -82,6 +82,7 @@ public class BaseTest {
 		Integer start = 0;
 		while (start < end) {
 			String len = new String(start.toString());
+			
 			len = padLeftZeros(len, 4);
 			len = prefix + " " + range + " " + len;
 			ResourceIdentifier ri = new ResourceIdentifier(len);

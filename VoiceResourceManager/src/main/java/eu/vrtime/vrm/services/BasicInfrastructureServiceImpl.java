@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,8 @@ import eu.vrtime.vrm.repositories.VoiceServiceRepository;
 
 @Service
 public class BasicInfrastructureServiceImpl implements BasicInfrastructureService {
+	
+	final Logger logger = LoggerFactory.getLogger(BasicInfrastructureServiceImpl.class);
 
 	private SoftswitchRepository switchRepository;
 
@@ -47,6 +51,7 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	@Transactional
 	public void addSoftswitch(String switchId, String name, SoftswitchStatus status) {
 		Softswitch sw = new Softswitch(switchId, name, status);
+		logger.debug(name +  " " + status);
 		switchRepository.saveAndFlush(sw);
 
 	}
