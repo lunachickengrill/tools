@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import eu.vrtime.vrm.domain.exceptions.SessionManagerNotFoundException;
 import eu.vrtime.vrm.domain.model.Resource;
 import eu.vrtime.vrm.domain.model.SessionManager;
 import eu.vrtime.vrm.domain.model.Softswitch;
@@ -45,15 +46,15 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 
 	@Override
 	@Transactional
-	public void addSoftswitch(String switchId, String name, SoftswitchStatus status) {
+	public Softswitch addSoftswitch(String switchId, String name, SoftswitchStatus status) {
 		Softswitch sw = new Softswitch(switchId, name, status);
-		switchRepository.saveAndFlush(sw);
+		return switchRepository.saveAndFlush(sw);
 
 	}
 
 	@Override
 	@Transactional
-	public void addSessionManager(final String smId, final Softswitch softswitch) {
+	public SessionManager addSessionManager(final String smId, final Softswitch softswitch) {
 		Long oid = softswitch.getOid();
 		Optional<Softswitch> dbSw = switchRepository.findById(oid);
 		if (!dbSw.isPresent()) {
@@ -62,7 +63,7 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 
 		Softswitch sw = dbSw.get();
 		SessionManager sm = new SessionManager(smId, sw);
-		sessionManagerRepository.saveAndFlush(sm);
+		return sessionManagerRepository.saveAndFlush(sm);
 
 	}
 
@@ -84,20 +85,16 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 
 	@Override
 	@Transactional
-	public void addResource(final String smId, final Resource resource) {
-		Optional<SessionManager> dbSm = sessionManagerRepository.findBySmId(smId);
+	public Resource addResource(final String smId, final Resource resource) {
+		SessionManager dbSm = sessionManagerRepository.findBySmId(smId)
+				.orElseThrow(SessionManagerNotFoundException::new);
 
-		if (!dbSm.isPresent()) {
-			// TODO throw exception
-		}
 
-		SessionManager sm = dbSm.get();
-		sm.addResource(resource);
-		resource.setSessionManager(sm);
-		resourceRepository.saveAndFlush(resource);
+		dbSm.addResource(resource);
+		resource.setSessionManager(dbSm);
+		return resourceRepository.saveAndFlush(resource);
 
 	}
-
 
 	@Override
 	@Transactional
