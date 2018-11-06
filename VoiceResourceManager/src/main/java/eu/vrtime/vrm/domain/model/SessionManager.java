@@ -65,10 +65,6 @@ public class SessionManager extends AbstractBaseEntity {
 		resources.add(resource);
 	}
 
-	public String toStringOid() {
-		return this.oid.toString();
-	}
-
 	@Override
 	public String toString() {
 		return "SessionManager [oid=" + toStringOid() + ", smId=" + smId + ", createDate=" + createDate
