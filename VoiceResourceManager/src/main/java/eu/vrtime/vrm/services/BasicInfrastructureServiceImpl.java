@@ -26,7 +26,7 @@ import eu.vrtime.vrm.repositories.VoiceServiceRepository;
 
 @Service
 public class BasicInfrastructureServiceImpl implements BasicInfrastructureService {
-	
+
 	final Logger logger = LoggerFactory.getLogger(BasicInfrastructureServiceImpl.class);
 
 	private SoftswitchRepository switchRepository;
@@ -52,12 +52,8 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	@Transactional
 	public Softswitch addSoftswitch(String switchId, String name, SoftswitchStatus status) {
 		Softswitch sw = new Softswitch(switchId, name, status);
-<<<<<<< HEAD
+
 		return switchRepository.saveAndFlush(sw);
-=======
-		logger.debug(name +  " " + status);
-		switchRepository.saveAndFlush(sw);
->>>>>>> branch 'master' of https://github.com/lunachickengrill/JavaStuff.git
 
 	}
 
@@ -97,7 +93,6 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	public Resource addResource(final String smId, final Resource resource) {
 		SessionManager dbSm = sessionManagerRepository.findBySmId(smId)
 				.orElseThrow(SessionManagerNotFoundException::new);
-
 
 		dbSm.addResource(resource);
 		resource.setSessionManager(dbSm);
