@@ -10,10 +10,12 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import eu.vrtime.vrm.domain.shared.AbstractBaseEntity;
 
 @Entity
+@Table(name="T_SESSIONMANAGER")
 public class SessionManager extends AbstractBaseEntity {
 
 	/**

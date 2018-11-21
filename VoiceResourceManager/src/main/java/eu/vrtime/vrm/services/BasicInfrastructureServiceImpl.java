@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import eu.vrtime.vrm.domain.exceptions.SessionManagerNotFoundException;
+import eu.vrtime.vrm.domain.exceptions.DataNotFoundException;
 import eu.vrtime.vrm.domain.model.Resource;
 import eu.vrtime.vrm.domain.model.SessionManager;
 import eu.vrtime.vrm.domain.model.Softswitch;
@@ -52,9 +52,7 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	@Transactional
 	public Softswitch addSoftswitch(String switchId, String name, SoftswitchStatus status) {
 		Softswitch sw = new Softswitch(switchId, name, status);
-
 		return switchRepository.saveAndFlush(sw);
-
 	}
 
 	@Override
@@ -62,10 +60,6 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	public SessionManager addSessionManager(final String smId, final Softswitch softswitch) {
 		Long oid = softswitch.getOid();
 		Optional<Softswitch> dbSw = switchRepository.findById(oid);
-		if (!dbSw.isPresent()) {
-			// TODO throw exception
-		}
-
 		Softswitch sw = dbSw.get();
 		SessionManager sm = new SessionManager(smId, sw);
 		return sessionManagerRepository.saveAndFlush(sm);
@@ -79,11 +73,6 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 		List<ResourceCountingResult> result = resourceRepository.queryResouces();
 		result.sort(Comparator.comparing(ResourceCountingResult::getCnt).reversed());
 		Optional<ResourceCountingResult> sm = result.stream().findFirst();
-
-		if (!sm.isPresent()) {
-			// TODO throw exception
-		}
-
 		return sm.get().getSessionManager();
 
 	}
@@ -92,7 +81,7 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	@Transactional
 	public Resource addResource(final String smId, final Resource resource) {
 		SessionManager dbSm = sessionManagerRepository.findBySmId(smId)
-				.orElseThrow(SessionManagerNotFoundException::new);
+				.orElseThrow(DataNotFoundException::new);
 
 		dbSm.addResource(resource);
 		resource.setSessionManager(dbSm);
@@ -103,15 +92,9 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	@Override
 	@Transactional
 	public Resource getFirstFreeeResourceBySessionManager(SessionManager sessionManager) {
-		Optional<Resource> r = resourceRepository.findTopByStatusAndSessionManagerOrderByOid(ResourceStatus.FREE,
+		Optional<Resource> res = resourceRepository.findTopByStatusAndSessionManagerOrderByOid(ResourceStatus.FREE,
 				sessionManager);
-
-		if (!r.isPresent()) {
-			// TODO throw exception
-		}
-
-		// TODO Auto-generated method stub
-		return null;
+		return res.get();
 	}
 
 	@Override

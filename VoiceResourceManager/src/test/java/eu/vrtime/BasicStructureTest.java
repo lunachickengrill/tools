@@ -12,6 +12,7 @@ import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import eu.vrtime.vrm.domain.model.Resource;
@@ -24,7 +25,8 @@ import eu.vrtime.vrm.domain.shared.ResourceStatus;
 public class BasicStructureTest extends BaseTest {
 
 	public static final Set<Resource> cs2kResources = new HashSet<>();
-
+	
+	
 	@Before
 	public void init() {
 
@@ -62,7 +64,7 @@ public class BasicStructureTest extends BaseTest {
 		assertTrue(resource.isPresent());
 
 		VoiceService voiceService = new VoiceService(SID_1, CUSTID_1, DN_1);
-		resourceService.allocateResourceForVoiceService(resource.get().getIdentifier(), voiceService);
+		resourceService.allocateResourceForVoiceService(resource.get(), voiceService);
 
 		Optional<VoiceService> dbService = serviceRepository.findByCustomerId(CUSTID_1);
 		assertTrue(dbService.isPresent());
@@ -72,16 +74,10 @@ public class BasicStructureTest extends BaseTest {
 
 		result.sort(Comparator.comparing(ResourceCountingResult::getCnt).reversed());
 
-		result.stream().forEach(System.out::println);
+//		result.stream().forEach(System.out::println);
 
 	}
 	
-	@Test
-	public void testGetOidPrePesist() {
-		
-		Softswitch sw = new Softswitch(SWID_2, SWNAME_2, SWSTATUS_2);
-		assertNull(sw.getOid());
-		
-	}
+
 
 }

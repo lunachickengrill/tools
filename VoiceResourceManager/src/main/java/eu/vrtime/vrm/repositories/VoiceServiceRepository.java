@@ -18,6 +18,8 @@ public interface VoiceServiceRepository extends JpaRepository<VoiceService, Long
 	public Optional<VoiceService> findByDirectoryNumber(String directoryNumber);
 
 	public Optional<VoiceService> findByCustomerId(String customerId);
+	
+	public Optional<VoiceService> findByResource(Resource resource);
 
 	public void delete(VoiceService service);
 

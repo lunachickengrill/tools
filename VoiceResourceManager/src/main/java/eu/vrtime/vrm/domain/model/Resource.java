@@ -8,12 +8,14 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import eu.vrtime.vrm.domain.shared.AbstractBaseEntity;
 import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
 import eu.vrtime.vrm.domain.shared.ResourceStatus;
 
 @Entity
+@Table(name="T_RESOURCE")
 public class Resource extends AbstractBaseEntity {
 
 	/**

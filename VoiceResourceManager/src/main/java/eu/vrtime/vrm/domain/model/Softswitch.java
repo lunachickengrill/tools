@@ -13,6 +13,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.metamodel.IdentifiableType;
 
 import org.hibernate.engine.internal.Cascade;
@@ -22,6 +23,7 @@ import eu.vrtime.vrm.domain.shared.Identity;
 import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
 
 @Entity
+@Table(name="T_SOFTSWITCH")
 public class Softswitch extends AbstractBaseEntity {
 
 	@Column(name = "switch_id", nullable = false, updatable = false, unique = true)

@@ -6,10 +6,12 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import eu.vrtime.vrm.domain.shared.AbstractBaseEntity;
 
 @Entity
+@Table(name="T_VOICESERVICE")
 public class VoiceService extends AbstractBaseEntity {
 
 	/**
@@ -67,7 +69,6 @@ public class VoiceService extends AbstractBaseEntity {
 	public void setResource(Resource resource) {
 		this.resource = resource;
 	}
-
 
 	@Override
 	public String toString() {
