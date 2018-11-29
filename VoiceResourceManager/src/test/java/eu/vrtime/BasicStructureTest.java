@@ -47,11 +47,14 @@ public class BasicStructureTest extends BaseTest {
 		
 		Softswitch sw = new Softswitch(SWID_1, SWNAME_1, SWSTATUS_1);
 		Softswitch dbSW = switchRepository.saveAndFlush(sw);
-		assertNotNull(dbSW.hashCode());
+		assertNotNull(dbSW);
 		
 		SessionManager sm = new SessionManager(SMID_1, dbSW);
 		dbSW.addSessionManager(sm);
 		dbSW = switchRepository.saveAndFlush(dbSW);
+		assertTrue(dbSW.getSessionManagers().size()>0);
+		
+
 		
 		
 

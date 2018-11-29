@@ -112,7 +112,7 @@ public class Softswitch extends AbstractBaseEntity {
 
 	@Override
 	public int hashCode() {
-		return oid.hashCode();
+		return 31;
 	}
 
 	@Override

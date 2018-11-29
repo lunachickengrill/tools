@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import eu.vrtime.vrm.domain.shared.AbstractBaseEntity;
 
 @Entity
-@Table(name="T_VOICESERVICE")
+@Table(name = "T_VOICESERVICE")
 public class VoiceService extends AbstractBaseEntity {
 
 	/**
@@ -28,7 +28,7 @@ public class VoiceService extends AbstractBaseEntity {
 	@Column(name = "directory_number", nullable = false, updatable = true, unique = true)
 	private String directoryNumber;
 
-	@OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "resourceId")
 	public Resource resource;
 
@@ -68,6 +68,20 @@ public class VoiceService extends AbstractBaseEntity {
 
 	public void setResource(Resource resource) {
 		this.resource = resource;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (!(o instanceof VoiceService))
+			return false;
+		return oid != null && oid.equals(((VoiceService) o).oid);
+	}
+
+	@Override
+	public int hashCode() {
+		return 31;
 	}
 
 	@Override
