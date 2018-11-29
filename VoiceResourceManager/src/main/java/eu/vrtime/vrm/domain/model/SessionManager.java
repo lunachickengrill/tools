@@ -15,7 +15,7 @@ import javax.persistence.Table;
 import eu.vrtime.vrm.domain.shared.AbstractBaseEntity;
 
 @Entity
-@Table(name="T_SESSIONMANAGER")
+@Table(name = "T_SESSIONMANAGER")
 public class SessionManager extends AbstractBaseEntity {
 
 	/**
@@ -26,11 +26,11 @@ public class SessionManager extends AbstractBaseEntity {
 	@Column(name = "sm_id", nullable = false, updatable = true, unique = true)
 	private String smId;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "FK_SOFTSWITCH", nullable = false, updatable = true, unique = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "FK_SOFTSWITCH")
 	private Softswitch softswitch;
 
-	@OneToMany(mappedBy = "sessionManager",fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	@OneToMany(mappedBy = "sessionManager", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Resource> resources = new HashSet<>();
 
 	public SessionManager(final String smId, final Softswitch softswitch) {
@@ -61,10 +61,29 @@ public class SessionManager extends AbstractBaseEntity {
 	public void setResources(Set<Resource> resources) {
 		this.resources = resources;
 	}
-	
+
 	public void addResource(Resource resource) {
 		resource.setSessionManager(this);
 		resources.add(resource);
+	}
+
+	public void removeResource(Resource resource) {
+		resources.remove(resource);
+		resource.setSessionManager(null);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (!(o instanceof SessionManager))
+			return false;
+		return oid != null && oid.equals(((SessionManager) o).oid);
+	}
+
+	@Override
+	public int hashCode() {
+		return oid.hashCode();
 	}
 
 	@Override

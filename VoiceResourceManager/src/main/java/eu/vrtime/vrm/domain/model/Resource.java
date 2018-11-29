@@ -15,7 +15,7 @@ import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
 import eu.vrtime.vrm.domain.shared.ResourceStatus;
 
 @Entity
-@Table(name="T_RESOURCE")
+@Table(name = "T_RESOURCE")
 public class Resource extends AbstractBaseEntity {
 
 	/**
@@ -23,8 +23,8 @@ public class Resource extends AbstractBaseEntity {
 	 */
 	private static final long serialVersionUID = 6150543763294953271L;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "FK_SESSIONMANAGER", nullable = false, updatable = true, unique = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "FK_SESSIONMANAGER")
 	private SessionManager sessionManager;
 
 	@Embedded
@@ -61,6 +61,20 @@ public class Resource extends AbstractBaseEntity {
 
 	public void setStatus(ResourceStatus status) {
 		this.status = status;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (!(o instanceof Resource))
+			return true;
+		return oid != null && oid.equals(((Resource) o).oid);
+	}
+
+	@Override
+	public int hashCode() {
+		return oid.hashCode();
 	}
 
 	@Override
