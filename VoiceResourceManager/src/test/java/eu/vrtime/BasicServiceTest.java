@@ -33,7 +33,7 @@ public class BasicServiceTest extends BaseTest {
 	@Before
 	public void init() {
 		deleteAll();
-		createTestData();
+//		createTestData();
 	}
 
 	@Test
