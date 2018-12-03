@@ -38,7 +38,7 @@ public class Softswitch extends AbstractBaseEntity {
 	@Column(name = "description", nullable = true, updatable = true, unique = false)
 	private String description;
 
-	@OneToMany(mappedBy = "softswitch", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "softswitch", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
 	private Set<SessionManager> sessionManagers = new HashSet<>();
 
 	public Softswitch(String switchId, String name, SoftswitchStatus status) {

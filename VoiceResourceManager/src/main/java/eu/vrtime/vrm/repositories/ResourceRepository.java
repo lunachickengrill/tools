@@ -35,7 +35,12 @@ public interface ResourceRepository extends JpaRepository<Resource, Long> {
 
 	public void flush();
 
-	@Query(value = "select new eu.vrtime.vrm.domain.shared.ResourceCountingResult(r.sessionManager as sessionManager, count(r) as cnt) from Resource r where r.status ='FREE' group by r.sessionManager order by count(*) desc")
+//	@Query(value = "select new eu.vrtime.vrm.domain.shared.ResourceCountingResult(r.sessionManager as sessionManager, count(r) as cnt) from Resource r where r.status ='FREE' group by r.sessionManager order by count(*) desc")
+//	public List<ResourceCountingResult> queryResouces();
+	
+	
+	// added join on softswitch with condition status=ONLINE
+	@Query(value = "select new eu.vrtime.vrm.domain.shared.ResourceCountingResult(r.sessionManager as sessionManager, count(r) as cnt) from Resource r, SessionManager s, Softswitch w where r.sessionManager=s.oid and s.softswitch=w.oid and r.status ='FREE' and w.status='ONLINE' group by r.sessionManager order by count(*) desc")
 	public List<ResourceCountingResult> queryResouces();
 
 }

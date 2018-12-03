@@ -59,13 +59,18 @@ public class SessionManager extends AbstractBaseEntity {
 	}
 
 	public void setResources(Set<Resource> resources) {
-		this.resources = resources;
+		for (Resource r : resources) {
+			r.setSessionManager(this);
+			this.resources.add(r);
+		}
+		
 	}
 	
 	public void addResource(Resource resource) {
 		resource.setSessionManager(this);
 		resources.add(resource);
 	}
+	
 
 	@Override
 	public String toString() {

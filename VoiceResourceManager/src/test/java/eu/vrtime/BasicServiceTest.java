@@ -30,22 +30,14 @@ public class BasicServiceTest extends BaseTest {
 
 	public static final VoiceService VS_CUST_3 = new VoiceService("VOIP111111", "111111", "019111111");
 
-	@Before
-	public void init() {
-		deleteAll();
-		createTestData();
-	}
 
 	@Test
-	@Ignore
 	public void contextLoads() {
 
 	}
 
 	@Test
-	@Ignore
 	public void queryResourcesTest() {
-
 		List<ResourceCountingResult> queryResult = resourceRepository.queryResouces();
 		assertTrue(queryResult.size() > 0);
 
@@ -57,9 +49,7 @@ public class BasicServiceTest extends BaseTest {
 	}
 
 	@Test
-	@Ignore
 	public void getSessionManagerWithMaxFreeResourcesTest() {
-
 		SessionManager dbSm = infraService.getSessionManagerWithMaxFreeResources();
 		assertNotNull(dbSm);
 	}
@@ -77,6 +67,7 @@ public class BasicServiceTest extends BaseTest {
 	}
 
 	@Test
+	@Ignore
 	public void allocateSecondLineResourceTest() {
 
 		Optional<VoiceService> voiceService = serviceRepository.findByCustomerId(CUSTID_1);

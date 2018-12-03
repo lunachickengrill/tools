@@ -68,6 +68,43 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 
 	@Override
 	@Transactional
+	public Softswitch changeSoftswitch(Softswitch softswitch) {
+		return switchRepository.saveAndFlush(softswitch);
+	}
+
+	@Override
+	@Transactional
+	public SessionManager changeSessionManager(SessionManager sessionManager) {
+		return sessionManagerRepository.saveAndFlush(sessionManager);
+	}
+
+	@Override
+	@Transactional
+	public Resource changeResource(Resource resource) {
+		return resourceRepository.saveAndFlush(resource);
+	}
+
+	@Override
+	@Transactional
+	public void deleteSoftswitch(Softswitch softswitch) {
+		switchRepository.delete(softswitch);
+	}
+
+	@Override
+	@Transactional
+	public void deleteSessionManager(SessionManager sessionManager) {
+		sessionManagerRepository.delete(sessionManager);
+	}
+
+	@Override
+	@Transactional
+	public void deleteResource(Resource resource) {
+		resourceRepository.delete(resource);
+
+	}
+
+	@Override
+	@Transactional
 	public SessionManager getSessionManagerWithMaxFreeResources() {
 
 		List<ResourceCountingResult> result = resourceRepository.queryResouces();
@@ -80,8 +117,7 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	@Override
 	@Transactional
 	public Resource addResource(final String smId, final Resource resource) {
-		SessionManager dbSm = sessionManagerRepository.findBySmId(smId)
-				.orElseThrow(DataNotFoundException::new);
+		SessionManager dbSm = sessionManagerRepository.findBySmId(smId).orElseThrow(DataNotFoundException::new);
 
 		dbSm.addResource(resource);
 		resource.setSessionManager(dbSm);
