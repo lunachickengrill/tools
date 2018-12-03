@@ -1,9 +1,9 @@
 package eu.vrtime.vrm.domain.model;
 
-import java.util.ArrayList;
+import static org.hamcrest.CoreMatchers.instanceOf;
+
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -14,16 +14,12 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.metamodel.IdentifiableType;
-
-import org.hibernate.engine.internal.Cascade;
 
 import eu.vrtime.vrm.domain.shared.AbstractBaseEntity;
-import eu.vrtime.vrm.domain.shared.Identity;
 import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
 
 @Entity
-@Table(name="T_SOFTSWITCH")
+@Table(name = "T_SOFTSWITCH")
 public class Softswitch extends AbstractBaseEntity {
 
 	@Column(name = "switch_id", nullable = false, updatable = false, unique = true)
@@ -38,7 +34,7 @@ public class Softswitch extends AbstractBaseEntity {
 	@Column(name = "description", nullable = true, updatable = true, unique = false)
 	private String description;
 
-	@OneToMany(mappedBy = "softswitch", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
+	@OneToMany(mappedBy = "softswitch", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<SessionManager> sessionManagers = new HashSet<>();
 
 	public Softswitch(String switchId, String name, SoftswitchStatus status) {
@@ -96,10 +92,28 @@ public class Softswitch extends AbstractBaseEntity {
 	}
 
 	public void addSessionManager(SessionManager sessionManager) {
+		sessionManagers.add(sessionManager);
 		sessionManager.setSoftswitch(this);
-		this.sessionManagers.add(sessionManager);
 	}
 
+	public void removeSessionManager(SessionManager sessionManager) {
+		sessionManagers.remove(sessionManager);
+		sessionManager.setSoftswitch(null);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (!(o instanceof Softswitch))
+			return false;
+		return oid != null && oid.equals(((Softswitch) o).oid);
+	}
+
+	@Override
+	public int hashCode() {
+		return 31;
+	}
 
 	@Override
 	public String toString() {

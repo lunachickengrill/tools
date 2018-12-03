@@ -33,6 +33,7 @@ import eu.vrtime.vrm.services.BasicResourceManagementService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = VoiceResourceManagerApplication.class)
+@Transactional
 public class BaseTest {
 
 	public static final String SWID_1 = "1";
@@ -61,7 +62,6 @@ public class BaseTest {
 	public static final VoiceService VS_CUST_1 = new VoiceService(SID_1, CUSTID_1, DN_1);
 	public static final VoiceService VS_CUST_1_2nd = new VoiceService("VOIP222222", "222222", "019222222");
 	public static final VoiceService VS_CUST_2 = new VoiceService(SID_2, CUSTID_2, DN_2);
-	
 
 	public static final Softswitch CS2K = new Softswitch("1", "cs2k", SoftswitchStatus.ONLINE);
 	public static final Softswitch NGCP = new Softswitch("2", "ngcp", SoftswitchStatus.ONLINE);
@@ -97,13 +97,8 @@ public class BaseTest {
 
 	}
 
-	protected void fillSoftswitch() {
-		switchRepository.saveAndFlush(CS2K);
-		switchRepository.saveAndFlush(NGCP);
-	}
 
-	protected Set<Resource> fillResources(Integer range, Integer end) {
-		Set<Resource> cs2kResources = new HashSet<>();
+	protected void fillResources(String smId, Integer range, Integer end) {
 		String prefix = "SS ";
 		Integer start = 0;
 		while (start < end) {
@@ -112,11 +107,13 @@ public class BaseTest {
 			len = padLeftZeros(len, 4);
 			len = prefix + " " + range + " " + len;
 			ResourceIdentifier ri = new ResourceIdentifier(len);
-			cs2kResources.add(new Resource(ri, ResourceStatus.FREE));
+//			infraService.addResource(smId, new Resource(ri, ResourceStatus.FREE));
+
+			// cs2kResources.add(new Resource(ri, ResourceStatus.FREE));
+
 			start++;
 		}
 
-		return cs2kResources;
 	}
 
 	private static String padLeftZeros(String str, int n) {
@@ -124,57 +121,57 @@ public class BaseTest {
 	}
 
 	public void generateResources() {
-		Set<Resource> resources1 = fillResources(10, 10);
-		resources1.stream().forEach(resource -> infraService.addResource(SMID_1, resource));
-
-		Set<Resource> resources2 = fillResources(20, 10);
-		resources2.stream().forEach(resource -> infraService.addResource(SMID_2, resource));
-
-		Set<Resource> resources3 = fillResources(30, 20);
-		resources3.stream().forEach(resource -> infraService.addResource(SMID_2, resource));
+		fillResources(SMID_1, 10, 10);
+		fillResources(SMID_2, 20, 10);
+		fillResources(SMID_2, 30, 20);
 	}
 
-	@Transactional
-	public void createTestData() {
-
-		infraService.addSoftswitch(SWID_1, SWNAME_1, SWSTATUS_1);
-		Optional<Softswitch> dbSw = switchRepository.findBySwitchId(SWID_1);
-		assertTrue(dbSw.isPresent());
-
-		infraService.addSessionManager(SMID_1, dbSw.get());
-		infraService.addSessionManager(SMID_2, dbSw.get());
-
-		Optional<SessionManager> dbSm1 = sessionManagerRepository.findBySmId(SMID_1);
-		assertTrue(dbSm1.isPresent());
-
-		Optional<SessionManager> dbSm2 = sessionManagerRepository.findBySmId(SMID_2);
-		assertTrue(dbSm2.isPresent());
-
-		generateResources();
-
-		Optional<Resource> resource1 = resourceRepository
-				.findTopByStatusAndSessionManagerOrderByOid(ResourceStatus.FREE, dbSm1.get());
-		assertTrue(resource1.isPresent());
-
-		resourceService.allocateResourceForVoiceService(resource1.get(), VS_CUST_1);
-
-		Optional<VoiceService> dbService1 = serviceRepository.findByCustomerId(CUSTID_1);
-		assertTrue(dbService1.isPresent());
-
-		Optional<Resource> resource2 = resourceRepository
-				.findTopByStatusAndSessionManagerOrderByOid(ResourceStatus.FREE, dbSm1.get());
-		assertTrue(resource2.isPresent());
-
-		resourceService.allocateResourceForVoiceService(resource2.get(), VS_CUST_2);
-
-		Optional<VoiceService> dbService2 = serviceRepository.findByCustomerId(CUSTID_2);
-		assertTrue(dbService2.isPresent());
-
-		List<ResourceCountingResult> result = resourceRepository.queryResouces();
-		assertTrue(result.size() > 0);
-
-		// result.sort(Comparator.comparing(ResourceCountingResult::getCnt).reversed());
-
-		// result.stream().forEach(System.out::println);
-	}
+	 @Transactional
+	 public void createTestData() {
+	
+	 infraService.addSoftswitch(SWID_1, SWNAME_1, SWSTATUS_1);
+	 Optional<Softswitch> dbSw = switchRepository.findBySwitchId(SWID_1);
+	 assertTrue(dbSw.isPresent());
+	
+	 infraService.addSessionManager(SMID_1, dbSw.get());
+	 infraService.addSessionManager(SMID_2, dbSw.get());
+	
+	 Optional<SessionManager> dbSm1 = sessionManagerRepository.findBySmId(SMID_1);
+	 assertTrue(dbSm1.isPresent());
+	
+	 Optional<SessionManager> dbSm2 = sessionManagerRepository.findBySmId(SMID_2);
+	 assertTrue(dbSm2.isPresent());
+	
+	 generateResources();
+	
+	 Optional<Resource> resource1 = resourceRepository
+	 .findTopByStatusAndSessionManagerOrderByOid(ResourceStatus.FREE,
+	 dbSm1.get());
+	 assertTrue(resource1.isPresent());
+	
+	 resourceService.allocateResourceForVoiceService(resource1.get(), VS_CUST_1);
+	
+	 Optional<VoiceService> dbService1 =
+	 serviceRepository.findByCustomerId(CUSTID_1);
+	 assertTrue(dbService1.isPresent());
+	
+	 Optional<Resource> resource2 = resourceRepository
+	 .findTopByStatusAndSessionManagerOrderByOid(ResourceStatus.FREE,
+	 dbSm1.get());
+	 assertTrue(resource2.isPresent());
+	
+	 resourceService.allocateResourceForVoiceService(resource2.get(), VS_CUST_2);
+	
+	 Optional<VoiceService> dbService2 =
+	 serviceRepository.findByCustomerId(CUSTID_2);
+	 assertTrue(dbService2.isPresent());
+	
+	 List<ResourceCountingResult> result = resourceRepository.queryResouces();
+	 assertTrue(result.size() > 0);
+	
+	 //
+	 result.sort(Comparator.comparing(ResourceCountingResult::getCnt).reversed());
+	
+	 // result.stream().forEach(System.out::println);
+	 }
 }

@@ -15,8 +15,8 @@ import eu.vrtime.vrm.domain.exceptions.DataNotFoundException;
 import eu.vrtime.vrm.domain.model.Resource;
 import eu.vrtime.vrm.domain.model.SessionManager;
 import eu.vrtime.vrm.domain.model.Softswitch;
-import eu.vrtime.vrm.domain.model.VoiceService;
 import eu.vrtime.vrm.domain.shared.ResourceCountingResult;
+import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
 import eu.vrtime.vrm.domain.shared.ResourceStatus;
 import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
 import eu.vrtime.vrm.repositories.ResourceRepository;
@@ -122,6 +122,16 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 		dbSm.addResource(resource);
 		resource.setSessionManager(dbSm);
 		return resourceRepository.saveAndFlush(resource);
+	}
+
+	public Resource addResource(ResourceIdentifier identifier, SessionManager sessionManager) {
+		Long oid = sessionManager.getOid();
+		Optional<SessionManager> dbSm = sessionManagerRepository.findById(oid);
+		SessionManager sm = dbSm.get();
+		sm.addResource(new Resource(identifier, ResourceStatus.FREE));
+		sessionManagerRepository.save(sm);
+
+		return null;
 
 	}
 
