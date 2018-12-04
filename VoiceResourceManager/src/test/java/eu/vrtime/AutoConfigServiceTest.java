@@ -36,8 +36,7 @@ public class AutoConfigServiceTest extends BaseTest {
 		assertTrue(countSwitch>0);
 					
 		Set<SessionManager> dbSm = switchRepository.findBySwitchId("1").get().getSessionManagers();
-		assertTrue(dbSm.size()>0);
-		
+		assertTrue(dbSm.size()>0);	
 		
 	}
 	
