@@ -27,8 +27,14 @@ import eu.vrtime.vrm.services.BasicInfrastructureService;
 import eu.vrtime.vrm.services.BasicResourceManagementService;
 
 public class BasicServiceTest extends BaseTest {
-
-	public static final VoiceService VS_CUST_3 = new VoiceService("VOIP111111", "111111", "019111111");
+	
+	
+	public static final String VS_CUST_3_CUSTID = "1111111";
+	public static final String VS_CUST_3_SID = "VOIP111111";
+	public static final String VS_CUST_3_DN1 = "019111111";
+	public static final String VS_CUST_3_DN2 = "019111112";
+	
+	public static final VoiceService VS_CUST_3 = new VoiceService(VS_CUST_3_SID, VS_CUST_3_CUSTID, VS_CUST_3_DN1);
 
 
 
@@ -71,7 +77,7 @@ public class BasicServiceTest extends BaseTest {
 	@Ignore
 	public void allocateSecondLineResourceTest() {
 
-		Optional<VoiceService> voiceService = serviceRepository.findByCustomerId(CUSTID_1);
+		Optional<VoiceService> voiceService = serviceRepository.findByCustomerId(VS_CUST_3_CUSTID);
 		assertTrue("voiceService is not present", voiceService.isPresent());
 
 		Resource res = voiceService.get().getResource();
