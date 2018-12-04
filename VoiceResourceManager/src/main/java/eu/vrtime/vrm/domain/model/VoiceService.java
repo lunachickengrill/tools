@@ -19,7 +19,7 @@ public class VoiceService extends AbstractBaseEntity {
 	 */
 	private static final long serialVersionUID = 6895257404688974719L;
 
-	@Column(name = "service_id", nullable = false, updatable = true, unique = true)
+	@Column(name = "service_id", nullable = false, updatable = true, unique = false)
 	private String serviceId;
 
 	@Column(name = "customer_id", nullable = false, updatable = true, unique = false)
@@ -28,14 +28,18 @@ public class VoiceService extends AbstractBaseEntity {
 	@Column(name = "directory_number", nullable = false, updatable = true, unique = true)
 	private String directoryNumber;
 
+	@Column(name = "line_number", nullable = false, updatable = false, unique = false)
+	private Integer lineNo;
+
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "resourceId")
 	public Resource resource;
 
-	public VoiceService(String serviceId, String customerId, String directoryNumber) {
+	public VoiceService(String serviceId, String customerId, String directoryNumber, int lineNo) {
 		this.serviceId = serviceId;
 		this.customerId = customerId;
 		this.directoryNumber = directoryNumber;
+		this.lineNo = lineNo;
 	}
 
 	public String getServiceId() {
@@ -70,6 +74,14 @@ public class VoiceService extends AbstractBaseEntity {
 		this.resource = resource;
 	}
 
+	public int getLineNo() {
+		return lineNo;
+	}
+
+	public void setLineNo(int lineNo) {
+		this.lineNo = lineNo;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)
@@ -86,8 +98,10 @@ public class VoiceService extends AbstractBaseEntity {
 
 	@Override
 	public String toString() {
-		return "VoiceService [oid=" + toStringOid() + ", serviceId=" + serviceId + ", customerId=" + customerId
-				+ ", directoryNumber=" + directoryNumber + ", resource=" + resource.toStringOid() + "]";
+		return "VoiceService [oid=" + oid + ",serviceId=" + serviceId + ", customerId=" + customerId
+				+ ", directoryNumber=" + directoryNumber + ", lineNo=" + lineNo + ", resource=" + resource.getOid()
+				+ ", LEN=" + resource.getIdentifier().toString() + ",  createDate=" + createDate + ", lastModified="
+				+ lastModified + "]";
 	}
 
 	VoiceService() {

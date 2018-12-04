@@ -23,7 +23,7 @@ public class Resource extends AbstractBaseEntity {
 	 */
 	private static final long serialVersionUID = 6150543763294953271L;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "FK_SESSIONMANAGER")
 	private SessionManager sessionManager;
 

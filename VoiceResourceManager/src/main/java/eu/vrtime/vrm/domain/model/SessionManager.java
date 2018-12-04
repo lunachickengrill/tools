@@ -26,11 +26,11 @@ public class SessionManager extends AbstractBaseEntity {
 	@Column(name = "sm_id", nullable = false, updatable = true, unique = true)
 	private String smId;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "FK_SOFTSWITCH")
 	private Softswitch softswitch;
 
-	@OneToMany(mappedBy = "sessionManager", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "sessionManager", fetch=FetchType.LAZY,cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Resource> resources = new HashSet<>();
 
 	public SessionManager(final String smId, final Softswitch softswitch) {

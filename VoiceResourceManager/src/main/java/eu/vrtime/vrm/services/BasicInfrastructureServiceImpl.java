@@ -12,6 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import eu.vrtime.vrm.domain.exceptions.DataNotFoundException;
+import eu.vrtime.vrm.domain.exceptions.IllegalStateException;
+import eu.vrtime.vrm.domain.exceptions.NoFreeResourcesException;
+import eu.vrtime.vrm.domain.exceptions.SessionManagerNotFoundException;
+import eu.vrtime.vrm.domain.exceptions.SoftswitchNotFoundException;
 import eu.vrtime.vrm.domain.model.Resource;
 import eu.vrtime.vrm.domain.model.SessionManager;
 import eu.vrtime.vrm.domain.model.Softswitch;
@@ -58,8 +62,16 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	@Override
 	@Transactional
 	public SessionManager addSessionManager(final String smId, final Softswitch softswitch) {
+
+		if (softswitch.getOid() == null) {
+			throw new IllegalStateException("No OID present. Object apparently not persisted yet");
+		}
 		Long oid = softswitch.getOid();
 		Optional<Softswitch> dbSw = switchRepository.findById(oid);
+		if (!(dbSw.isPresent())) {
+			throw new SoftswitchNotFoundException("Softswitch not found");
+		}
+
 		Softswitch sw = dbSw.get();
 		SessionManager sm = new SessionManager(smId, sw);
 		return sessionManagerRepository.saveAndFlush(sm);
@@ -110,6 +122,9 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 		List<ResourceCountingResult> result = resourceRepository.queryResouces();
 		result.sort(Comparator.comparing(ResourceCountingResult::getCnt).reversed());
 		Optional<ResourceCountingResult> sm = result.stream().findFirst();
+		if (!(sm.isPresent())) {
+			throw new NoFreeResourcesException("No SessionManager with free Resources found");
+		}
 		return sm.get().getSessionManager();
 
 	}
@@ -117,16 +132,37 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	@Override
 	@Transactional
 	public Resource addResource(final String smId, final Resource resource) {
-		SessionManager dbSm = sessionManagerRepository.findBySmId(smId).orElseThrow(DataNotFoundException::new);
 
+		if (smId == null) {
+			throw new IllegalStateException("SessionManager ID missing");
+		}
+
+		Optional<SessionManager> dbSessionManager = sessionManagerRepository.findBySmId(smId);
+		if (!(dbSessionManager.isPresent())) {
+			throw new DataNotFoundException("SessionManager not found for Resource " + resource.getIdentifier());
+		}
+
+		SessionManager dbSm = dbSessionManager.get();
 		dbSm.addResource(resource);
 		resource.setSessionManager(dbSm);
 		return resourceRepository.saveAndFlush(resource);
 	}
 
+	@Override
+	@Transactional
 	public Resource addResource(ResourceIdentifier identifier, SessionManager sessionManager) {
+		
+		if (sessionManager.getOid()==null) {
+			throw new IllegalStateException("No OID for SessionManager");
+		}
+
 		Long oid = sessionManager.getOid();
 		Optional<SessionManager> dbSm = sessionManagerRepository.findById(oid);
+
+		if (!(dbSm.isPresent())) {
+			throw new SessionManagerNotFoundException("SessionManager not found " + dbSm.get().getSmId());
+		}
+
 		SessionManager sm = dbSm.get();
 		sm.addResource(new Resource(identifier, ResourceStatus.FREE));
 		sessionManagerRepository.save(sm);

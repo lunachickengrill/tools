@@ -33,38 +33,31 @@ import eu.vrtime.vrm.services.BasicResourceManagementService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = VoiceResourceManagerApplication.class)
-@Transactional
 public class BaseTest {
 
-	public static final String SWID_1 = "1";
-	public static final String SWID_2 = "2";
-	public static final String SWID_3 = "3";
+	public static final String CUST1_SID = "VOIP000001";
+	public static final String CUST1_CUSTID = "1234567";
+	public static final String CUST1_DN1 = "0111111";
+	public static final String CUST1_DN2 = "0111112";
 
-	public static final String SWNAME_1 = "cs2k";
-	public static final String SWNAME_2 = "ngcp";
-	public static final String SWNAME_3 = "unitTest";
+	public static final String CUST2_SID = "VOIP000002";
+	public static final String CUST2_CUSTID = "456789";
+	public static final String CUST2_DN1 = "0122221";
+	public static final String CUST2_DN2 = "0122222";
 
-	public static final SoftswitchStatus SWSTATUS_1 = SoftswitchStatus.ONLINE;
-	public static final SoftswitchStatus SWSTATUS_2 = SoftswitchStatus.OFFLINE;
-	public static final SoftswitchStatus SWSTATUS_3 = SoftswitchStatus.ONLINE;
+	public static final String CUST3_SID = "VOIP111111";
+	public static final String CUST3_CUSTID = "333333";
+	public static final String CUST3_DN1 = "019111111";
+	public static final String CUST3_DN2 = "019111112";
 
-	public static final String SMID_1 = "1";
-	public static final String SMID_2 = "2";
+	public static final VoiceService VS_CUST1_DN1 = new VoiceService(CUST1_SID, CUST1_CUSTID, CUST1_DN1, 1);
+	public static final VoiceService VS_CUST1_DN2 = new VoiceService(CUST1_SID, CUST1_CUSTID, CUST1_DN2, 2);
 
-	public static final String SID_1 = "VOIP000001";
-	public static final String CUSTID_1 = "1234567";
-	public static final String DN_1 = "01987654";
+	public static final VoiceService VS_CUST2_DN1 = new VoiceService(CUST2_SID, CUST2_CUSTID, CUST2_DN1, 1);
+	public static final VoiceService VS_CUST2_DN2 = new VoiceService(CUST2_SID, CUST2_CUSTID, CUST2_DN2, 2);
 
-	public static final String SID_2 = "VOIP000002";
-	public static final String CUSTID_2 = "456789";
-	public static final String DN_2 = "02987654";
-
-	public static final VoiceService VS_CUST_1 = new VoiceService(SID_1, CUSTID_1, DN_1);
-	public static final VoiceService VS_CUST_1_2nd = new VoiceService("VOIP222222", "222222", "019222222");
-	public static final VoiceService VS_CUST_2 = new VoiceService(SID_2, CUSTID_2, DN_2);
-
-	public static final Softswitch CS2K = new Softswitch("1", "cs2k", SoftswitchStatus.ONLINE);
-	public static final Softswitch NGCP = new Softswitch("2", "ngcp", SoftswitchStatus.ONLINE);
+	public static final VoiceService VS_CUST3_DN1 = new VoiceService(CUST3_SID, CUST3_CUSTID, CUST3_DN1, 1);
+	public static final VoiceService VS_CUST3_DN2 = new VoiceService(CUST3_SID, CUST3_CUSTID, CUST3_DN2, 2);
 
 	@Autowired
 	protected SoftswitchRepository switchRepository;
@@ -84,94 +77,4 @@ public class BaseTest {
 	@Autowired
 	protected BasicResourceManagementService resourceService;
 
-	@Transactional
-	protected void deleteAll() {
-		serviceRepository.deleteAll();
-		serviceRepository.flush();
-		resourceRepository.deleteAll();
-		resourceRepository.flush();
-		switchRepository.deleteAll();
-		switchRepository.flush();
-		sessionManagerRepository.deleteAll();
-		sessionManagerRepository.flush();
-
-	}
-
-
-	protected void fillResources(String smId, Integer range, Integer end) {
-		String prefix = "SS ";
-		Integer start = 0;
-		while (start < end) {
-			String len = new String(start.toString());
-
-			len = padLeftZeros(len, 4);
-			len = prefix + " " + range + " " + len;
-			ResourceIdentifier ri = new ResourceIdentifier(len);
-//			infraService.addResource(smId, new Resource(ri, ResourceStatus.FREE));
-
-			// cs2kResources.add(new Resource(ri, ResourceStatus.FREE));
-
-			start++;
-		}
-
-	}
-
-	private static String padLeftZeros(String str, int n) {
-		return String.format("%1$" + n + "s", str).replace(' ', '0');
-	}
-
-	public void generateResources() {
-		fillResources(SMID_1, 10, 10);
-		fillResources(SMID_2, 20, 10);
-		fillResources(SMID_2, 30, 20);
-	}
-
-	 @Transactional
-	 public void createTestData() {
-	
-	 infraService.addSoftswitch(SWID_1, SWNAME_1, SWSTATUS_1);
-	 Optional<Softswitch> dbSw = switchRepository.findBySwitchId(SWID_1);
-	 assertTrue(dbSw.isPresent());
-	
-	 infraService.addSessionManager(SMID_1, dbSw.get());
-	 infraService.addSessionManager(SMID_2, dbSw.get());
-	
-	 Optional<SessionManager> dbSm1 = sessionManagerRepository.findBySmId(SMID_1);
-	 assertTrue(dbSm1.isPresent());
-	
-	 Optional<SessionManager> dbSm2 = sessionManagerRepository.findBySmId(SMID_2);
-	 assertTrue(dbSm2.isPresent());
-	
-	 generateResources();
-	
-	 Optional<Resource> resource1 = resourceRepository
-	 .findTopByStatusAndSessionManagerOrderByOid(ResourceStatus.FREE,
-	 dbSm1.get());
-	 assertTrue(resource1.isPresent());
-	
-	 resourceService.allocateResourceForVoiceService(resource1.get(), VS_CUST_1);
-	
-	 Optional<VoiceService> dbService1 =
-	 serviceRepository.findByCustomerId(CUSTID_1);
-	 assertTrue(dbService1.isPresent());
-	
-	 Optional<Resource> resource2 = resourceRepository
-	 .findTopByStatusAndSessionManagerOrderByOid(ResourceStatus.FREE,
-	 dbSm1.get());
-	 assertTrue(resource2.isPresent());
-	
-	 resourceService.allocateResourceForVoiceService(resource2.get(), VS_CUST_2);
-	
-	 Optional<VoiceService> dbService2 =
-	 serviceRepository.findByCustomerId(CUSTID_2);
-	 assertTrue(dbService2.isPresent());
-	
-	 List<ResourceCountingResult> result = resourceRepository.queryResouces();
-	 assertTrue(result.size() > 0);
-	
-	 //
-	 result.sort(Comparator.comparing(ResourceCountingResult::getCnt).reversed());
-	
-	 // result.stream().forEach(System.out::println);
-	 }
 }
