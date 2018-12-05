@@ -1,8 +1,14 @@
 package eu.vrtime.vrm.services;
 
+import java.util.Optional;
+
+import javax.management.ServiceNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import eu.vrtime.vrm.domain.exceptions.IllegalStateException;
+import eu.vrtime.vrm.domain.exceptions.VoiceServiceNotFoundException;
 import eu.vrtime.vrm.domain.model.Resource;
 import eu.vrtime.vrm.domain.model.SessionManager;
 import eu.vrtime.vrm.domain.model.Softswitch;
@@ -73,8 +79,16 @@ public class VoiceResourceManagementServiceImpl implements VoiceResourceManageme
 	}
 
 	@Override
-	public ReleaseResourceResponse releaseResource(String customerId, String SID, String directoryNumber) {
-		// TODO Auto-generated method stub
+	public ReleaseResourceResponse releaseResource(String customerId, String SID, String directoryNumber, String lineNo) {
+		ReleaseResourceResponse res = new ReleaseResourceResponse();
+		
+		Optional<VoiceService> dbVs = serviceRepository.findByDirectoryNumber(directoryNumber);
+		if (!(dbVs.isPresent())) {
+			throw new VoiceServiceNotFoundException("No VoiceService found for DN " + directoryNumber);
+		}
+		
+		resourceService.releaseResouceForVoiceService(dbVs.get());
+		//TODO finish implementation
 		return null;
 	}
 

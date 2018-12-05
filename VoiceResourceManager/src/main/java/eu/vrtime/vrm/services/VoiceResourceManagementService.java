@@ -5,7 +5,8 @@ public interface VoiceResourceManagementService {
 	public AllocateResourceResponse allocateResource(String customerId, String SID, String directoryNumber,
 			String lineNo);
 
-	public ReleaseResourceResponse releaseResource(String customerId, String SID, String directoryNumber);
+	public ReleaseResourceResponse releaseResource(String customerId, String SID, String directoryNumber,
+			String lineNo);
 
 	public GetServiceInfoResponse getServiceInfo(String customerId);
 
