@@ -31,11 +31,17 @@ public class AutConfigService {
 	@Value("${vrm.softswitch.cs2k.id}")
 	private String SOFTSWITCH_CS2K_ID;
 
+	@Value("${vrm.softswitch.cs2k.nic")
+	private String SOFTSWITCH_CS2K_NIC;
+
 	@Value("${vrm.softswitch.ngcp.name}")
 	private String SOFTSWITCH_NGCP_NAME;
 
 	@Value("${vrm.softswitch.ngcp.id}")
 	private String SOFTSWITCH_NGCP_ID;
+
+	@Value("${vrm.softswitch.ngcp.nic")
+	private String SOFTSWITCH_NGCP_NIC;
 
 	@Value("${vrm.setupconfigdata}")
 	private boolean SETUPCONFIGDATA;
@@ -55,10 +61,10 @@ public class AutConfigService {
 	@Transactional
 	private void setup() {
 		if (SETUPCONFIGDATA == true) {
-			Softswitch dbSw1 = switchRepository
-					.save(new Softswitch(SOFTSWITCH_CS2K_ID, SOFTSWITCH_CS2K_NAME, SoftswitchStatus.ONLINE));
-			Softswitch dbSw2 = switchRepository
-					.save(new Softswitch(SOFTSWITCH_NGCP_ID, SOFTSWITCH_NGCP_NAME, SoftswitchStatus.OFFLINE));
+			Softswitch dbSw1 = switchRepository.save(new Softswitch(SOFTSWITCH_CS2K_ID, SOFTSWITCH_CS2K_NIC,
+					SOFTSWITCH_CS2K_NAME, SoftswitchStatus.ONLINE));
+			Softswitch dbSw2 = switchRepository.save(new Softswitch(SOFTSWITCH_NGCP_ID, SOFTSWITCH_NGCP_NIC,
+					SOFTSWITCH_NGCP_NAME, SoftswitchStatus.OFFLINE));
 
 			SessionManager sm1 = new SessionManager("1", dbSw1);
 			Set<Resource> res1 = fillResources(10, 100);

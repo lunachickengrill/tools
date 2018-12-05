@@ -1,5 +1,6 @@
 package eu.vrtime;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -13,7 +14,9 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 
+import eu.vrtime.vrm.domain.exceptions.VoiceServiceNotFoundException;
 import eu.vrtime.vrm.domain.model.Resource;
 import eu.vrtime.vrm.domain.model.SessionManager;
 import eu.vrtime.vrm.domain.model.VoiceService;
@@ -24,7 +27,7 @@ import eu.vrtime.vrm.repositories.SessionManagerRepository;
 import eu.vrtime.vrm.repositories.SoftswitchRepository;
 import eu.vrtime.vrm.repositories.VoiceServiceRepository;
 import eu.vrtime.vrm.services.BasicInfrastructureService;
-import eu.vrtime.vrm.services.BasicResourceManagementService;
+import eu.vrtime.vrm.services.BasicResourceService;
 
 /**
  * @Transaction
@@ -33,7 +36,7 @@ import eu.vrtime.vrm.services.BasicResourceManagementService;
  *
  */
 @Transactional
-public class BasicResourceManagementServiceTest extends BaseTest {
+public class BasicResourceServiceTest extends BaseTest {
 
 	@Test
 	public void contextLoads() {
@@ -86,7 +89,9 @@ public class BasicResourceManagementServiceTest extends BaseTest {
 		assertNotNull("Resource is null", res);
 
 		resourceService.allocateResourceForVoiceService(res, VS_CUST2_DN1);
+				
 		VoiceService dbVs1 = serviceRepository.findByCustomerIdAndLineNo(CUST2_CUSTID, 1).get();
+		
 		assertNotNull("VoiceService is null", dbVs1);
 		assertTrue("CustomerId not matching", dbVs1.getCustomerId().equals(CUST2_CUSTID));
 		assertTrue("DN not matching", dbVs1.getDirectoryNumber().equals(CUST2_DN1));
@@ -106,6 +111,28 @@ public class BasicResourceManagementServiceTest extends BaseTest {
 		assertTrue("LineNo not matching", dbVs2.getLineNo() == 2);
 		System.out.println("dbVS2 " + dbVs2.toString());
 
+	}
+	
+	@Test
+	public void releaseReosurceTest() {
+		SessionManager dbSm = infraService.getSessionManagerWithMaxFreeResources();
+		Resource res = resourceService.getFirstAvailableResource(dbSm);
+		Long resOid = res.getOid();
+		resourceService.allocateResourceForVoiceService(res, VS_CUST3_DN1);
+		Optional<VoiceService> dbVs = serviceRepository.findByCustomerIdAndLineNo(CUST3_CUSTID, 1);
+		
+		assertTrue(dbVs.get().getResource().getIdentifier() != null);
+		
+		resourceService.releaseResouceForVoiceService(VS_CUST3_DN1);
+		Optional<VoiceService> dbVsdeleted = serviceRepository.findByCustomerIdAndLineNo(CUST3_CUSTID, 1);
+		assertFalse(dbVsdeleted.isPresent());
+		
+		res = resourceRepository.findById(resOid).get();
+		assertTrue(res.getStatus().equals(ResourceStatus.FREE));
+		
+		
+		
+		
 	}
 
 }

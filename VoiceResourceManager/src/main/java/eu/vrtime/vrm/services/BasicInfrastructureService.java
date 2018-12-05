@@ -9,7 +9,7 @@ import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
 
 public interface BasicInfrastructureService {
 
-	public Softswitch addSoftswitch(String switchId, String name, SoftswitchStatus status);
+	public Softswitch addSoftswitch(String switchId,String nic, String name, SoftswitchStatus status);
 
 	public SessionManager addSessionManager(String smId, Softswitch softswitch);
 

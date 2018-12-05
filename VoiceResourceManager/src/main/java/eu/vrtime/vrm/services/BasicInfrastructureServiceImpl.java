@@ -54,8 +54,8 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 
 	@Override
 	@Transactional
-	public Softswitch addSoftswitch(String switchId, String name, SoftswitchStatus status) {
-		Softswitch sw = new Softswitch(switchId, name, status);
+	public Softswitch addSoftswitch(String switchId,String nic, String name, SoftswitchStatus status) {
+		Softswitch sw = new Softswitch(switchId,nic, name, status);
 		return switchRepository.saveAndFlush(sw);
 	}
 

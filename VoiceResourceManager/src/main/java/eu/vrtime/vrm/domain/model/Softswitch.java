@@ -22,8 +22,11 @@ import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
 @Table(name = "T_SOFTSWITCH")
 public class Softswitch extends AbstractBaseEntity {
 
-	@Column(name = "switch_id", nullable = false, updatable = false, unique = true)
+	@Column(name = "switch_id", nullable = false, updatable = true, unique = true)
 	private String switchId;
+
+	@Column(name = "nic", nullable = false, updatable = true, unique = false)
+	private String nic;
 
 	@Column(name = "name", nullable = false, updatable = true, unique = false)
 	private String name;
@@ -37,8 +40,9 @@ public class Softswitch extends AbstractBaseEntity {
 	@OneToMany(mappedBy = "softswitch", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<SessionManager> sessionManagers = new HashSet<>();
 
-	public Softswitch(String switchId, String name, SoftswitchStatus status) {
+	public Softswitch(String switchId, String nic, String name, SoftswitchStatus status) {
 		this.switchId = switchId;
+		this.nic = nic;
 		this.name = name;
 		this.status = status;
 	}
@@ -49,6 +53,14 @@ public class Softswitch extends AbstractBaseEntity {
 
 	public void setSwitchId(String switchId) {
 		this.switchId = switchId;
+	}
+
+	public String getNic() {
+		return nic;
+	}
+
+	public void setNic(String nic) {
+		this.nic = nic;
 	}
 
 	public String getName() {
@@ -117,8 +129,8 @@ public class Softswitch extends AbstractBaseEntity {
 
 	@Override
 	public String toString() {
-		return "Softswitch [oid=" + toStringOid() + ", switchId=" + switchId + ", name=" + name + ", status=" + status
-				+ ", description=" + description + "]";
+		return "Softswitch [switchId=" + switchId + ", nic=" + nic + ", name=" + name + ", status=" + status
+				+ ", description=" + description + ", sessionManagers=" + sessionManagers + "]";
 	}
 
 	Softswitch() {

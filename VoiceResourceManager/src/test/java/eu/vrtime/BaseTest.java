@@ -29,7 +29,7 @@ import eu.vrtime.vrm.repositories.SessionManagerRepository;
 import eu.vrtime.vrm.repositories.SoftswitchRepository;
 import eu.vrtime.vrm.repositories.VoiceServiceRepository;
 import eu.vrtime.vrm.services.BasicInfrastructureService;
-import eu.vrtime.vrm.services.BasicResourceManagementService;
+import eu.vrtime.vrm.services.BasicResourceService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = VoiceResourceManagerApplication.class)
@@ -75,6 +75,6 @@ public class BaseTest {
 	protected BasicInfrastructureService infraService;
 
 	@Autowired
-	protected BasicResourceManagementService resourceService;
+	protected BasicResourceService resourceService;
 
 }

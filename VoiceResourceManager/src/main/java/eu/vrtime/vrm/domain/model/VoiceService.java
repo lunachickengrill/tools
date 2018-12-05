@@ -31,7 +31,7 @@ public class VoiceService extends AbstractBaseEntity {
 	@Column(name = "line_number", nullable = false, updatable = false, unique = false)
 	private Integer lineNo;
 
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "resourceId")
 	public Resource resource;
 

@@ -18,7 +18,7 @@ import eu.vrtime.vrm.repositories.SessionManagerRepository;
 import eu.vrtime.vrm.repositories.VoiceServiceRepository;
 
 @Service
-public class BasicResourceManagementServiceImpl implements BasicResourceManagementService {
+public class BasicResourceServiceImpl implements BasicResourceService {
 
 	private VoiceServiceRepository serviceRepository;
 
@@ -27,7 +27,7 @@ public class BasicResourceManagementServiceImpl implements BasicResourceManageme
 	private SessionManagerRepository sessionManagerRepository;
 
 	@Autowired
-	public BasicResourceManagementServiceImpl(final VoiceServiceRepository serviceRepository,
+	public BasicResourceServiceImpl(final VoiceServiceRepository serviceRepository,
 			final ResourceRepository resourceRepository, final SessionManagerRepository sessionManagerRepository) {
 		this.serviceRepository = serviceRepository;
 		this.resourceRepository = resourceRepository;
@@ -37,13 +37,13 @@ public class BasicResourceManagementServiceImpl implements BasicResourceManageme
 	@Override
 	@Transactional
 	public void allocateResourceForVoiceService(final Resource resource, final VoiceService voiceService) {
-			
+
 		Long oid = voiceService.getOid();
 		Optional<Resource> dbResource = resourceRepository.findById(resource.getOid());
-		if(!(dbResource.isPresent())) {
+		if (!(dbResource.isPresent())) {
 			throw new ResourceNotFoundException("Resource not found");
 		}
-		
+
 		Resource res = dbResource.get();
 		res.setStatus(ResourceStatus.ALLOCATED);
 		res = resourceRepository.save(res);
@@ -72,22 +72,15 @@ public class BasicResourceManagementServiceImpl implements BasicResourceManageme
 	}
 
 	@Override
-	public void getVoiceServiceData() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	@Transactional
 	public void releaseResouceForVoiceService(VoiceService voiceService) {
-		
-		// TODO Auto-generated method stub
-		
+
 		Optional<VoiceService> dbVoiceService = serviceRepository.findByOid(voiceService.getOid());
 		VoiceService dbSvc = dbVoiceService.get();
 		Resource res = dbSvc.getResource();
-		
-		
+		serviceRepository.delete(dbSvc);
+		res.setStatus(ResourceStatus.FREE);
+		resourceRepository.save(res);
 
 	}
 

@@ -7,13 +7,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import eu.vrtime.vrm.repositories.ResourceRepository;
 import eu.vrtime.vrm.services.BasicInfrastructureService;
+import eu.vrtime.vrm.services.VoiceResourceManagementService;
 
 @RestController
 @RequestMapping("/api/rest")
 public class VrmRestService {
 	
 	@Autowired
-	BasicInfrastructureService basicInfrastructureService;
+	VoiceResourceManagementService voiceService;
 	
 	@Autowired
 	ResourceRepository resourceRepository;
