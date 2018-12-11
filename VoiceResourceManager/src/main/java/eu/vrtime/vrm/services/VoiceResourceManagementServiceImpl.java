@@ -1,5 +1,6 @@
 package eu.vrtime.vrm.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.management.ServiceNotFoundException;
@@ -13,6 +14,7 @@ import eu.vrtime.vrm.domain.model.Resource;
 import eu.vrtime.vrm.domain.model.SessionManager;
 import eu.vrtime.vrm.domain.model.Softswitch;
 import eu.vrtime.vrm.domain.model.VoiceService;
+import eu.vrtime.vrm.repositories.ResourceRepository;
 import eu.vrtime.vrm.repositories.SessionManagerRepository;
 import eu.vrtime.vrm.repositories.VoiceServiceRepository;
 
@@ -22,26 +24,27 @@ public class VoiceResourceManagementServiceImpl implements VoiceResourceManageme
 	private BasicInfrastructureService infraService;
 	private BasicResourceService resourceService;
 	private SessionManagerRepository sessionManagerRepository;
-
+	private ResourceRepository resourceRepository;
 	private VoiceServiceRepository serviceRepository;
 
 	@Autowired
 	public VoiceResourceManagementServiceImpl(final BasicInfrastructureService infraService,
 			final BasicResourceService resourceService, final SessionManagerRepository sessionManagerRepository,
-			VoiceServiceRepository serviceRepository) {
+			VoiceServiceRepository serviceRepository, final ResourceRepository resourceRepository) {
 		this.infraService = infraService;
 		this.resourceService = resourceService;
 		this.sessionManagerRepository = sessionManagerRepository;
 		this.serviceRepository = serviceRepository;
+		this.resourceRepository = resourceRepository;
 	}
 
 	@Override
 	public AllocateResourceResponse allocateResource(String customerId, String SID, String directoryNumber,
 			String lineNo) {
-		
+
 		AllocateResourceResponse resp = new AllocateResourceResponse();
 		VoiceService vs = new VoiceService(SID, customerId, directoryNumber, Integer.parseInt(lineNo));
-		
+
 		if (lineNo.equals("1")) {
 
 			SessionManager dbSm = infraService.getSessionManagerWithMaxFreeResources();
@@ -79,22 +82,37 @@ public class VoiceResourceManagementServiceImpl implements VoiceResourceManageme
 	}
 
 	@Override
-	public ReleaseResourceResponse releaseResource(String customerId, String SID, String directoryNumber, String lineNo) {
-		ReleaseResourceResponse res = new ReleaseResourceResponse();
-		
+	public ReleaseResourceResponse releaseResource(String customerId, String SID, String directoryNumber,
+			String lineNo) {
+		ReleaseResourceResponse resp = new ReleaseResourceResponse();
+
 		Optional<VoiceService> dbVs = serviceRepository.findByDirectoryNumber(directoryNumber);
 		if (!(dbVs.isPresent())) {
 			throw new VoiceServiceNotFoundException("No VoiceService found for DN " + directoryNumber);
 		}
-		
+		Resource res = dbVs.get().getResource();
+		resp.setCustomerId(customerId);
+		resp.setSid(SID);
+		resp.setDirectoryNumber(directoryNumber);
+		resp.setLen(res.getIdentifier().getIdentifier());
+
 		resourceService.releaseResouceForVoiceService(dbVs.get());
-		//TODO finish implementation
-		return null;
+
+		return resp;
 	}
 
 	@Override
 	public GetServiceInfoResponse getServiceInfo(String customerId) {
 		// TODO Auto-generated method stub
+		GetServiceInfoResponse resp = new GetServiceInfoResponse();
+		
+		Optional<List<VoiceService>> dbVs = serviceRepository.findByCustomerId(customerId);
+		if(!(dbVs.isPresent())) {
+			throw new VoiceServiceNotFoundException("No VoiceService found for CustomerId " + customerId);
+		}
+		
+		
+		
 		return null;
 	}
 

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
@@ -19,12 +20,25 @@ public class ReleaseResourceResponse implements Serializable {
 	 */
 	private static final long serialVersionUID = 5512621358722170724L;
 
+	@JacksonXmlProperty(localName = "LEN")
 	private String len;
+
+	@JacksonXmlProperty(localName = "SMID")
 	private String smId;
+
+	@JacksonXmlProperty(localName = "NIC")
 	private String nic;
+
+	@JacksonXmlProperty(localName = "SW-ID")
 	private String switchId;
+
+	@JacksonXmlProperty(localName = "DN")
 	private String directoryNumber;
+
+	@JacksonXmlProperty(localName = "CUSTOMERID")
 	private String customerId;
+
+	@JacksonXmlProperty(localName = "SID")
 	private String sid;
 
 	public ReleaseResourceResponse(ResourceIdentifier resourceIdentifier, String smId, String nic, String switchId,
