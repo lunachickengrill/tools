@@ -31,7 +31,7 @@ public class AutConfigService {
 	@Value("${vrm.softswitch.cs2k.id}")
 	private String SOFTSWITCH_CS2K_ID;
 
-	@Value("${vrm.softswitch.cs2k.nic")
+	@Value("${vrm.softswitch.cs2k.nic}")
 	private String SOFTSWITCH_CS2K_NIC;
 
 	@Value("${vrm.softswitch.ngcp.name}")
@@ -40,7 +40,7 @@ public class AutConfigService {
 	@Value("${vrm.softswitch.ngcp.id}")
 	private String SOFTSWITCH_NGCP_ID;
 
-	@Value("${vrm.softswitch.ngcp.nic")
+	@Value("${vrm.softswitch.ngcp.nic}")
 	private String SOFTSWITCH_NGCP_NIC;
 
 	@Value("${vrm.setupconfigdata}")
