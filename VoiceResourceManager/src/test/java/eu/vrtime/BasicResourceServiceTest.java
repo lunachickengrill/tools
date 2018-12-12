@@ -30,7 +30,7 @@ import eu.vrtime.vrm.services.BasicInfrastructureService;
 import eu.vrtime.vrm.services.BasicResourceService;
 
 //Enable @Transactional annotation if you want the transaction be rolled back after the test has finished. Disable to get the data written to the test db
-@Transactional
+//@Transactional
 public class BasicResourceServiceTest extends BaseTest {
 
 	@Test

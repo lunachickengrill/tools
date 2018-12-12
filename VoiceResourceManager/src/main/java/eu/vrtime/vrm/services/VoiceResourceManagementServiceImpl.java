@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.management.ServiceNotFoundException;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import eu.vrtime.vrm.domain.model.Resource;
 import eu.vrtime.vrm.domain.model.SessionManager;
 import eu.vrtime.vrm.domain.model.Softswitch;
 import eu.vrtime.vrm.domain.model.VoiceService;
+import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
 import eu.vrtime.vrm.repositories.ResourceRepository;
 import eu.vrtime.vrm.repositories.SessionManagerRepository;
 import eu.vrtime.vrm.repositories.SoftswitchRepository;
@@ -46,6 +48,7 @@ public class VoiceResourceManagementServiceImpl implements VoiceResourceManageme
 	}
 
 	@Override
+	@Transactional
 	public AllocateResourceResponse allocateResource(String customerId, String SID, String directoryNumber,
 			String lineNo) {
 
@@ -89,8 +92,9 @@ public class VoiceResourceManagementServiceImpl implements VoiceResourceManageme
 	}
 
 	@Override
-	public ReleaseResourceResponse releaseResource(String customerId, String SID, String directoryNumber,
-			String lineNo) {
+	@Transactional
+	public ReleaseResourceResponse releaseResource(String customerId, String directoryNumber
+			) {
 		ReleaseResourceResponse resp = new ReleaseResourceResponse();
 
 		Optional<VoiceService> dbVs = serviceRepository.findByDirectoryNumber(directoryNumber);
@@ -99,7 +103,6 @@ public class VoiceResourceManagementServiceImpl implements VoiceResourceManageme
 		}
 		Resource res = dbVs.get().getResource();
 		resp.setCustomerId(customerId);
-		resp.setSid(SID);
 		resp.setDirectoryNumber(directoryNumber);
 		resp.setLen(res.getIdentifier().getIdentifier());
 
@@ -109,9 +112,9 @@ public class VoiceResourceManagementServiceImpl implements VoiceResourceManageme
 	}
 
 	@Override
-	public GetServiceInfoResponse getServiceInfo(String customerId) {
+	public ServiceInfoResponse getServiceInfo(String customerId) {
 		// TODO Auto-generated method stub
-		GetServiceInfoResponse resp = new GetServiceInfoResponse();
+		ServiceInfoResponse resp = new ServiceInfoResponse();
 
 		Optional<List<VoiceService>> dbVs = serviceRepository.findByCustomerId(customerId);
 		if (!(dbVs.isPresent())) {
@@ -120,12 +123,13 @@ public class VoiceResourceManagementServiceImpl implements VoiceResourceManageme
 
 		List<VoiceService> vcs = dbVs.get();
 		vcs.forEach(element -> {
+
 			Optional<Resource> res = resourceRepository.findByOid(element.getResource().getOid());
 			if (!(res.isPresent())) {
 				throw new ResourceNotFoundException("Resource not found for CustomerId " + customerId);
 			}
 
-			resp.addLen(res.get().getIdentifier().getIdentifier());
+			resp.addLen(res.get().getIdentifier());
 			resp.addDN(element.getDirectoryNumber());
 
 			Optional<SessionManager> sm = sessionManagerRepository.findBySmId(res.get().getSessionManager().getSmId());

@@ -1,6 +1,7 @@
 package eu.vrtime.vrm.services;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
@@ -10,7 +11,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
 
 @JacksonXmlRootElement(localName = "GetServiceInfoResponse")
-public class GetServiceInfoResponse implements Serializable {
+public class ServiceInfoResponse implements Serializable {
 
 	/**
 	 * 
@@ -21,10 +22,10 @@ public class GetServiceInfoResponse implements Serializable {
 	private String customerId;
 
 	@JacksonXmlElementWrapper(localName = "DNs")
-	private List<String> dn;
+	private List<String> dn = new ArrayList<>();
 
 	@JacksonXmlElementWrapper(localName = "LENs")
-	private List<String> len;
+	private List<ResourceIdentifier> len = new ArrayList<>();
 
 	@JacksonXmlProperty(localName = "SMID")
 	private String smId;
@@ -35,14 +36,14 @@ public class GetServiceInfoResponse implements Serializable {
 	@JacksonXmlProperty(localName = "SW-ID")
 	private String switchId;
 
-	public GetServiceInfoResponse(final String customerId, final String smId, final String nic, final String switchId) {
+	public ServiceInfoResponse(final String customerId, final String smId, final String nic, final String switchId) {
 		this.smId = smId;
 		this.nic = nic;
 		this.switchId = switchId;
 
 	}
 
-	public GetServiceInfoResponse() {
+	public ServiceInfoResponse() {
 
 	}
 
@@ -62,11 +63,11 @@ public class GetServiceInfoResponse implements Serializable {
 		this.dn = dn;
 	}
 
-	public List<String> getLen() {
+	public List<ResourceIdentifier> getLen() {
 		return len;
 	}
 
-	public void setLen(List<String> len) {
+	public void setLen(List<ResourceIdentifier> len) {
 		this.len = len;
 	}
 
@@ -93,13 +94,13 @@ public class GetServiceInfoResponse implements Serializable {
 	public void setSwitchId(String switchId) {
 		this.switchId = switchId;
 	}
-	
+
 	public void addDN(String dn) {
 		this.dn.add(dn);
 	}
-	
-	public void addLen(String len) {
-		this.len.add(len);
+
+	public void addLen(ResourceIdentifier resourceIdentifier) {
+		this.len.add(resourceIdentifier);
 	}
 
 	@Override

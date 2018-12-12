@@ -21,6 +21,10 @@ public class ResourceIdentifier implements ValueObject<ResourceIdentifier> {
 		}
 		this.identifier = identifier;
 	}
+	
+	public String toStringIdentifier() {
+		return this.identifier;
+	}
 
 	@Override
 	public boolean sameValueAs(ResourceIdentifier other) {
