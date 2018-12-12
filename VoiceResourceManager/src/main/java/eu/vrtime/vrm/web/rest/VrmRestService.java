@@ -8,20 +8,25 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
 import eu.vrtime.vrm.repositories.ResourceRepository;
 import eu.vrtime.vrm.services.AllocateResourceResponse;
 import eu.vrtime.vrm.services.BasicInfrastructureService;
 import eu.vrtime.vrm.services.ReleaseResourceResponse;
+import eu.vrtime.vrm.services.ServiceInfoResponse;
 import eu.vrtime.vrm.services.VoiceResourceManagementService;
 
 @RestController
 @RequestMapping("/api/rest")
 public class VrmRestService {
 
+	// TODO write @ControllerAdvice to create proper responses in case of
+	// application exceptions
+
 	VoiceResourceManagementService vrmService;
 
-	@Autowired
-	ResourceRepository resourceRepository;
+	// @Autowired
+	// ResourceRepository resourceRepository;
 
 	@Autowired
 	public VrmRestService(final VoiceResourceManagementService vrmService) {
@@ -33,8 +38,9 @@ public class VrmRestService {
 			@RequestParam(value = "sid") String sid, @RequestParam(value = "dn") String directoryNumber,
 			@RequestParam(value = "lineNo") String lineNo) {
 
-		// TODO method body
-		return null;
+		AllocateResourceResponse resp = vrmService.allocateResource(customerId, sid, directoryNumber, lineNo);
+
+		return resp;
 
 	}
 
@@ -43,8 +49,22 @@ public class VrmRestService {
 			@RequestParam(value = "sid") String sid, @RequestParam(value = "dn") String directoryNumber,
 			@RequestParam(value = "lineNo") String lineNo) {
 
-		// TODO method body
-		return null;
+		ReleaseResourceResponse resp = vrmService.releaseResource(customerId, directoryNumber);
+
+		return resp;
+	}
+
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	public ServiceInfoResponse test() {
+		ServiceInfoResponse resp = new ServiceInfoResponse();
+		resp.setCustomerId("TEST123");
+		resp.addDN("0123456");
+		resp.addLen(new ResourceIdentifier("TEST 00 00 01"));
+		resp.setNic("123456");
+		resp.setSmId("100");
+		resp.setSwitchId("TEST SWICHT");
+
+		return resp;
 	}
 
 }
