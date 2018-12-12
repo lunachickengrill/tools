@@ -13,10 +13,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@SuppressWarnings("deprecation")
 	public void configure(AuthenticationManagerBuilder builder) throws Exception {
-		builder.inMemoryAuthentication()
-				.passwordEncoder(new BCryptPasswordEncoder())
-				.withUser("user1").password("secret1").roles("USER").and().withUser("admin1").password("secret1")
-				.roles("USER", "ADMIN");
+		builder.inMemoryAuthentication().passwordEncoder(NoOpPasswordEncoder.getInstance()).withUser("user1")
+				.password("secret1").roles("USER").and().withUser("admin1").password("secret1").roles("USER", "ADMIN");
 	}
 
 	protected void configure(HttpSecurity http) throws Exception {
