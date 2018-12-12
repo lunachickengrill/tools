@@ -54,6 +54,14 @@ public class VrmRestService {
 		return resp;
 	}
 
+	@RequestMapping(value = "/getServiceInfo", method = RequestMethod.POST)
+	public ServiceInfoResponse getServiceInfo(@RequestParam(value = "customerId") String customerId) {
+
+		ServiceInfoResponse resp = vrmService.getServiceInfo(customerId);
+
+		return resp;
+	}
+
 	@RequestMapping(value = "/test", method = RequestMethod.GET)
 	public ServiceInfoResponse test() {
 		ServiceInfoResponse resp = new ServiceInfoResponse();
