@@ -2,6 +2,7 @@ package eu.vrtime.vrm.services;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
@@ -14,12 +15,25 @@ public class AllocateResourceResponse implements Serializable {
 	 */
 	private static final long serialVersionUID = -977653430804986366L;
 
+	@JacksonXmlProperty(localName = "LEN")
 	private String len;
+
+	@JacksonXmlProperty(localName = "SMID")
 	private String smId;
+
+	@JacksonXmlProperty(localName = "NIC")
 	private String nic;
+
+	@JacksonXmlProperty(localName = "SW-ID")
 	private String switchId;
+
+	@JacksonXmlProperty(localName = "DN")
 	private String directoryNumber;
+
+	@JacksonXmlProperty(localName = "CUSTOMERID")
 	private String customerId;
+
+	@JacksonXmlProperty(localName = "SID")
 	private String sid;
 
 	public AllocateResourceResponse(ResourceIdentifier resourceIdentifier, String smId, String nic, String switchId,
@@ -92,6 +106,12 @@ public class AllocateResourceResponse implements Serializable {
 
 	public void setSid(String sid) {
 		this.sid = sid;
+	}
+
+	@Override
+	public String toString() {
+		return "AllocateResourceResponse [len=" + len + ", smId=" + smId + ", nic=" + nic + ", switchId=" + switchId
+				+ ", directoryNumber=" + directoryNumber + ", customerId=" + customerId + ", sid=" + sid + "]";
 	}
 
 }

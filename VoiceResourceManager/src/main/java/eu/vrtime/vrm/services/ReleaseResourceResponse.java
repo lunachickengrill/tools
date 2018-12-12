@@ -23,15 +23,6 @@ public class ReleaseResourceResponse implements Serializable {
 	@JacksonXmlProperty(localName = "LEN")
 	private String len;
 
-	@JacksonXmlProperty(localName = "SMID")
-	private String smId;
-
-	@JacksonXmlProperty(localName = "NIC")
-	private String nic;
-
-	@JacksonXmlProperty(localName = "SW-ID")
-	private String switchId;
-
 	@JacksonXmlProperty(localName = "DN")
 	private String directoryNumber;
 
@@ -44,9 +35,6 @@ public class ReleaseResourceResponse implements Serializable {
 	public ReleaseResourceResponse(ResourceIdentifier resourceIdentifier, String smId, String nic, String switchId,
 			String directoryNumber, String customerId, String sid) {
 		this.len = resourceIdentifier.getIdentifier();
-		this.smId = smId;
-		this.nic = nic;
-		this.switchId = switchId;
 		this.directoryNumber = directoryNumber;
 		this.customerId = customerId;
 		this.sid = sid;
@@ -63,30 +51,6 @@ public class ReleaseResourceResponse implements Serializable {
 
 	public void setLen(String len) {
 		this.len = len;
-	}
-
-	public String getSmId() {
-		return smId;
-	}
-
-	public void setSmId(String smId) {
-		this.smId = smId;
-	}
-
-	public String getNic() {
-		return nic;
-	}
-
-	public void setNic(String nic) {
-		this.nic = nic;
-	}
-
-	public String getSwitchId() {
-		return switchId;
-	}
-
-	public void setSwitchId(String switchId) {
-		this.switchId = switchId;
 	}
 
 	public String getDirectoryNumber() {
@@ -111,6 +75,12 @@ public class ReleaseResourceResponse implements Serializable {
 
 	public void setSid(String sid) {
 		this.sid = sid;
+	}
+
+	@Override
+	public String toString() {
+		return "ReleaseResourceResponse [len=" + len + ", directoryNumber=" + directoryNumber + ", customerId="
+				+ customerId + ", sid=" + sid + "]";
 	}
 
 }

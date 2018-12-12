@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import eu.vrtime.vrm.domain.exceptions.IllegalStateException;
+import eu.vrtime.vrm.domain.exceptions.ResourceNotFoundException;
+import eu.vrtime.vrm.domain.exceptions.SessionManagerNotFoundException;
+import eu.vrtime.vrm.domain.exceptions.SoftswitchNotFoundException;
 import eu.vrtime.vrm.domain.exceptions.VoiceServiceNotFoundException;
 import eu.vrtime.vrm.domain.model.Resource;
 import eu.vrtime.vrm.domain.model.SessionManager;
@@ -16,6 +19,7 @@ import eu.vrtime.vrm.domain.model.Softswitch;
 import eu.vrtime.vrm.domain.model.VoiceService;
 import eu.vrtime.vrm.repositories.ResourceRepository;
 import eu.vrtime.vrm.repositories.SessionManagerRepository;
+import eu.vrtime.vrm.repositories.SoftswitchRepository;
 import eu.vrtime.vrm.repositories.VoiceServiceRepository;
 
 @Service
@@ -26,16 +30,19 @@ public class VoiceResourceManagementServiceImpl implements VoiceResourceManageme
 	private SessionManagerRepository sessionManagerRepository;
 	private ResourceRepository resourceRepository;
 	private VoiceServiceRepository serviceRepository;
+	private SoftswitchRepository switchRepository;
 
 	@Autowired
 	public VoiceResourceManagementServiceImpl(final BasicInfrastructureService infraService,
 			final BasicResourceService resourceService, final SessionManagerRepository sessionManagerRepository,
-			VoiceServiceRepository serviceRepository, final ResourceRepository resourceRepository) {
+			VoiceServiceRepository serviceRepository, final ResourceRepository resourceRepository,
+			final SoftswitchRepository switchRepository) {
 		this.infraService = infraService;
 		this.resourceService = resourceService;
 		this.sessionManagerRepository = sessionManagerRepository;
 		this.serviceRepository = serviceRepository;
 		this.resourceRepository = resourceRepository;
+		this.switchRepository = switchRepository;
 	}
 
 	@Override
@@ -105,15 +112,40 @@ public class VoiceResourceManagementServiceImpl implements VoiceResourceManageme
 	public GetServiceInfoResponse getServiceInfo(String customerId) {
 		// TODO Auto-generated method stub
 		GetServiceInfoResponse resp = new GetServiceInfoResponse();
-		
+
 		Optional<List<VoiceService>> dbVs = serviceRepository.findByCustomerId(customerId);
-		if(!(dbVs.isPresent())) {
+		if (!(dbVs.isPresent())) {
 			throw new VoiceServiceNotFoundException("No VoiceService found for CustomerId " + customerId);
 		}
-		
-		
-		
-		return null;
+
+		List<VoiceService> vcs = dbVs.get();
+		vcs.forEach(element -> {
+			Optional<Resource> res = resourceRepository.findByOid(element.getResource().getOid());
+			if (!(res.isPresent())) {
+				throw new ResourceNotFoundException("Resource not found for CustomerId " + customerId);
+			}
+
+			resp.addLen(res.get().getIdentifier().getIdentifier());
+			resp.addDN(element.getDirectoryNumber());
+
+			Optional<SessionManager> sm = sessionManagerRepository.findBySmId(res.get().getSessionManager().getSmId());
+			if (!(sm.isPresent())) {
+				throw new SessionManagerNotFoundException("SessionManager not found for CustomerId " + customerId);
+			}
+
+			resp.setSmId(sm.get().getSmId());
+
+			Optional<Softswitch> sw = switchRepository.findByOid(sm.get().getSoftswitch().getOid());
+			if (!(sw.isPresent())) {
+				throw new SoftswitchNotFoundException("Softswitch not found for CustomerId " + customerId);
+			}
+
+			resp.setSwitchId(sw.get().getSwitchId());
+			resp.setNic(sw.get().getNic());
+
+		});
+
+		return resp;
 	}
 
 }
