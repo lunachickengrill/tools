@@ -1,6 +1,8 @@
 package eu.vrtime.vrm.web.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,13 +22,9 @@ import eu.vrtime.vrm.services.VoiceResourceManagementService;
 @RequestMapping("/api/rest")
 public class VrmRestService {
 
-	// TODO write @ControllerAdvice to create proper responses in case of
-	// application exceptions
+	// TODO implement proper exception handling
 
 	VoiceResourceManagementService vrmService;
-
-	// @Autowired
-	// ResourceRepository resourceRepository;
 
 	@Autowired
 	public VrmRestService(final VoiceResourceManagementService vrmService) {
@@ -34,13 +32,13 @@ public class VrmRestService {
 	}
 
 	@RequestMapping(value = "/allocateResource", method = RequestMethod.POST)
-	public AllocateResourceResponse allocateResource(@RequestParam(value = "customerId") String customerId,
+	public ResponseEntity<AllocateResourceResponse> allocateResource(@RequestParam(value = "customerId") String customerId,
 			@RequestParam(value = "sid") String sid, @RequestParam(value = "dn") String directoryNumber,
 			@RequestParam(value = "lineNo") String lineNo) {
 
 		AllocateResourceResponse resp = vrmService.allocateResource(customerId, sid, directoryNumber, lineNo);
 
-		return resp;
+		return new ResponseEntity<AllocateResourceResponse>(resp, HttpStatus.OK);
 
 	}
 
@@ -63,7 +61,7 @@ public class VrmRestService {
 	}
 
 	@RequestMapping(value = "/test", method = RequestMethod.GET)
-	public ServiceInfoResponse test() {
+	public ResponseEntity<ServiceInfoResponse> test() {
 		ServiceInfoResponse resp = new ServiceInfoResponse();
 		resp.setCustomerId("TEST123");
 		resp.addDN("0123456");
@@ -72,7 +70,7 @@ public class VrmRestService {
 		resp.setSmId("100");
 		resp.setSwitchId("TEST SWICHT");
 
-		return resp;
+		return new ResponseEntity<ServiceInfoResponse>(resp, HttpStatus.OK);
 	}
 
 }
