@@ -1,5 +1,8 @@
 package eu.vrtime.vrm.web.rest;
 
+import java.sql.SQLException;
+
+import org.h2.jdbc.JdbcSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,7 +15,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
+import eu.vrtime.vrm.domain.exceptions.DataNotFoundException;
+import eu.vrtime.vrm.domain.exceptions.NoFreeResourcesException;
+import eu.vrtime.vrm.domain.exceptions.ResourceNotFoundException;
+import eu.vrtime.vrm.domain.exceptions.SessionManagerNotFoundException;
+import eu.vrtime.vrm.domain.exceptions.SoftswitchNotFoundException;
+import eu.vrtime.vrm.domain.exceptions.StatusCodeException;
+import eu.vrtime.vrm.domain.exceptions.VoiceServiceNotFoundException;
 import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
 import eu.vrtime.vrm.repositories.ResourceRepository;
 import eu.vrtime.vrm.services.AllocateResourceResponse;
@@ -26,9 +37,6 @@ import eu.vrtime.vrm.services.VoiceResourceManagementService;
 @RequestMapping("/api/rest")
 public class VrmRestController {
 
-	// TODO write @ControllerAdvice to create proper responses in case of
-	// application exceptions
-
 	VoiceResourceManagementService vrmService;
 
 	@Autowired
@@ -36,38 +44,50 @@ public class VrmRestController {
 		this.vrmService = vrmService;
 	}
 
-	@RequestMapping(value = "/allocateResource", method = RequestMethod.POST,produces = {MediaType.APPLICATION_XML_VALUE})
-	public ResponseEntity<AllocateResourceResponse> allocateResource(@RequestParam(value = "customerId") String customerId,
-			@RequestParam(value = "sid") String sid, @RequestParam(value = "dn") String directoryNumber,
-			@RequestParam(value = "lineNo") String lineNo) {
-
-		AllocateResourceResponse resp = vrmService.allocateResource(customerId, sid, directoryNumber, lineNo);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_XML);
-		return new ResponseEntity<AllocateResourceResponse>(resp, headers, HttpStatus.OK);
-
+	@RequestMapping(value = "/allocateResource", method = RequestMethod.POST, produces = {
+			MediaType.APPLICATION_XML_VALUE })
+	public ResponseEntity<AllocateResourceResponse> allocateResource(
+			@RequestParam(value = "customerId") String customerId, @RequestParam(value = "sid") String sid,
+			@RequestParam(value = "dn") String directoryNumber, @RequestParam(value = "lineNo") String lineNo) {
+		try {
+			AllocateResourceResponse resp = vrmService.allocateResource(customerId, sid, directoryNumber, lineNo);
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_XML);
+			return new ResponseEntity<AllocateResourceResponse>(resp, headers, HttpStatus.OK);
+		} catch (StatusCodeException ex) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
+		}
 	}
 
-	@RequestMapping(value = "/releaseResource", method = RequestMethod.POST, produces = {MediaType.APPLICATION_XML_VALUE})
-	public ResponseEntity<ReleaseResourceResponse> releaseResource(@RequestParam(value = "customerId") String customerId,
-			@RequestParam(value = "sid") String sid, @RequestParam(value = "dn") String directoryNumber,
-			@RequestParam(value = "lineNo") String lineNo) {
+	@RequestMapping(value = "/releaseResource", method = RequestMethod.POST, produces = {
+			MediaType.APPLICATION_XML_VALUE })
+	public ResponseEntity<ReleaseResourceResponse> releaseResource(
+			@RequestParam(value = "customerId") String customerId, @RequestParam(value = "sid") String sid,
+			@RequestParam(value = "dn") String directoryNumber, @RequestParam(value = "lineNo") String lineNo) {
 
-		ReleaseResourceResponse resp = vrmService.releaseResource(customerId, directoryNumber);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_XML);
+		try {
+			ReleaseResourceResponse resp = vrmService.releaseResource(customerId, directoryNumber);
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_XML);
 
-		return new ResponseEntity<ReleaseResourceResponse>(resp, headers, HttpStatus.OK);
+			return new ResponseEntity<ReleaseResourceResponse>(resp, headers, HttpStatus.OK);
+		} catch (StatusCodeException ex) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
+		}
 	}
 
-	@RequestMapping(value = "/getServiceInfo", method = RequestMethod.GET, produces = {MediaType.APPLICATION_XML_VALUE})
+	@RequestMapping(value = "/getServiceInfo", method = RequestMethod.GET, produces = {
+			MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<ServiceInfoResponse> getServiceInfo(@RequestParam(value = "customerId") String customerId) {
 
-		ServiceInfoResponse resp = vrmService.getServiceInfo(customerId);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_XML);
-
-		return new ResponseEntity<ServiceInfoResponse>(resp, headers, HttpStatus.OK);
+		try {
+			ServiceInfoResponse resp = vrmService.getServiceInfo(customerId);
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_XML);
+			return new ResponseEntity<ServiceInfoResponse>(resp, headers, HttpStatus.OK);
+		} catch (StatusCodeException ex) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
+		}
 	}
 
 	@RequestMapping(value = "/testXml", method = RequestMethod.GET, produces = { "application/xml", "text/xml" })
