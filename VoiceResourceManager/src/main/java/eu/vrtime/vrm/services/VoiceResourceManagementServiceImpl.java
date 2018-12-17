@@ -69,7 +69,6 @@ public class VoiceResourceManagementServiceImpl implements VoiceResourceManageme
 			resp.setSmId(dbSm.getSmId());
 			resp.setCustomerId(dbVs.getCustomerId());
 			resp.setDirectoryNumber(dbVs.getDirectoryNumber());
-			resp.setSid(dbVs.getServiceId());
 
 		} else {
 
@@ -86,15 +85,14 @@ public class VoiceResourceManagementServiceImpl implements VoiceResourceManageme
 			resp.setSmId(dbSm.getSmId());
 			resp.setCustomerId(dbVs.getCustomerId());
 			resp.setDirectoryNumber(dbVs.getDirectoryNumber());
-			resp.setSid(dbVs.getServiceId());
+
 		}
 		return resp;
 	}
 
 	@Override
 	@Transactional
-	public ReleaseResourceResponse releaseResource(String customerId, String directoryNumber
-			) {
+	public ReleaseResourceResponse releaseResource(String customerId, String directoryNumber) {
 		ReleaseResourceResponse resp = new ReleaseResourceResponse();
 
 		Optional<VoiceService> dbVs = serviceRepository.findByDirectoryNumber(directoryNumber);
@@ -129,8 +127,7 @@ public class VoiceResourceManagementServiceImpl implements VoiceResourceManageme
 				throw new ResourceNotFoundException("Resource not found for CustomerId " + customerId);
 			}
 
-			resp.addLen(res.get().getIdentifier());
-			resp.addDN(element.getDirectoryNumber());
+			resp.addNumber(element.getDirectoryNumber(), res.get().getIdentifier().getIdentifier());
 
 			Optional<SessionManager> sm = sessionManagerRepository.findBySmId(res.get().getSessionManager().getSmId());
 			if (!(sm.isPresent())) {

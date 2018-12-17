@@ -20,16 +20,16 @@ public class ReleaseResourceResponse implements Serializable {
 	 */
 	private static final long serialVersionUID = 5512621358722170724L;
 
-	@JacksonXmlProperty(localName = "LEN")
+	@JacksonXmlProperty(localName = "len")
 	private String len;
 
-	@JacksonXmlProperty(localName = "DN")
+	@JacksonXmlProperty(localName = "dn")
 	private String directoryNumber;
 
-	@JacksonXmlProperty(localName = "CUSTOMERID")
+	@JacksonXmlProperty(localName = "customerId")
 	private String customerId;
 
-	@JacksonXmlProperty(localName = "SID")
+	@JacksonXmlProperty(localName = "sid")
 	private String sid;
 
 	public ReleaseResourceResponse(ResourceIdentifier resourceIdentifier, String smId, String nic, String switchId,

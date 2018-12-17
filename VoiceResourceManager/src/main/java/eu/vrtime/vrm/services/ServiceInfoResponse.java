@@ -2,13 +2,16 @@ package eu.vrtime.vrm.services;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
+import eu.vrtime.vrm.domain.shared.VoiceNumber;
 
 @JacksonXmlRootElement(localName = "GetServiceInfoResponse")
 public class ServiceInfoResponse implements Serializable {
@@ -18,25 +21,23 @@ public class ServiceInfoResponse implements Serializable {
 	 */
 	private static final long serialVersionUID = 8563800613252717971L;
 
-	@JacksonXmlProperty(localName = "CUSTOMERID")
+	@JacksonXmlProperty(localName = "customerId")
 	private String customerId;
 
-	@JacksonXmlElementWrapper(localName = "DNs")
-	private List<String> dn = new ArrayList<>();
-
-	@JacksonXmlElementWrapper(localName = "LENs")
-	private List<ResourceIdentifier> len = new ArrayList<>();
-
-	@JacksonXmlProperty(localName = "SMID")
+	@JacksonXmlProperty(localName = "smid")
 	private String smId;
 
-	@JacksonXmlProperty(localName = "NIC")
+	@JacksonXmlProperty(localName = "nic")
 	private String nic;
 
-	@JacksonXmlProperty(localName = "SW-ID")
+	@JacksonXmlProperty(localName = "swId")
 	private String switchId;
 
+	@JacksonXmlElementWrapper(localName = "numbers")
+	private List<VoiceNumber> number = new ArrayList<>();
+
 	public ServiceInfoResponse(final String customerId, final String smId, final String nic, final String switchId) {
+		this.customerId = customerId;
 		this.smId = smId;
 		this.nic = nic;
 		this.switchId = switchId;
@@ -53,22 +54,6 @@ public class ServiceInfoResponse implements Serializable {
 
 	public void setCustomerId(String customerId) {
 		this.customerId = customerId;
-	}
-
-	public List<String> getDn() {
-		return dn;
-	}
-
-	public void setDn(List<String> dn) {
-		this.dn = dn;
-	}
-
-	public List<ResourceIdentifier> getLen() {
-		return len;
-	}
-
-	public void setLen(List<ResourceIdentifier> len) {
-		this.len = len;
 	}
 
 	public String getSmId() {
@@ -95,18 +80,16 @@ public class ServiceInfoResponse implements Serializable {
 		this.switchId = switchId;
 	}
 
-	public void addDN(String dn) {
-		this.dn.add(dn);
+	public List<VoiceNumber> getNumber() {
+		return number;
 	}
 
-	public void addLen(ResourceIdentifier resourceIdentifier) {
-		this.len.add(resourceIdentifier);
+	public void setNumber(List<VoiceNumber> number) {
+		this.number = number;
 	}
 
-	@Override
-	public String toString() {
-		return "GetServiceInfoResponse [customerId=" + customerId + ", dn=" + dn + ", len=" + len + ", smId=" + smId
-				+ ", nic=" + nic + ", switchId=" + switchId + "]";
+	public void addNumber(String dn, String len) {
+		number.add(new VoiceNumber(dn, len));
 	}
 
 }

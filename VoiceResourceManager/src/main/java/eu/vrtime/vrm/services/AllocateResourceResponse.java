@@ -15,26 +15,24 @@ public class AllocateResourceResponse implements Serializable {
 	 */
 	private static final long serialVersionUID = -977653430804986366L;
 
-	@JacksonXmlProperty(localName = "LEN")
+	@JacksonXmlProperty(localName = "len")
 	private String len;
 
-	@JacksonXmlProperty(localName = "SMID")
+	@JacksonXmlProperty(localName = "smId")
 	private String smId;
 
-	@JacksonXmlProperty(localName = "NIC")
+	@JacksonXmlProperty(localName = "nic")
 	private String nic;
 
-	@JacksonXmlProperty(localName = "SW-ID")
+	@JacksonXmlProperty(localName = "swId")
 	private String switchId;
 
-	@JacksonXmlProperty(localName = "DN")
+	@JacksonXmlProperty(localName = "dn")
 	private String directoryNumber;
 
-	@JacksonXmlProperty(localName = "CUSTOMERID")
+	@JacksonXmlProperty(localName = "customerId")
 	private String customerId;
 
-	@JacksonXmlProperty(localName = "SID")
-	private String sid;
 
 	public AllocateResourceResponse(ResourceIdentifier resourceIdentifier, String smId, String nic, String switchId,
 			String directoryNumber, String customerId, String sid) {
@@ -44,7 +42,6 @@ public class AllocateResourceResponse implements Serializable {
 		this.switchId = switchId;
 		this.directoryNumber = directoryNumber;
 		this.customerId = customerId;
-		this.sid = sid;
 
 	}
 
@@ -100,18 +97,12 @@ public class AllocateResourceResponse implements Serializable {
 		this.customerId = customerId;
 	}
 
-	public String getSid() {
-		return sid;
-	}
-
-	public void setSid(String sid) {
-		this.sid = sid;
-	}
-
 	@Override
 	public String toString() {
 		return "AllocateResourceResponse [len=" + len + ", smId=" + smId + ", nic=" + nic + ", switchId=" + switchId
-				+ ", directoryNumber=" + directoryNumber + ", customerId=" + customerId + ", sid=" + sid + "]";
+				+ ", directoryNumber=" + directoryNumber + ", customerId=" + customerId + "]";
 	}
+
+
 
 }
