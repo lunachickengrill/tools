@@ -64,8 +64,6 @@ public class VrmRestService {
 	public ResponseEntity<ServiceInfoResponse> test() {
 		ServiceInfoResponse resp = new ServiceInfoResponse();
 		resp.setCustomerId("TEST123");
-		resp.addDN("0123456");
-		resp.addLen(new ResourceIdentifier("TEST 00 00 01"));
 		resp.setNic("123456");
 		resp.setSmId("100");
 		resp.setSwitchId("TEST SWICHT");
