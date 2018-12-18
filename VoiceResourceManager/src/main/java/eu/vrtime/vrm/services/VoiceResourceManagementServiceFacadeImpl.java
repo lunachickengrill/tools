@@ -63,7 +63,7 @@ public class VoiceResourceManagementServiceFacadeImpl implements VoiceResourceMa
 			resourceService.allocateResourceForVoiceService(dbRes, vs);
 			VoiceService dbVs = serviceRepository.findByResource(dbRes).get();
 
-			resp.setSwitchId(dbSw.getSwitchId());
+			resp.setSwitchId(dbSw.getSwitchId().toStringSwId());
 			resp.setNic(dbSw.getNic());
 			resp.setSmId(dbSm.getSmId());
 			resp.setCustomerId(dbVs.getCustomerId());
@@ -79,7 +79,7 @@ public class VoiceResourceManagementServiceFacadeImpl implements VoiceResourceMa
 			resourceService.allocateResourceForVoiceService(dbRes, vs);
 			VoiceService dbVs = serviceRepository.findByResource(dbRes).get();
 
-			resp.setSwitchId(dbSw.getSwitchId());
+			resp.setSwitchId(dbSw.getSwitchId().toStringSwId());
 			resp.setNic(dbSw.getNic());
 			resp.setSmId(dbSm.getSmId());
 			resp.setCustomerId(dbVs.getCustomerId());
@@ -139,7 +139,7 @@ public class VoiceResourceManagementServiceFacadeImpl implements VoiceResourceMa
 				throw new SoftswitchNotFoundException("Softswitch not found for CustomerId " + customerId);
 			}
 
-			resp.setSwitchId(sw.get().getSwitchId());
+			resp.setSwitchId(sw.get().getSwitchId().toStringSwId());
 			resp.setNic(sw.get().getNic());
 
 		});

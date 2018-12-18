@@ -6,14 +6,15 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import eu.vrtime.vrm.api.exceptions.DataNotFoundException;
-import eu.vrtime.vrm.api.exceptions.IllegalStateException;
 import eu.vrtime.vrm.api.exceptions.NoFreeResourcesException;
+import eu.vrtime.vrm.api.exceptions.ResourceNotFoundException;
 import eu.vrtime.vrm.api.exceptions.SessionManagerNotFoundException;
 import eu.vrtime.vrm.api.exceptions.SoftswitchNotFoundException;
 import eu.vrtime.vrm.domain.model.Resource;
@@ -23,6 +24,7 @@ import eu.vrtime.vrm.domain.shared.ResourceCountingResult;
 import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
 import eu.vrtime.vrm.domain.shared.ResourceStatus;
 import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
+import eu.vrtime.vrm.domain.shared.SwitchId;
 import eu.vrtime.vrm.repositories.ResourceRepository;
 import eu.vrtime.vrm.repositories.SessionManagerRepository;
 import eu.vrtime.vrm.repositories.SoftswitchRepository;
@@ -54,20 +56,27 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 
 	@Override
 	@Transactional
-	public Softswitch addSoftswitch(String switchId,String nic, String name, SoftswitchStatus status) {
-		Softswitch sw = new Softswitch(switchId,nic, name, status);
+	public Softswitch addSoftswitch(final String switchId, final String nic, final String name,
+			final SoftswitchStatus status) {
+		Validate.notNull(switchId);
+		Validate.notNull(nic);
+		Validate.notNull(name);
+		Validate.notNull(status);
+
+		SwitchId swId = new SwitchId(switchId);
+
+		Softswitch sw = new Softswitch(swId, nic, name, status);
 		return switchRepository.saveAndFlush(sw);
 	}
 
 	@Override
 	@Transactional
 	public SessionManager addSessionManager(final String smId, final Softswitch softswitch) {
+		Validate.notNull(smId);
+		Validate.notNull(softswitch);
+		Validate.notNull(softswitch.getOid());
 
-		if (softswitch.getOid() == null) {
-			throw new IllegalStateException("No OID present. Object apparently not persisted yet");
-		}
-		Long oid = softswitch.getOid();
-		Optional<Softswitch> dbSw = switchRepository.findById(oid);
+		Optional<Softswitch> dbSw = switchRepository.findById(softswitch.getOid());
 		if (!(dbSw.isPresent())) {
 			throw new SoftswitchNotFoundException("Softswitch not found");
 		}
@@ -80,37 +89,72 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 
 	@Override
 	@Transactional
-	public Softswitch changeSoftswitch(Softswitch softswitch) {
+	public Softswitch changeSoftswitch(final Softswitch softswitch) {
+		Validate.notNull(softswitch);
+		Validate.notNull(softswitch.getOid());
+
 		return switchRepository.saveAndFlush(softswitch);
 	}
 
 	@Override
 	@Transactional
-	public SessionManager changeSessionManager(SessionManager sessionManager) {
+	public SessionManager changeSessionManager(final SessionManager sessionManager) {
+		Validate.notNull(sessionManager);
+		Validate.notNull(sessionManager.getOid());
+
+		Optional<SessionManager> dbSessionManager = sessionManagerRepository.findByOid(sessionManager.getOid());
+		if (!(dbSessionManager.isPresent())) {
+			throw new SessionManagerNotFoundException("SessionManager not found");
+		}
+
 		return sessionManagerRepository.saveAndFlush(sessionManager);
 	}
 
 	@Override
 	@Transactional
-	public Resource changeResource(Resource resource) {
+	public Resource changeResource(final Resource resource) {
+		Validate.notNull(resource);
+		Validate.notNull(resource.getOid());
+
 		return resourceRepository.saveAndFlush(resource);
 	}
 
 	@Override
 	@Transactional
-	public void deleteSoftswitch(Softswitch softswitch) {
+	public void deleteSoftswitch(final Softswitch softswitch) {
+		Validate.notNull(softswitch);
+		Validate.notNull(softswitch.getOid());
+
+		Optional<Softswitch> dbSoftswitch = switchRepository.findByOid(softswitch.getOid());
+		if (!(dbSoftswitch.isPresent())) {
+			throw new SoftswitchNotFoundException("Softswitch not found");
+		}
 		switchRepository.delete(softswitch);
 	}
 
 	@Override
 	@Transactional
-	public void deleteSessionManager(SessionManager sessionManager) {
+	public void deleteSessionManager(final SessionManager sessionManager) {
+		Validate.notNull(sessionManager);
+		Validate.notNull(sessionManager.getOid());
+
+		Optional<SessionManager> dbSessionManager = sessionManagerRepository.findByOid(sessionManager.getOid());
+		if (!(dbSessionManager.isPresent())) {
+			throw new SessionManagerNotFoundException("SessionManager not found");
+		}
 		sessionManagerRepository.delete(sessionManager);
 	}
 
 	@Override
 	@Transactional
-	public void deleteResource(Resource resource) {
+	public void deleteResource(final Resource resource) {
+		Validate.notNull(resource);
+		Validate.notNull(resource.getOid());
+
+		Optional<Resource> dbResource = resourceRepository.findByOid(resource.getOid());
+		if (!(dbResource.isPresent())) {
+			throw new ResourceNotFoundException("Resource not found");
+		}
 		resourceRepository.delete(resource);
 
 	}
@@ -132,10 +176,8 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	@Override
 	@Transactional
 	public Resource addResource(final String smId, final Resource resource) {
-
-		if (smId == null) {
-			throw new IllegalStateException("SessionManager ID missing");
-		}
+		Validate.notEmpty(smId);
+		Validate.notNull(resource);
 
 		Optional<SessionManager> dbSessionManager = sessionManagerRepository.findBySmId(smId);
 		if (!(dbSessionManager.isPresent())) {
@@ -150,39 +192,67 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 
 	@Override
 	@Transactional
-	public Resource addResource(ResourceIdentifier identifier, SessionManager sessionManager) {
-		
-		if (sessionManager.getOid()==null) {
-			throw new IllegalStateException("No OID for SessionManager");
+	public void addResource(final ResourceIdentifier identifier, final SessionManager sessionManager) {
+		Validate.notNull(identifier);
+		Validate.notNull(sessionManager);
+		Validate.notNull(sessionManager.getOid());
+
+		Optional<SessionManager> dbSessionManager = sessionManagerRepository.findById(sessionManager.getOid());
+
+		if (!(dbSessionManager.isPresent())) {
+			throw new SessionManagerNotFoundException("SessionManager not found " + dbSessionManager.get().getSmId());
 		}
 
-		Long oid = sessionManager.getOid();
-		Optional<SessionManager> dbSm = sessionManagerRepository.findById(oid);
-
-		if (!(dbSm.isPresent())) {
-			throw new SessionManagerNotFoundException("SessionManager not found " + dbSm.get().getSmId());
-		}
-
-		SessionManager sm = dbSm.get();
+		SessionManager sm = dbSessionManager.get();
 		sm.addResource(new Resource(identifier, ResourceStatus.FREE));
-		sessionManagerRepository.save(sm);
-
-		return null;
+		sessionManagerRepository.saveAndFlush(sm);
 
 	}
 
 	@Override
 	@Transactional
-	public Resource getFirstFreeeResourceBySessionManager(SessionManager sessionManager) {
-		Optional<Resource> res = resourceRepository.findTopByStatusAndSessionManagerOrderByOid(ResourceStatus.FREE,
-				sessionManager);
-		return res.get();
+	public Resource getFirstFreeeResourceBySessionManager(final SessionManager sessionManager) {
+		Validate.notNull(sessionManager);
+		Validate.notNull(sessionManager.getOid());
+
+		Optional<Resource> dbResource = resourceRepository
+				.findTopByStatusAndSessionManagerOrderByOid(ResourceStatus.FREE, sessionManager);
+		if (!(dbResource.isPresent())) {
+			throw new NoFreeResourcesException("No free resource on SessionManager " + sessionManager.getSmId());
+		}
+		return dbResource.get();
 	}
 
 	@Override
 	@Transactional
-	public void lockResource(Resource resource) {
-		// TODO Auto-generated method stub
+	public void lockResource(final Resource resource) {
+		Validate.notNull(resource);
+		Validate.notNull(resource.getOid());
+
+		Optional<Resource> dbResource = resourceRepository.findByOid(resource.getOid());
+		if (!(dbResource.isPresent())) {
+			throw new ResourceNotFoundException("Resource not found");
+		}
+
+		Resource dbRes = dbResource.get();
+		dbRes.setStatus(ResourceStatus.LOCKED);
+		resourceRepository.saveAndFlush(dbRes);
+
+	}
+
+	@Override
+	public void unlockResource(final Resource resource) {
+		Validate.notNull(resource);
+		Validate.notNull(resource.getOid());
+
+		Optional<Resource> dbResource = resourceRepository.findByOid(resource.getOid());
+		if (!(dbResource.isPresent())) {
+			throw new ResourceNotFoundException("Resource not found");
+		}
+
+		Resource dbRes = dbResource.get();
+		dbRes.setStatus(ResourceStatus.FREE);
+		resourceRepository.saveAndFlush(dbRes);
 
 	}
 

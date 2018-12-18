@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -18,6 +19,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 
 import eu.vrtime.vrm.api.exceptions.VoiceServiceNotFoundException;
 import eu.vrtime.vrm.domain.model.Resource;
+import eu.vrtime.vrm.domain.model.ResourceLog;
 import eu.vrtime.vrm.domain.model.SessionManager;
 import eu.vrtime.vrm.domain.model.VoiceService;
 import eu.vrtime.vrm.domain.shared.ResourceCountingResult;
@@ -84,9 +86,9 @@ public class BasicResourceServiceTest extends BaseTest {
 		assertNotNull("Resource is null", res);
 
 		resourceService.allocateResourceForVoiceService(res, VS_CUST2_DN1);
-				
+
 		VoiceService dbVs1 = serviceRepository.findByCustomerIdAndLineNo(CUST2_CUSTID, 1).get();
-		
+
 		assertNotNull("VoiceService is null", dbVs1);
 		assertTrue("CustomerId not matching", dbVs1.getCustomerId().equals(CUST2_CUSTID));
 		assertTrue("DN not matching", dbVs1.getDirectoryNumber().equals(CUST2_DN1));
@@ -107,7 +109,7 @@ public class BasicResourceServiceTest extends BaseTest {
 		System.out.println("dbVS2 " + dbVs2.toString());
 
 	}
-	
+
 	@Test
 	public void releaseReosurceTest() {
 		SessionManager dbSm = infraService.getSessionManagerWithMaxFreeResources();
@@ -115,19 +117,24 @@ public class BasicResourceServiceTest extends BaseTest {
 		Long resOid = res.getOid();
 		resourceService.allocateResourceForVoiceService(res, VS_CUST3_DN1);
 		Optional<VoiceService> dbVs = serviceRepository.findByCustomerIdAndLineNo(CUST3_CUSTID, 1);
-		
+
 		assertTrue(dbVs.get().getResource().getIdentifier() != null);
-		
+
 		resourceService.releaseResouceForVoiceService(VS_CUST3_DN1);
 		Optional<VoiceService> dbVsdeleted = serviceRepository.findByCustomerIdAndLineNo(CUST3_CUSTID, 1);
 		assertFalse(dbVsdeleted.isPresent());
-		
+
 		res = resourceRepository.findById(resOid).get();
 		assertTrue(res.getStatus().equals(ResourceStatus.FREE));
-		
-		
-		
-		
+
+		Optional<List<ResourceLog>> resourceLogEntry = logRepository.findByDn(CUST3_DN1);
+		assertTrue(resourceLogEntry.isPresent());
+		assertTrue(resourceLogEntry.get().size() == 1);
+
+		assertTrue(resourceLogEntry.get().get(0).getCustomerId().equals(CUST3_CUSTID));
+		assertTrue(resourceLogEntry.get().get(0).getDn().equals(CUST3_DN1));
+		assertTrue(resourceLogEntry.get().get(0).getLen().equals(dbVs.get().getResource().getIdentifier()));
+
 	}
 
 }

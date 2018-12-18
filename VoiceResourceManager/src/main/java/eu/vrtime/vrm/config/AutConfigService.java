@@ -19,6 +19,7 @@ import eu.vrtime.vrm.domain.model.Softswitch;
 import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
 import eu.vrtime.vrm.domain.shared.ResourceStatus;
 import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
+import eu.vrtime.vrm.domain.shared.SwitchId;
 import eu.vrtime.vrm.repositories.SessionManagerRepository;
 import eu.vrtime.vrm.repositories.SoftswitchRepository;
 
@@ -61,9 +62,9 @@ public class AutConfigService {
 	@Transactional
 	private void setup() {
 		if (SETUPCONFIGDATA == true) {
-			Softswitch dbSw1 = switchRepository.save(new Softswitch(SOFTSWITCH_CS2K_ID, SOFTSWITCH_CS2K_NIC,
+			Softswitch dbSw1 = switchRepository.save(new Softswitch(new SwitchId(SOFTSWITCH_CS2K_ID), SOFTSWITCH_CS2K_NIC,
 					SOFTSWITCH_CS2K_NAME, SoftswitchStatus.ONLINE));
-			Softswitch dbSw2 = switchRepository.save(new Softswitch(SOFTSWITCH_NGCP_ID, SOFTSWITCH_NGCP_NIC,
+			Softswitch dbSw2 = switchRepository.save(new Softswitch(new SwitchId(SOFTSWITCH_NGCP_ID), SOFTSWITCH_NGCP_NIC,
 					SOFTSWITCH_NGCP_NAME, SoftswitchStatus.OFFLINE));
 
 			SessionManager sm1 = new SessionManager("1", dbSw1);

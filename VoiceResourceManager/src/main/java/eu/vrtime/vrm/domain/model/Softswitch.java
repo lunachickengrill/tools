@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -15,15 +16,23 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.Validate;
+
 import eu.vrtime.vrm.domain.shared.AbstractBaseEntity;
 import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
+import eu.vrtime.vrm.domain.shared.SwitchId;
 
 @Entity
 @Table(name = "T_SOFTSWITCH")
 public class Softswitch extends AbstractBaseEntity {
 
+	// @Column(name = "switch_id", nullable = false, updatable = true, unique =
+	// true)
+	// private String switchId;
+
+	@Embedded
 	@Column(name = "switch_id", nullable = false, updatable = true, unique = true)
-	private String switchId;
+	private SwitchId switchId;
 
 	@Column(name = "nic", nullable = false, updatable = true, unique = false)
 	private String nic;
@@ -40,18 +49,23 @@ public class Softswitch extends AbstractBaseEntity {
 	@OneToMany(mappedBy = "softswitch", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<SessionManager> sessionManagers = new HashSet<>();
 
-	public Softswitch(String switchId, String nic, String name, SoftswitchStatus status) {
+	public Softswitch(final SwitchId switchId, final String nic, final String name, final SoftswitchStatus status) {
+		Validate.notNull(switchId);
+		Validate.notNull(nic);
+		Validate.notNull(name);
+		Validate.notNull(status);
+
 		this.switchId = switchId;
 		this.nic = nic;
 		this.name = name;
 		this.status = status;
 	}
 
-	public String getSwitchId() {
+	public SwitchId getSwitchId() {
 		return switchId;
 	}
 
-	public void setSwitchId(String switchId) {
+	public void setSwitchId(SwitchId switchId) {
 		this.switchId = switchId;
 	}
 

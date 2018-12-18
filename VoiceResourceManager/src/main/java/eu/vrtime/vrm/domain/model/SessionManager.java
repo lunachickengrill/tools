@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.Validate;
+
 import eu.vrtime.vrm.domain.shared.AbstractBaseEntity;
 
 @Entity
@@ -34,6 +36,9 @@ public class SessionManager extends AbstractBaseEntity {
 	private Set<Resource> resources = new HashSet<>();
 
 	public SessionManager(final String smId, final Softswitch softswitch) {
+		Validate.notNull(smId);
+		Validate.notNull(softswitch);
+		
 		this.smId = smId;
 		this.softswitch = softswitch;
 	}

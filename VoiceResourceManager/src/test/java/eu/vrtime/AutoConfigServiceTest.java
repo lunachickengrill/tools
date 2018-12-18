@@ -13,6 +13,7 @@ import eu.vrtime.vrm.domain.model.Resource;
 import eu.vrtime.vrm.domain.model.SessionManager;
 import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
 import eu.vrtime.vrm.domain.shared.ResourceStatus;
+import eu.vrtime.vrm.domain.shared.SwitchId;
 import eu.vrtime.vrm.repositories.SessionManagerRepository;
 import eu.vrtime.vrm.repositories.SoftswitchRepository;
 
@@ -35,7 +36,7 @@ public class AutoConfigServiceTest extends BaseTest {
 		long countSwitch = switchRepository.count();
 		assertTrue(countSwitch>0);
 					
-		Set<SessionManager> dbSm = switchRepository.findBySwitchId("1").get().getSessionManagers();
+		Set<SessionManager> dbSm = switchRepository.findBySwitchId(new SwitchId("1")).get().getSessionManagers();
 		assertTrue(dbSm.size()>0);	
 		
 	}

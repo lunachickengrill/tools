@@ -27,12 +27,16 @@ public interface BasicInfrastructureService {
 
 	public void deleteResource(Resource resource);
 
-	public Resource addResource(ResourceIdentifier identifier, SessionManager sessionManager);
+	public void addResource(ResourceIdentifier identifier, SessionManager sessionManager);
 
 	public SessionManager getSessionManagerWithMaxFreeResources();
 
 	public Resource getFirstFreeeResourceBySessionManager(SessionManager sessionManager);
 
 	public void lockResource(Resource resource);
+	
+	public void unlockResource(Resource resource);
+	
+	
 
 }

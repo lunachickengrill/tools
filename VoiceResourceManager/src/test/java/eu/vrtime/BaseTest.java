@@ -24,6 +24,7 @@ import eu.vrtime.vrm.domain.shared.ResourceCountingResult;
 import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
 import eu.vrtime.vrm.domain.shared.ResourceStatus;
 import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
+import eu.vrtime.vrm.repositories.ResourceLogRepository;
 import eu.vrtime.vrm.repositories.ResourceRepository;
 import eu.vrtime.vrm.repositories.SessionManagerRepository;
 import eu.vrtime.vrm.repositories.SoftswitchRepository;
@@ -76,5 +77,8 @@ public class BaseTest {
 
 	@Autowired
 	protected BasicResourceService resourceService;
+	
+	@Autowired
+	protected ResourceLogRepository logRepository;
 
 }

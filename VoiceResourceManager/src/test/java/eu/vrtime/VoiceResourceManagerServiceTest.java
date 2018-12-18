@@ -31,7 +31,8 @@ public class VoiceResourceManagerServiceTest extends BaseTest {
 		AllocateResourceResponse resp = vrmService.allocateResource(CUST1_CUSTID, CUST1_SID, CUST1_DN1, "1");
 		assertNotNull(resp);
 
-		assertTrue(resp.getCustomerId().equals(CUST1_CUSTID) && resp.getDirectoryNumber().equals(CUST1_DN1));
+		assertTrue(resp.getCustomerId().equals(CUST1_CUSTID));
+		assertTrue(resp.getNumber().size() > 0);
 		System.out.println(resp.toString());
 
 		ServiceInfoResponse svcResp = vrmService.getServiceInfo(CUST1_CUSTID);
@@ -44,29 +45,43 @@ public class VoiceResourceManagerServiceTest extends BaseTest {
 
 		AllocateResourceResponse respOne = vrmService.allocateResource(CUST2_CUSTID, CUST2_SID, CUST2_DN1, "1");
 		assertNotNull(respOne);
-		assertTrue(respOne.getCustomerId().equals(CUST2_CUSTID) && respOne.getDirectoryNumber().equals(CUST2_DN1));
-
+		assertTrue(respOne.getCustomerId().equals(CUST2_CUSTID));
+		assertTrue(respOne.getNumber().size() == 1);
 		ServiceInfoResponse svcRespOne = vrmService.getServiceInfo(CUST2_CUSTID);
 		assertNotNull(svcRespOne);
 
 		AllocateResourceResponse respTwo = vrmService.allocateResource(CUST2_CUSTID, CUST2_SID, CUST2_DN2, "2");
 		assertNotNull(respTwo);
-		assertTrue(respTwo.getCustomerId().equals(CUST2_CUSTID) && respTwo.getDirectoryNumber().equals(CUST2_DN2));
-
+		assertTrue(respTwo.getCustomerId().equals(CUST2_CUSTID));
+		assertTrue(respTwo.getNumber().size() == 1);
 		ServiceInfoResponse svcRespTwo = vrmService.getServiceInfo(CUST2_CUSTID);
 		assertNotNull(svcRespTwo);
 
 	}
+	
+	@Test
+	public void allocateAndReleaseResourceTest() {
+		
+		AllocateResourceResponse resp = vrmService.allocateResource(CUST3_CUSTID, CUST3_SID, CUST3_DN1, "1");
+		assertNotNull(resp);
+
+		assertTrue(resp.getCustomerId().equals(CUST3_CUSTID));
+		
+		ServiceInfoResponse svcResp = vrmService.getServiceInfo(CUST3_CUSTID);
+		assertNotNull(svcResp);
+
+		vrmService.releaseResource(CUST3_CUSTID, CUST3_DN1);
+		
+	}
 
 	@Test(expected = VoiceServiceNotFoundException.class)
-	public void allocateAndReleaseResourceTest() {
+	public void allocateAndReleaseResourceExpectExceptionTest() {
 
 		AllocateResourceResponse resp = vrmService.allocateResource(CUST3_CUSTID, CUST3_SID, CUST3_DN1, "1");
 		assertNotNull(resp);
 
-		assertTrue(resp.getCustomerId().equals(CUST3_CUSTID) && resp.getDirectoryNumber().equals(CUST3_DN1));
-		System.out.println(resp.toString());
-
+		assertTrue(resp.getCustomerId().equals(CUST3_CUSTID));
+		
 		ServiceInfoResponse svcResp = vrmService.getServiceInfo(CUST3_CUSTID);
 		assertNotNull(svcResp);
 
@@ -76,5 +91,6 @@ public class VoiceResourceManagerServiceTest extends BaseTest {
 		System.out.println(svcResp.toString());
 
 	}
+	
 
 }

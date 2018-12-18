@@ -1,6 +1,5 @@
 package eu.vrtime.vrm.domain.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,15 +7,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.Validate;
+
 import eu.vrtime.vrm.domain.shared.AbstractBaseEntity;
 
 @Entity
 @Table(name = "T_VOICESERVICE")
 public class VoiceService extends AbstractBaseEntity {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 6895257404688974719L;
 
 	@Column(name = "service_id", nullable = false, updatable = true, unique = false)
@@ -35,7 +33,13 @@ public class VoiceService extends AbstractBaseEntity {
 	@JoinColumn(name = "resourceId")
 	public Resource resource;
 
-	public VoiceService(String serviceId, String customerId, String directoryNumber, int lineNo) {
+	public VoiceService(final String serviceId, final String customerId, final String directoryNumber,
+			final int lineNo) {
+		Validate.notNull(serviceId);
+		Validate.notNull(customerId);
+		Validate.notNull(directoryNumber);
+		Validate.notNull(lineNo);
+
 		this.serviceId = serviceId;
 		this.customerId = customerId;
 		this.directoryNumber = directoryNumber;

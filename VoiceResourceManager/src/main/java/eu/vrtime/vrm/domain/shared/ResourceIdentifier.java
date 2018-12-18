@@ -2,6 +2,8 @@ package eu.vrtime.vrm.domain.shared;
 
 import javax.persistence.Embeddable;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 @Embeddable
 public class ResourceIdentifier implements ValueObject<ResourceIdentifier> {
 
@@ -21,7 +23,7 @@ public class ResourceIdentifier implements ValueObject<ResourceIdentifier> {
 		}
 		this.identifier = identifier;
 	}
-	
+
 	public String toStringIdentifier() {
 		return this.identifier;
 	}
@@ -33,7 +35,7 @@ public class ResourceIdentifier implements ValueObject<ResourceIdentifier> {
 
 	@Override
 	public int hashCode() {
-		return identifier.hashCode();
+		return new HashCodeBuilder().append(identifier).build();
 	}
 
 	@Override
