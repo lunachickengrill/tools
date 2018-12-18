@@ -2,15 +2,12 @@ package eu.vrtime.vrm.api.messages;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
-import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
 import eu.vrtime.vrm.domain.shared.VoiceNumber;
 
 @JacksonXmlRootElement(localName = "GetServiceInfoResponse")
@@ -90,6 +87,12 @@ public class ServiceInfoResponse implements Serializable {
 
 	public void addNumber(String dn, String len) {
 		number.add(new VoiceNumber(dn, len));
+	}
+
+	@Override
+	public String toString() {
+		return "ServiceInfoResponse [customerId=" + customerId + ", smId=" + smId + ", nic=" + nic + ", switchId="
+				+ switchId + ", number=" + number + "]";
 	}
 
 }

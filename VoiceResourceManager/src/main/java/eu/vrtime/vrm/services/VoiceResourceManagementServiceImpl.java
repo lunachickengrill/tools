@@ -66,12 +66,12 @@ public class VoiceResourceManagementServiceImpl implements VoiceResourceManageme
 			resourceService.allocateResourceForVoiceService(dbRes, vs);
 			VoiceService dbVs = serviceRepository.findByResource(dbRes).get();
 
-			resp.setLen(dbRes.getIdentifier().getIdentifier());
 			resp.setSwitchId(dbSw.getSwitchId());
 			resp.setNic(dbSw.getNic());
 			resp.setSmId(dbSm.getSmId());
 			resp.setCustomerId(dbVs.getCustomerId());
-			resp.setDirectoryNumber(dbVs.getDirectoryNumber());
+
+			resp.addNumber(directoryNumber, dbRes.getIdentifier().getIdentifier());
 
 		} else {
 
@@ -82,12 +82,11 @@ public class VoiceResourceManagementServiceImpl implements VoiceResourceManageme
 			resourceService.allocateResourceForVoiceService(dbRes, vs);
 			VoiceService dbVs = serviceRepository.findByResource(dbRes).get();
 
-			resp.setLen(dbRes.getIdentifier().getIdentifier());
 			resp.setSwitchId(dbSw.getSwitchId());
 			resp.setNic(dbSw.getNic());
 			resp.setSmId(dbSm.getSmId());
 			resp.setCustomerId(dbVs.getCustomerId());
-			resp.setDirectoryNumber(dbVs.getDirectoryNumber());
+			resp.addNumber(directoryNumber, dbRes.getIdentifier().getIdentifier());
 
 		}
 		return resp;
@@ -102,10 +101,9 @@ public class VoiceResourceManagementServiceImpl implements VoiceResourceManageme
 		if (!(dbVs.isPresent())) {
 			throw new VoiceServiceNotFoundException("No VoiceService found for DN " + directoryNumber);
 		}
-		Resource res = dbVs.get().getResource();
+		Resource dbRes = dbVs.get().getResource();
 		resp.setCustomerId(customerId);
-		resp.setDirectoryNumber(directoryNumber);
-		resp.setLen(res.getIdentifier().getIdentifier());
+		resp.addNumber(directoryNumber, dbRes.getIdentifier().getIdentifier());
 
 		resourceService.releaseResouceForVoiceService(dbVs.get());
 

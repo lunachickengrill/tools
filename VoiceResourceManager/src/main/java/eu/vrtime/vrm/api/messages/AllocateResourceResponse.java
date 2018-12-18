@@ -1,11 +1,14 @@
 package eu.vrtime.vrm.api.messages;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
-import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
+import eu.vrtime.vrm.domain.shared.VoiceNumber;
 
 @JacksonXmlRootElement(localName = "AllocateResourceResponse")
 public class AllocateResourceResponse implements Serializable {
@@ -15,8 +18,8 @@ public class AllocateResourceResponse implements Serializable {
 	 */
 	private static final long serialVersionUID = -977653430804986366L;
 
-	@JacksonXmlProperty(localName = "len")
-	private String len;
+	@JacksonXmlProperty(localName = "customerId")
+	private String customerId;
 
 	@JacksonXmlProperty(localName = "smId")
 	private String smId;
@@ -27,34 +30,19 @@ public class AllocateResourceResponse implements Serializable {
 	@JacksonXmlProperty(localName = "swId")
 	private String switchId;
 
-	@JacksonXmlProperty(localName = "dn")
-	private String directoryNumber;
+	@JacksonXmlElementWrapper(localName = "numbers")
+	private List<VoiceNumber> number = new ArrayList<>();
 
-	@JacksonXmlProperty(localName = "customerId")
-	private String customerId;
-
-
-	public AllocateResourceResponse(ResourceIdentifier resourceIdentifier, String smId, String nic, String switchId,
-			String directoryNumber, String customerId, String sid) {
-		this.len = resourceIdentifier.getIdentifier();
+	public AllocateResourceResponse(String smId, String nic, String switchId, String customerId, String sid) {
 		this.smId = smId;
 		this.nic = nic;
 		this.switchId = switchId;
-		this.directoryNumber = directoryNumber;
 		this.customerId = customerId;
 
 	}
 
 	public AllocateResourceResponse() {
 
-	}
-
-	public String getLen() {
-		return len;
-	}
-
-	public void setLen(String len) {
-		this.len = len;
 	}
 
 	public String getSmId() {
@@ -81,14 +69,6 @@ public class AllocateResourceResponse implements Serializable {
 		this.switchId = switchId;
 	}
 
-	public String getDirectoryNumber() {
-		return directoryNumber;
-	}
-
-	public void setDirectoryNumber(String directoryNumber) {
-		this.directoryNumber = directoryNumber;
-	}
-
 	public String getCustomerId() {
 		return customerId;
 	}
@@ -97,12 +77,22 @@ public class AllocateResourceResponse implements Serializable {
 		this.customerId = customerId;
 	}
 
-	@Override
-	public String toString() {
-		return "AllocateResourceResponse [len=" + len + ", smId=" + smId + ", nic=" + nic + ", switchId=" + switchId
-				+ ", directoryNumber=" + directoryNumber + ", customerId=" + customerId + "]";
+	public List<VoiceNumber> getNumber() {
+		return number;
 	}
 
+	public void setNumber(List<VoiceNumber> number) {
+		this.number = number;
+	}
 
+	public void addNumber(String dn, String len) {
+		number.add(new VoiceNumber(dn, len));
+	}
+
+	@Override
+	public String toString() {
+		return "AllocateResourceResponse [customerId=" + customerId + ", smId=" + smId + ", nic=" + nic + ", switchId="
+				+ switchId + ", number=" + number + "]";
+	}
 
 }
