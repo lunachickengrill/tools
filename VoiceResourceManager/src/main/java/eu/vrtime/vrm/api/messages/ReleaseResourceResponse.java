@@ -1,4 +1,4 @@
-package eu.vrtime.vrm.services;
+package eu.vrtime.vrm.api.messages;
 
 import java.io.Serializable;
 import java.util.ArrayList;

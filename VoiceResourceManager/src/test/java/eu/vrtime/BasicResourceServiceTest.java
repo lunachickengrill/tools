@@ -16,7 +16,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 
-import eu.vrtime.vrm.domain.exceptions.VoiceServiceNotFoundException;
+import eu.vrtime.vrm.api.exceptions.VoiceServiceNotFoundException;
 import eu.vrtime.vrm.domain.model.Resource;
 import eu.vrtime.vrm.domain.model.SessionManager;
 import eu.vrtime.vrm.domain.model.VoiceService;

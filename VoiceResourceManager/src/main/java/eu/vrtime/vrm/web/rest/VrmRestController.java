@@ -17,20 +17,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import eu.vrtime.vrm.domain.exceptions.DataNotFoundException;
-import eu.vrtime.vrm.domain.exceptions.NoFreeResourcesException;
-import eu.vrtime.vrm.domain.exceptions.ResourceNotFoundException;
-import eu.vrtime.vrm.domain.exceptions.SessionManagerNotFoundException;
-import eu.vrtime.vrm.domain.exceptions.SoftswitchNotFoundException;
-import eu.vrtime.vrm.domain.exceptions.StatusCodeException;
-import eu.vrtime.vrm.domain.exceptions.VoiceServiceNotFoundException;
+import eu.vrtime.vrm.api.exceptions.DataNotFoundException;
+import eu.vrtime.vrm.api.exceptions.NoFreeResourcesException;
+import eu.vrtime.vrm.api.exceptions.ResourceNotFoundException;
+import eu.vrtime.vrm.api.exceptions.SessionManagerNotFoundException;
+import eu.vrtime.vrm.api.exceptions.SoftswitchNotFoundException;
+import eu.vrtime.vrm.api.exceptions.StatusCodeException;
+import eu.vrtime.vrm.api.exceptions.VoiceServiceNotFoundException;
+import eu.vrtime.vrm.api.messages.AllocateResourceResponse;
+import eu.vrtime.vrm.api.messages.ReleaseResourceResponse;
+import eu.vrtime.vrm.api.messages.ServiceInfoResponse;
+import eu.vrtime.vrm.api.messages.TestJsonResponse;
 import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
 import eu.vrtime.vrm.repositories.ResourceRepository;
-import eu.vrtime.vrm.services.AllocateResourceResponse;
 import eu.vrtime.vrm.services.BasicInfrastructureService;
-import eu.vrtime.vrm.services.ReleaseResourceResponse;
-import eu.vrtime.vrm.services.ServiceInfoResponse;
-import eu.vrtime.vrm.services.TestJsonResponse;
 import eu.vrtime.vrm.services.VoiceResourceManagementService;
 
 @RestController

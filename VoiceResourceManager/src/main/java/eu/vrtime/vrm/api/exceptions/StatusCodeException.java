@@ -1,4 +1,4 @@
-package eu.vrtime.vrm.domain.exceptions;
+package eu.vrtime.vrm.api.exceptions;
 
 import org.apache.commons.lang3.StringUtils;
 

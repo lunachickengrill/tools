@@ -8,9 +8,9 @@ import javax.transaction.Transactional;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import eu.vrtime.vrm.domain.exceptions.VoiceServiceNotFoundException;
-import eu.vrtime.vrm.services.AllocateResourceResponse;
-import eu.vrtime.vrm.services.ServiceInfoResponse;
+import eu.vrtime.vrm.api.exceptions.VoiceServiceNotFoundException;
+import eu.vrtime.vrm.api.messages.AllocateResourceResponse;
+import eu.vrtime.vrm.api.messages.ServiceInfoResponse;
 import eu.vrtime.vrm.services.VoiceResourceManagementService;
 
 //Enable @Transactional annotation if you want the transaction be rolled back after the test has finished. Disable to get the data written to the test db

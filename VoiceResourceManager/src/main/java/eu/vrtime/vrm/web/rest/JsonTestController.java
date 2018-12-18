@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import eu.vrtime.vrm.services.TestJsonResponse;
+import eu.vrtime.vrm.api.messages.TestJsonResponse;
 
 @RestController
 @RequestMapping("/test/json")

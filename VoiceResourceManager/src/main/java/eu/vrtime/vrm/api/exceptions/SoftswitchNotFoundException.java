@@ -1,4 +1,4 @@
-package eu.vrtime.vrm.domain.exceptions;
+package eu.vrtime.vrm.api.exceptions;
 
 public class SoftswitchNotFoundException extends StatusCodeException {
 

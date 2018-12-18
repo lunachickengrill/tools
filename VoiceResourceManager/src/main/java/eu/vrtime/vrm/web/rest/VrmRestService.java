@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import eu.vrtime.vrm.api.messages.AllocateResourceResponse;
+import eu.vrtime.vrm.api.messages.ReleaseResourceResponse;
+import eu.vrtime.vrm.api.messages.ServiceInfoResponse;
 import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
 import eu.vrtime.vrm.repositories.ResourceRepository;
-import eu.vrtime.vrm.services.AllocateResourceResponse;
 import eu.vrtime.vrm.services.BasicInfrastructureService;
-import eu.vrtime.vrm.services.ReleaseResourceResponse;
-import eu.vrtime.vrm.services.ServiceInfoResponse;
 import eu.vrtime.vrm.services.VoiceResourceManagementService;
 
 @RestController
