@@ -25,7 +25,7 @@ import eu.vrtime.vrm.repositories.SoftswitchRepository;
 import eu.vrtime.vrm.repositories.VoiceServiceRepository;
 
 @Service
-public class VoiceResourceManagementServiceImpl implements VoiceResourceManagementService {
+public class VoiceResourceManagementServiceFacadeImpl implements VoiceResourceManagementServiceFacade {
 
 	private BasicInfrastructureService infraService;
 	private BasicResourceService resourceService;
@@ -35,7 +35,7 @@ public class VoiceResourceManagementServiceImpl implements VoiceResourceManageme
 	private SoftswitchRepository switchRepository;
 
 	@Autowired
-	public VoiceResourceManagementServiceImpl(final BasicInfrastructureService infraService,
+	public VoiceResourceManagementServiceFacadeImpl(final BasicInfrastructureService infraService,
 			final BasicResourceService resourceService, final SessionManagerRepository sessionManagerRepository,
 			VoiceServiceRepository serviceRepository, final ResourceRepository resourceRepository,
 			final SoftswitchRepository switchRepository) {

@@ -11,14 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import eu.vrtime.vrm.api.exceptions.VoiceServiceNotFoundException;
 import eu.vrtime.vrm.api.messages.AllocateResourceResponse;
 import eu.vrtime.vrm.api.messages.ServiceInfoResponse;
-import eu.vrtime.vrm.services.VoiceResourceManagementService;
+import eu.vrtime.vrm.services.VoiceResourceManagementServiceFacade;
 
 //Enable @Transactional annotation if you want the transaction be rolled back after the test has finished. Disable to get the data written to the test db
 //@Transactional
 public class VoiceResourceManagerServiceTest extends BaseTest {
 
 	@Autowired
-	public VoiceResourceManagementService vrmService;
+	public VoiceResourceManagementServiceFacade vrmService;
 
 	@Test
 	public void contextLoads() {

@@ -31,16 +31,16 @@ import eu.vrtime.vrm.api.messages.TestJsonResponse;
 import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
 import eu.vrtime.vrm.repositories.ResourceRepository;
 import eu.vrtime.vrm.services.BasicInfrastructureService;
-import eu.vrtime.vrm.services.VoiceResourceManagementService;
+import eu.vrtime.vrm.services.VoiceResourceManagementServiceFacade;
 
 @RestController
 @RequestMapping("/api/rest")
 public class VrmRestController {
 
-	VoiceResourceManagementService vrmService;
+	VoiceResourceManagementServiceFacade vrmService;
 
 	@Autowired
-	public VrmRestController(final VoiceResourceManagementService vrmService) {
+	public VrmRestController(final VoiceResourceManagementServiceFacade vrmService) {
 		this.vrmService = vrmService;
 	}
 
