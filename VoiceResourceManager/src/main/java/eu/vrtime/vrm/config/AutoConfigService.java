@@ -7,6 +7,8 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,7 +26,9 @@ import eu.vrtime.vrm.repositories.SessionManagerRepository;
 import eu.vrtime.vrm.repositories.SoftswitchRepository;
 
 @Service
-public class AutConfigService {
+public class AutoConfigService {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(AutoConfigService.class);
 
 	@Value("${vrm.softswitch.cs2k.name}")
 	private String SOFTSWITCH_CS2K_NAME;
@@ -51,7 +55,7 @@ public class AutConfigService {
 	private SessionManagerRepository sessionManagerRepository;
 
 	@Autowired
-	public AutConfigService(final SoftswitchRepository switchRepository,
+	public AutoConfigService(final SoftswitchRepository switchRepository,
 			final SessionManagerRepository sessionManagerRepository) {
 		this.switchRepository = switchRepository;
 		this.sessionManagerRepository = sessionManagerRepository;
@@ -62,6 +66,7 @@ public class AutConfigService {
 	@Transactional
 	private void setup() {
 		if (SETUPCONFIGDATA == true) {
+			LOGGER.debug("SetupConfigData is on. Creating initial data");
 			Softswitch dbSw1 = switchRepository.save(new Softswitch(new SwitchId(SOFTSWITCH_CS2K_ID), SOFTSWITCH_CS2K_NIC,
 					SOFTSWITCH_CS2K_NAME, SoftswitchStatus.ONLINE));
 			Softswitch dbSw2 = switchRepository.save(new Softswitch(new SwitchId(SOFTSWITCH_NGCP_ID), SOFTSWITCH_NGCP_NIC,

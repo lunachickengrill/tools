@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,8 @@ import eu.vrtime.vrm.repositories.VoiceServiceRepository;
 
 @Service
 public class VoiceResourceManagementServiceFacadeImpl implements VoiceResourceManagementServiceFacade {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(VoiceResourceManagementServiceFacade.class);
 
 	private BasicInfrastructureService infraService;
 	private BasicResourceService resourceService;
@@ -51,7 +55,7 @@ public class VoiceResourceManagementServiceFacadeImpl implements VoiceResourceMa
 	@Transactional
 	public AllocateResourceResponse allocateResource(String customerId, String SID, String directoryNumber,
 			String lineNo) {
-
+		LOGGER.debug("allocateResource: " + customerId + " " + SID + " " + directoryNumber);
 		AllocateResourceResponse resp = new AllocateResourceResponse();
 		VoiceService vs = new VoiceService(SID, customerId, directoryNumber, Integer.parseInt(lineNo));
 
@@ -69,6 +73,7 @@ public class VoiceResourceManagementServiceFacadeImpl implements VoiceResourceMa
 			resp.setCustomerId(dbVs.getCustomerId());
 
 			resp.addNumber(directoryNumber, dbRes.getIdentifier().getIdentifier());
+			LOGGER.debug(resp.toString());
 
 		} else {
 
@@ -84,6 +89,7 @@ public class VoiceResourceManagementServiceFacadeImpl implements VoiceResourceMa
 			resp.setSmId(dbSm.getSmId());
 			resp.setCustomerId(dbVs.getCustomerId());
 			resp.addNumber(directoryNumber, dbRes.getIdentifier().getIdentifier());
+			LOGGER.debug(resp.toString());
 
 		}
 		return resp;
@@ -93,7 +99,7 @@ public class VoiceResourceManagementServiceFacadeImpl implements VoiceResourceMa
 	@Transactional
 	public ReleaseResourceResponse releaseResource(String customerId, String directoryNumber) {
 		ReleaseResourceResponse resp = new ReleaseResourceResponse();
-
+		LOGGER.debug("releaseResource " + customerId + " " + directoryNumber);
 		Optional<VoiceService> dbVs = serviceRepository.findByDirectoryNumber(directoryNumber);
 		if (!(dbVs.isPresent())) {
 			throw new VoiceServiceNotFoundException("No VoiceService found for DN " + directoryNumber);
@@ -103,12 +109,15 @@ public class VoiceResourceManagementServiceFacadeImpl implements VoiceResourceMa
 		resp.addNumber(directoryNumber, dbRes.getIdentifier().getIdentifier());
 
 		resourceService.releaseResouceForVoiceService(dbVs.get());
+		LOGGER.debug(resp.toString());
 
 		return resp;
 	}
 
 	@Override
 	public ServiceInfoResponse getServiceInfo(String customerId) {
+
+		LOGGER.debug("getServiceInfo " + customerId);
 
 		ServiceInfoResponse resp = new ServiceInfoResponse();
 
@@ -141,7 +150,7 @@ public class VoiceResourceManagementServiceFacadeImpl implements VoiceResourceMa
 
 			resp.setSwitchId(sw.get().getSwitchId().toStringSwId());
 			resp.setNic(sw.get().getNic());
-
+			LOGGER.debug(resp.toString());
 		});
 
 		return resp;
