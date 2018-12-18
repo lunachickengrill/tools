@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import eu.vrtime.vrm.api.exceptions.NoFreeResourcesException;
 import eu.vrtime.vrm.api.exceptions.ResourceNotFoundException;
 import eu.vrtime.vrm.domain.model.Resource;
 import eu.vrtime.vrm.domain.model.SessionManager;
@@ -56,6 +57,9 @@ public class BasicResourceServiceImpl implements BasicResourceService {
 	public Resource getFirstAvailableResource(SessionManager sessionManager) {
 		Optional<Resource> dbResource = resourceRepository
 				.findTopByStatusAndSessionManagerOrderByOid(ResourceStatus.FREE, sessionManager);
+		if (!(dbResource.isPresent())) {
+			throw new NoFreeResourcesException("No free resources");
+		}
 		Resource res = dbResource.get();
 		return res;
 	}
@@ -67,6 +71,9 @@ public class BasicResourceServiceImpl implements BasicResourceService {
 		Resource res = svc.getResource();
 		Optional<Resource> dbRes = resourceRepository.findTopByStatusAndSessionManagerOrderByOid(ResourceStatus.FREE,
 				res.getSessionManager());
+		if (!(dbRes.isPresent())) {
+			throw new NoFreeResourcesException("No free resources for adding additional voice service");
+		}
 
 		return dbRes.get();
 	}

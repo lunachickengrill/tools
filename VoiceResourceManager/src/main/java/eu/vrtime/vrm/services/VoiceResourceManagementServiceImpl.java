@@ -3,13 +3,11 @@ package eu.vrtime.vrm.services;
 import java.util.List;
 import java.util.Optional;
 
-import javax.management.ServiceNotFoundException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import eu.vrtime.vrm.api.exceptions.IllegalStateException;
 import eu.vrtime.vrm.api.exceptions.ResourceNotFoundException;
 import eu.vrtime.vrm.api.exceptions.SessionManagerNotFoundException;
 import eu.vrtime.vrm.api.exceptions.SoftswitchNotFoundException;
@@ -21,7 +19,6 @@ import eu.vrtime.vrm.domain.model.Resource;
 import eu.vrtime.vrm.domain.model.SessionManager;
 import eu.vrtime.vrm.domain.model.Softswitch;
 import eu.vrtime.vrm.domain.model.VoiceService;
-import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
 import eu.vrtime.vrm.repositories.ResourceRepository;
 import eu.vrtime.vrm.repositories.SessionManagerRepository;
 import eu.vrtime.vrm.repositories.SoftswitchRepository;
@@ -112,7 +109,7 @@ public class VoiceResourceManagementServiceImpl implements VoiceResourceManageme
 
 	@Override
 	public ServiceInfoResponse getServiceInfo(String customerId) {
-		// TODO Auto-generated method stub
+
 		ServiceInfoResponse resp = new ServiceInfoResponse();
 
 		Optional<List<VoiceService>> dbVs = serviceRepository.findByCustomerId(customerId);
