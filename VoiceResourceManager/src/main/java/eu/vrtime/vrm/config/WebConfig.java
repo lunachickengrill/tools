@@ -15,12 +15,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @ComponentScan(basePackages="eu.vrtime.vrm.web")
 public class WebConfig implements WebMvcConfigurer {
 
-	@Override
-	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-		Jackson2ObjectMapperBuilder builder = Jackson2ObjectMapperBuilder.xml();
-		builder.indentOutput(true);
-
-		converters.add(new MappingJackson2XmlHttpMessageConverter(builder.build()));
-	}
+//	@Override
+//	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+//		Jackson2ObjectMapperBuilder builder = Jackson2ObjectMapperBuilder.xml();
+//		builder.indentOutput(true);
+//
+//		converters.add(new MappingJackson2XmlHttpMessageConverter(builder.build()));
+//	}
 
 }

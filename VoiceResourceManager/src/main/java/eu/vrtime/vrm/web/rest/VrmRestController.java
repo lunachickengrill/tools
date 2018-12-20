@@ -34,7 +34,7 @@ public class VrmRestController {
 	}
 
 	@RequestMapping(value = "/allocateResource", method = RequestMethod.POST, produces = {
-			MediaType.APPLICATION_XML_VALUE })
+			MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<AllocateResourceResponse> allocateResource(
 			@RequestParam(value = "customerId") String customerId, @RequestParam(value = "sid") String sid,
 			@RequestParam(value = "dn") String directoryNumber, @RequestParam(value = "lineNo") String lineNo) {
@@ -97,7 +97,7 @@ public class VrmRestController {
 		}
 	}
 
-	@RequestMapping(value = "/testXml", method = RequestMethod.GET, produces = { "application/xml", "text/xml" })
+	@RequestMapping(value = "/testXml", method = RequestMethod.GET, produces = { MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<ServiceInfoResponse> testXml() {
 		LOGGER.info("Received request on " + API_PATH + "/testXml");
 
