@@ -16,7 +16,7 @@ import java.io.IOException;
 @Component
 public class LoggingAccessDeniedHandler implements AccessDeniedHandler {
 
-    private static Logger log = LoggerFactory.getLogger(LoggingAccessDeniedHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoggingAccessDeniedHandler.class);
 
     @Override
     public void handle(HttpServletRequest request,
@@ -26,7 +26,7 @@ public class LoggingAccessDeniedHandler implements AccessDeniedHandler {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if (auth != null) {
-            log.info(auth.getName()
+        	LOGGER.info(auth.getName()
                     + " was trying to access protected resource: "
                     + request.getRequestURI());
         }

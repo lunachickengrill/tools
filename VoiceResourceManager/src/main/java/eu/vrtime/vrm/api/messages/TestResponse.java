@@ -1,16 +1,13 @@
 package eu.vrtime.vrm.api.messages;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.xml.bind.annotation.XmlRootElement;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 public class TestResponse implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6801768438236319330L;
 
 	private String value;
 
