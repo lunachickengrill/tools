@@ -43,5 +43,10 @@ public class HomeController {
 	public String userIndex() {
 		return "/user/index";
 	}
+	
+	@GetMapping("/main")
+	public String login() {
+		return ("/main");
+	}
 
 }

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+	<div th:fragment="contentTable">
+		<th:block th:each="tableRow : ${tableData}">
+			<tr>
+				<td th:text="${tableData.oid}">blabla</td>
+			</tr>
+	</div>
+</body>
+</html>
