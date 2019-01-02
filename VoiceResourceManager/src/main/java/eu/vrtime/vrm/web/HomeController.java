@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import eu.vrtime.vrm.domain.model.SessionManager;
-import eu.vrtime.vrm.repositories.ResourceRepository;
 import eu.vrtime.vrm.repositories.SessionManagerRepository;
 
 @Controller
