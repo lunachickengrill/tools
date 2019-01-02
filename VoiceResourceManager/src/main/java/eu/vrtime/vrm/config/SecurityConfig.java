@@ -51,22 +51,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		// http.csrf().disable().authorizeRequests().antMatchers("/WEB-INF/**").permitAll().antMatchers("/login")
-		// .permitAll().antMatchers("/vrmUi").authenticated().antMatchers("/").authenticated().and().formLogin()
-		// .loginPage("/login").failureUrl("/login?error").loginProcessingUrl("/j_spring_security_check")
-		// .defaultSuccessUrl("/vrmUi",
-		// true).permitAll().and().logout().invalidateHttpSession(true)
-		// .deleteCookies("JSESSIONID").permitAll();
+		// http.authorizeRequests().antMatchers("/","/css/**", "/img/**",
+		// "/webjars/**").permitAll()
+		// .antMatchers("/user/**").hasRole("USER").anyRequest().authenticated().and().formLogin()
+		// .loginPage("/login").permitAll().and().logout().invalidateHttpSession(true).clearAuthentication(true)
+		// .logoutRequestMatcher(new
+		// AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login?logout")
+		// .permitAll().and().exceptionHandling().accessDeniedHandler(accessDeniedHandler).and()
+		// .authorizeRequests().antMatchers("/api/rest/**","/api/test/**").hasRole("ADMIN").and().csrf().disable().headers()
+		// .frameOptions().disable();
 
-		// http.httpBasic().and().authorizeRequests().antMatchers("/api/rest/**").hasRole("ADMIN").antMatchers("/**")
-		// .hasRole("ADMIN").and().csrf().disable().headers().frameOptions().disable();
+		http.httpBasic().and().authorizeRequests().antMatchers("/api/rest/**","/api/test/**").hasRole("ADMIN").antMatchers("/**")
+				.hasRole("ADMIN").and().csrf().disable().headers().frameOptions().disable().and().authorizeRequests()
+				.antMatchers("/", "/css/**", "/img/**", "/webjars/**").permitAll().antMatchers("/user/**")
+				.hasRole("USER").anyRequest().authenticated().and().formLogin().loginPage("/login").permitAll().and()
+				.logout().invalidateHttpSession(true).logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+				.logoutSuccessUrl("/login?logout").permitAll().and().exceptionHandling()
+				.accessDeniedHandler(accessDeniedHandler).and().csrf().disable().headers().frameOptions().disable();
 
-		http.authorizeRequests().antMatchers("/", "/js/**", "/css/**", "/img/**", "/webjars/**").permitAll()
-				.antMatchers("/user/**").hasRole("USER").anyRequest().authenticated().and().formLogin()
-				.loginPage("/login").permitAll().and().logout().invalidateHttpSession(true).clearAuthentication(true)
-				.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login?logout")
-				.permitAll().and().exceptionHandling().accessDeniedHandler(accessDeniedHandler).and()
-				.authorizeRequests().antMatchers("/api/rest/**").hasRole("ADMIN").and().csrf().disable().headers()
-				.frameOptions().disable();
 	}
 }
