@@ -9,8 +9,6 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.Validate;
 
-import eu.vrtime.vrm.domain.shared.AbstractBaseEntity;
-
 @Entity
 @Table(name = "T_VOICESERVICE")
 public class VoiceService extends AbstractBaseEntity {

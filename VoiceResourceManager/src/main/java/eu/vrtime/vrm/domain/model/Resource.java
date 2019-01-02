@@ -12,7 +12,6 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.Validate;
 
-import eu.vrtime.vrm.domain.shared.AbstractBaseEntity;
 import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
 import eu.vrtime.vrm.domain.shared.ResourceStatus;
 

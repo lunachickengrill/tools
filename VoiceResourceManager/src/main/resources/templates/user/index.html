@@ -70,7 +70,7 @@
 				th:text="' Here goes the serverTime as modelAndView ' + ${serverTime}"></p>
 			<p th:text=" ${test}"></p>
 			<ul>
-				<li th:each="sm : ${sessionManagers}"><span th:text="'SM ID ' + ${sm.getSmId()}">Default</span>
+				<li th:each="sm : ${sessionManagers}"><span th:text="'SM ID: ' + ${sm.getSmId()} + ', created: ' + ${sm.getCreateDate()} + ', lastModified: ' + ${sm.getLastModified()}">Default</span>
 				</li>
 			</ul>
 

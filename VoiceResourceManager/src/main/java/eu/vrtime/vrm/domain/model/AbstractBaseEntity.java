@@ -1,4 +1,4 @@
-package eu.vrtime.vrm.domain.shared;
+package eu.vrtime.vrm.domain.model;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -43,10 +43,11 @@ public class AbstractBaseEntity implements Serializable {
 	public Long getOid() {
 		return oid;
 	}
-	
+
 	public String toStringOid() {
 		return oid.toString();
 	}
+
 
 
 

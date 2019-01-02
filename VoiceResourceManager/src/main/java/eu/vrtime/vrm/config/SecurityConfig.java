@@ -61,13 +61,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// .authorizeRequests().antMatchers("/api/rest/**","/api/test/**").hasRole("ADMIN").and().csrf().disable().headers()
 		// .frameOptions().disable();
 
-		http.httpBasic().and().authorizeRequests().antMatchers("/api/rest/**","/api/test/**").hasRole("ADMIN").antMatchers("/**")
-				.hasRole("ADMIN").and().csrf().disable().headers().frameOptions().disable().and().authorizeRequests()
-				.antMatchers("/", "/css/**", "/img/**", "/webjars/**").permitAll().antMatchers("/user/**")
-				.hasRole("USER").anyRequest().authenticated().and().formLogin().loginPage("/login").permitAll().and()
-				.logout().invalidateHttpSession(true).logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-				.logoutSuccessUrl("/login?logout").permitAll().and().exceptionHandling()
-				.accessDeniedHandler(accessDeniedHandler).and().csrf().disable().headers().frameOptions().disable();
+//		http.httpBasic().and().authorizeRequests().antMatchers("/api/rest/**","/api/test/**").hasRole("ADMIN").antMatchers("/**")
+//				.hasRole("ADMIN").and().csrf().disable().headers().frameOptions().disable().and().authorizeRequests()
+//				.antMatchers("/", "/css/**", "/img/**", "/webjars/**").permitAll().antMatchers("/user/**")
+//				.hasRole("USER").anyRequest().authenticated().and().formLogin().loginPage("/login").permitAll().and()
+//				.logout().invalidateHttpSession(true).logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+//				.logoutSuccessUrl("/login?logout").permitAll().and().exceptionHandling()
+//				.accessDeniedHandler(accessDeniedHandler).and().csrf().disable().headers().frameOptions().disable();
 
+		
+		http.httpBasic().and().authorizeRequests().antMatchers("/api/rest/**","/api/test/**").hasRole("ADMIN").antMatchers("/**")
+		.hasRole("ADMIN").and().csrf().disable().headers().frameOptions().disable();
 	}
 }

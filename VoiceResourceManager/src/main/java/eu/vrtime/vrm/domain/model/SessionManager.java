@@ -1,5 +1,6 @@
 package eu.vrtime.vrm.domain.model;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,8 +14,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.Validate;
-
-import eu.vrtime.vrm.domain.shared.AbstractBaseEntity;
 
 @Entity
 @Table(name = "T_SESSIONMANAGER")
@@ -61,6 +60,14 @@ public class SessionManager extends AbstractBaseEntity {
 
 	public Set<Resource> getResources() {
 		return resources;
+	}
+	
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public Date getLastModified() {
+		return lastModified;
 	}
 
 	public void setResources(Set<Resource> resources) {
