@@ -1,43 +1,77 @@
 <!DOCTYPE html>
-<html>
-  <head>
-  <!-- Bootstrap core CSS -->
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<!-- Bootstrap core CSS -->
 <link href="../static/css/bootstrap.min.css" rel="stylesheet"
 	th:href="@{/css/bootstrap.min.css}" />
-  </head>
-  <body>
-    <div th:replace="fragments/header :: header">
-      <!-- ============================================================================ -->
-      <!-- This content is only used for static prototyping purposes (natural templates)-->
-      <!-- and is therefore entirely optional, as this markup fragment will be included -->
-      <!-- from "fragments/header.html" at runtime.                                     -->
-      <!-- ============================================================================ -->
-      <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-          <div class="navbar-header">
-            <a class="navbar-brand" href="#">Static header</a>
-          </div>
-          <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-              <li class="active"><a href="#">Home</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="container">
-      <div class="hero-unit">
-        <h1>Test</h1>
-        <p>
-          Welcome to the Spring MVC Quickstart application!
-          Get started quickly by signing up.
-        </p>
-        <!--  <div th:replace="fragments/content :: content"></div> -->
-        <p>
-          <a href="/signup" th:href="@{/signup}" class="btn btn-large btn-success">Sign up</a>
-        </p>
-      </div>
-      <div th:replace="fragments/footer :: footer">&copy; 2016 The Static Templates</div>
-    </div>
-  </body>
+</head>
+<body>
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target=".navbar-collapse">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">Voice Resource Manager</a>
+			</div>
+			<div class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="#">Home</a></li>
+					<li><a href="#">Softswitch</a></li>
+					<li><a href="#">SessionManager</a></li>
+					<li><a href="#">Resource</a></li>
+					<li><a href="#">Service</a></li>
+				</ul>
+			</div>
+			<!--/.nav-collapse -->
+		</div>
+	</div>
+
+	<div class="container">
+
+		<div class="text-center">
+			<h1>Bootstrap starter template</h1>
+			<p class="lead">
+				Use this document as a way to quickly start any new project.<br>
+				All you get is this text and a mostly barebones HTML document.
+			</p>
+			<form th:action="@{/querySoftswitches}" th:object="${softswitch}"
+				method="post">
+				<fieldset>
+					<legend>Softswitch Data</legend>
+					Switch ID:<br> <input type="text" th:field="*{switchId}" /><br>
+					Switch Name:<br> <input type="text" th:field="*{name}" /><br>
+					<input type="submit" value="Submit" /> <input type="reset"
+						value="Reset" />
+				</fieldset>
+			</form>
+		</div>
+
+	</div>
+	<!-- /.container -->
+
+	<div class="container">
+		<div th:if="${not #lists.isEmpty(softswitches)}">
+			<h2>Softswitches</h2>
+			<table class="table table-striped">
+				<tr>
+					<th>oid</th>
+					<th>switchId</th>
+					<th>Name</th>
+				</tr>
+				<tr th:each="softswitch : ${softswitches}">
+					<td th:text="${softswitch.getOid()}"></td>
+					<td th:text="${softswitch.getSwitchId()}"></td>
+					<td th:text="${softswitch.getName()}"></td>
+			</table>
+		</div>
+		<ul>
+		</ul>
+	</div>
+
+</body>
 </html>

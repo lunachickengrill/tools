@@ -29,6 +29,11 @@ public class Softswitch extends AbstractBaseEntity {
 	// true)
 	// private String switchId;
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7823116495312122813L;
+
 	@Embedded
 	@Column(name = "switch_id", nullable = false, updatable = true, unique = true)
 	private SwitchId switchId;
@@ -146,7 +151,7 @@ public class Softswitch extends AbstractBaseEntity {
 				+ ", description=" + description + ", sessionManagers=" + sessionManagers + "]";
 	}
 
-	Softswitch() {
+	public Softswitch() {
 
 	}
 
