@@ -4,7 +4,10 @@
 <head>
 <!-- Bootstrap core CSS -->
 <link href="../static/css/bootstrap.min.css" rel="stylesheet"
-	th:href="@{/css/bootstrap.min.css}" />
+	th:href="@{/css/bootstrap.min.css}" type="text/css"/>
+	<link href="../static/css/main.css" rel="stylesheet"
+	th:href="@{/css/main.css}" type="text/css"/>
+
 </head>
 <body>
 	<div class="navbar navbar-inverse navbar-fixed-top">
@@ -33,8 +36,9 @@
 
 	<div class="container">
 
-		<div class="text-center">
-			<h1>Bootstrap starter template</h1>
+		<div class="text-center" id="centerbox">
+			<h1>
+			Bootstrap starter template</h1>
 			<p class="lead">
 				Use this document as a way to quickly start any new project.<br>
 				All you get is this text and a mostly barebones HTML document.
@@ -54,7 +58,7 @@
 	</div>
 	<!-- /.container -->
 
-	<div class="container">
+	<div class="container" id="resulttable">
 		<div th:if="${not #lists.isEmpty(softswitches)}">
 			<h2>Softswitches</h2>
 			<table class="table table-striped">
@@ -69,8 +73,6 @@
 					<td th:text="${softswitch.getName()}"></td>
 			</table>
 		</div>
-		<ul>
-		</ul>
 	</div>
 
 </body>

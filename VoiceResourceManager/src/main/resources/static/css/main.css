@@ -13,3 +13,17 @@ footer {
 footer p {
 	padding: 15px;
 }
+
+body {
+	background-color: pink;
+}
+
+#resulttable {
+	background-color: green;
+	margin-top: 50px;
+}
+
+#centerbox {
+	background-color: red;
+	margin-top: 80px
+}

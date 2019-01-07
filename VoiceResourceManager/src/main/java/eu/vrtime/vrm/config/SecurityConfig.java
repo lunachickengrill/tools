@@ -70,7 +70,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //				.accessDeniedHandler(accessDeniedHandler).and().csrf().disable().headers().frameOptions().disable();
 
 		
-		http.httpBasic().and().authorizeRequests().antMatchers("/api/rest/**","/api/test/**").hasRole("ADMIN").antMatchers("/**")
+		http.httpBasic().and().authorizeRequests().antMatchers("/api/rest/**","/api/test/**","/main").hasRole("ADMIN").antMatchers("/**")
 		.hasRole("ADMIN").and().csrf().disable().headers().frameOptions().disable();
 	}
 }
