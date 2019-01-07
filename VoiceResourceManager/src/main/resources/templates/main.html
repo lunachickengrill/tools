@@ -4,9 +4,9 @@
 <head>
 <!-- Bootstrap core CSS -->
 <link href="../static/css/bootstrap.min.css" rel="stylesheet"
-	th:href="@{/css/bootstrap.min.css}" type="text/css"/>
-	<link href="../static/css/main.css" rel="stylesheet"
-	th:href="@{/css/main.css}" type="text/css"/>
+	th:href="@{/css/bootstrap.min.css}" type="text/css" />
+<link href="../static/css/main.css" rel="stylesheet"
+	th:href="@{/css/main.css}" type="text/css" />
 
 </head>
 <body>
@@ -34,25 +34,25 @@
 		</div>
 	</div>
 
-	<div class="container">
-
+	<div class="container" style="width: 100%">
 		<div class="text-center" id="centerbox">
-			<h1>
-			Bootstrap starter template</h1>
+			<h1>Bootstrap starter template</h1>
 			<p class="lead">
 				Use this document as a way to quickly start any new project.<br>
 				All you get is this text and a mostly barebones HTML document.
 			</p>
-			<form th:action="@{/querySoftswitches}" th:object="${softswitch}"
-				method="post">
-				<fieldset>
-					<legend>Softswitch Data</legend>
-					Switch ID:<br> <input type="text" th:field="*{switchId}" /><br>
-					Switch Name:<br> <input type="text" th:field="*{name}" /><br>
-					<input type="submit" value="Submit" /> <input type="reset"
-						value="Reset" />
-				</fieldset>
-			</form>
+			<div class="pull-left" id="inputbox" style="padding: 20px">
+				<form th:action="@{/querySoftswitches}" th:object="${softswitch}"
+					method="post">
+					<fieldset>
+						<legend>Softswitch Data</legend>
+						Switch ID:<br> <input type="text" th:field="*{switchId}" /><br>
+						Switch Name:<br> <input type="text" th:field="*{name}" /><br>
+						<input type="submit" value="Submit" /> <input type="reset"
+							value="Reset" />
+					</fieldset>
+				</form>
+			</div>
 		</div>
 
 	</div>
