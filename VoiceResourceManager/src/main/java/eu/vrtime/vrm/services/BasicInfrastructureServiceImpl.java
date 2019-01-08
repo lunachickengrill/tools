@@ -57,7 +57,7 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	@Override
 	@Transactional
 	public Softswitch addSoftswitch(final String switchId, final String nic, final String name,
-			final SoftswitchStatus status) {
+			final SoftswitchStatus status, final Boolean isLenEnabled) {
 		Validate.notNull(switchId);
 		Validate.notNull(nic);
 		Validate.notNull(name);
@@ -65,7 +65,7 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 
 		SwitchId swId = new SwitchId(switchId);
 
-		Softswitch sw = new Softswitch(swId, nic, name, status);
+		Softswitch sw = new Softswitch(swId, nic, name, status, isLenEnabled);
 		return switchRepository.saveAndFlush(sw);
 	}
 
@@ -171,6 +171,30 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 		}
 		return sm.get().getSessionManager();
 
+	}
+
+	@Override
+	@Transactional
+	public SessionManager getSessionManagerWithMaxFreeResources(SwitchId switchId) {
+		List<ResourceCountingResult> result = resourceRepository.queryResouces();
+		result.sort(Comparator.comparing(ResourceCountingResult::getCnt).reversed());
+		Optional<ResourceCountingResult> sm = result.stream().findFirst();
+		if (!(sm.isPresent())) {
+			throw new NoFreeResourcesException("No SessionManager with free Resources found on Softswitch " + switchId);
+		}
+		return sm.get().getSessionManager();
+	}
+
+	@Override
+	@Transactional
+	public SessionManager getSessionManagerWithMaxFreeResourcesLenEnabled() {
+		List<ResourceCountingResult> result = resourceRepository.queryResourcesLenEnabled();
+		result.sort(Comparator.comparing(ResourceCountingResult::getCnt).reversed());
+		Optional<ResourceCountingResult> sm = result.stream().findFirst();
+		if (!(sm.isPresent())) {
+			throw new NoFreeResourcesException("No SessionManager with free Resources found for LEN enabled switch");
+		}
+		return sm.get().getSessionManager();
 	}
 
 	@Override

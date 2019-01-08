@@ -24,7 +24,7 @@ import eu.vrtime.vrm.repositories.SoftswitchRepository;
 
 @Service
 public class AutoConfigService {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(AutoConfigService.class);
 
 	@Value("${vrm.softswitch.cs2k.name}")
@@ -36,6 +36,9 @@ public class AutoConfigService {
 	@Value("${vrm.softswitch.cs2k.nic}")
 	private String SOFTSWITCH_CS2K_NIC;
 
+	@Value("${vrm.softswitch.cs2k.isLenEnabled}")
+	private String SOFTSWITCH_CS2K_ISLENENABLED;
+
 	@Value("${vrm.softswitch.ngcp.name}")
 	private String SOFTSWITCH_NGCP_NAME;
 
@@ -44,6 +47,9 @@ public class AutoConfigService {
 
 	@Value("${vrm.softswitch.ngcp.nic}")
 	private String SOFTSWITCH_NGCP_NIC;
+
+	@Value("${vrm.softswitch.ngcp.isLenEnabled}")
+	private String SOFTSWITCH_NGCP_ISLENENABLED;
 
 	@Value("${vrm.setupconfigdata}")
 	private boolean SETUPCONFIGDATA;
@@ -64,10 +70,10 @@ public class AutoConfigService {
 	private void setup() {
 		if (SETUPCONFIGDATA == true) {
 			LOGGER.debug("SetupConfigData is on. Creating initial data");
-			Softswitch dbSw1 = switchRepository.save(new Softswitch(new SwitchId(SOFTSWITCH_CS2K_ID), SOFTSWITCH_CS2K_NIC,
-					SOFTSWITCH_CS2K_NAME, SoftswitchStatus.ONLINE));
-			Softswitch dbSw2 = switchRepository.save(new Softswitch(new SwitchId(SOFTSWITCH_NGCP_ID), SOFTSWITCH_NGCP_NIC,
-					SOFTSWITCH_NGCP_NAME, SoftswitchStatus.OFFLINE));
+			Softswitch dbSw1 = switchRepository.save(new Softswitch(new SwitchId(SOFTSWITCH_CS2K_ID),
+					SOFTSWITCH_CS2K_NIC, SOFTSWITCH_CS2K_NAME, SoftswitchStatus.ONLINE, Boolean.parseBoolean(SOFTSWITCH_CS2K_ISLENENABLED)));
+			Softswitch dbSw2 = switchRepository.save(new Softswitch(new SwitchId(SOFTSWITCH_NGCP_ID),
+					SOFTSWITCH_NGCP_NIC, SOFTSWITCH_NGCP_NAME, SoftswitchStatus.OFFLINE, Boolean.parseBoolean(SOFTSWITCH_NGCP_ISLENENABLED)));
 
 			SessionManager sm1 = new SessionManager("1", dbSw1);
 			Set<Resource> res1 = fillResources(10, 100);
@@ -128,7 +134,7 @@ public class AutoConfigService {
 
 	protected Set<Resource> fillResources(Integer range, Integer end) {
 		Set<Resource> cs2kResources = new HashSet<>();
-		String prefix = "SS ";
+		String prefix = "SS";
 		Integer start = 0;
 		while (start < end) {
 			String len = new String(start.toString());

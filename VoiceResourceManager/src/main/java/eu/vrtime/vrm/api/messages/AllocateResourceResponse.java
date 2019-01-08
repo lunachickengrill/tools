@@ -10,7 +10,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 import eu.vrtime.vrm.domain.shared.VoiceNumber;
 
-@JacksonXmlRootElement(localName = "AllocateResourceResponse")
+//@JacksonXmlRootElement(localName = "AllocateResourceResponse")
 public class AllocateResourceResponse implements Serializable {
 
 	/**
@@ -18,19 +18,19 @@ public class AllocateResourceResponse implements Serializable {
 	 */
 	private static final long serialVersionUID = -977653430804986366L;
 
-	@JacksonXmlProperty(localName = "customerId")
+//	@JacksonXmlProperty(localName = "customerId")
 	private String customerId;
 
-	@JacksonXmlProperty(localName = "smId")
+//	@JacksonXmlProperty(localName = "smId")
 	private String smId;
 
-	@JacksonXmlProperty(localName = "nic")
+//	@JacksonXmlProperty(localName = "nic")
 	private String nic;
 
-	@JacksonXmlProperty(localName = "swId")
+//	@JacksonXmlProperty(localName = "swId")
 	private String switchId;
 
-	@JacksonXmlElementWrapper(localName = "numbers")
+//	@JacksonXmlElementWrapper(localName = "numbers")
 	private List<VoiceNumber> number = new ArrayList<>();
 
 	public AllocateResourceResponse(String smId, String nic, String switchId, String customerId, String sid) {

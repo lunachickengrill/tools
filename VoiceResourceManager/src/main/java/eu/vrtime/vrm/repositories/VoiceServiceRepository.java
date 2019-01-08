@@ -14,13 +14,13 @@ public interface VoiceServiceRepository extends JpaRepository<VoiceService, Long
 
 	public Optional<VoiceService> findByOid(Long oid);
 
-	public Optional<List<VoiceService>> findByServiceId(String serviceId);
+//	public Optional<List<VoiceService>> findByServiceId(String serviceId);
 
 	public Optional<VoiceService> findByDirectoryNumber(String directoryNumber);
 
-	public Optional<List<VoiceService>> findByCustomerId(String customerId);
+//	public Optional<List<VoiceService>> findByCustomerId(String customerId);
 	
-	public Optional<VoiceService> findByCustomerIdAndLineNo(String customerId, int lineNo);
+//	public Optional<VoiceService> findByCustomerIdAndLineNo(String customerId, int lineNo);
 
 	public Optional<VoiceService> findByResource(Resource resource);
 

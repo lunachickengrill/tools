@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import javax.transaction.Transactional;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -25,67 +26,75 @@ public class VoiceResourceManagerServiceTest extends BaseTest {
 
 	}
 
+	
+	@Ignore
 	@Test
-	public void allocateResourceForOneServiceTest() {
-
-		AllocateResourceResponse resp = vrmService.allocateResource(CUST1_CUSTID, CUST1_SID, CUST1_DN1, "1");
+	public void allocateResourceTest() {
+		AllocateResourceResponse resp = vrmService.allocateResource(CUST1_DN1);
 		assertNotNull(resp);
-
-		assertTrue(resp.getCustomerId().equals(CUST1_CUSTID));
-		assertTrue(resp.getNumber().size() > 0);
-		System.out.println(resp.toString());
-
-		ServiceInfoResponse svcResp = vrmService.getServiceInfo(CUST1_CUSTID);
-		assertNotNull(svcResp);
-
-	}
-
-	@Test
-	public void allocateResourceForTwoServicesTest() {
-
-		AllocateResourceResponse respOne = vrmService.allocateResource(CUST2_CUSTID, CUST2_SID, CUST2_DN1, "1");
-		assertNotNull(respOne);
-		assertTrue(respOne.getCustomerId().equals(CUST2_CUSTID));
-		assertTrue(respOne.getNumber().size() == 1);
-		ServiceInfoResponse svcRespOne = vrmService.getServiceInfo(CUST2_CUSTID);
-		assertNotNull(svcRespOne);
-
-		AllocateResourceResponse respTwo = vrmService.allocateResource(CUST2_CUSTID, CUST2_SID, CUST2_DN2, "2");
-		assertNotNull(respTwo);
-		assertTrue(respTwo.getCustomerId().equals(CUST2_CUSTID));
-		assertTrue(respTwo.getNumber().size() == 1);
-		ServiceInfoResponse svcRespTwo = vrmService.getServiceInfo(CUST2_CUSTID);
-		assertNotNull(svcRespTwo);
-
+		
+		vrmService.releaseResource(CUST1_DN1);
+		
 	}
 	
 	@Test
-	public void allocateAndReleaseResourceTest() {
-		
-		AllocateResourceResponse resp = vrmService.allocateResource(CUST3_CUSTID, CUST3_SID, CUST3_DN1, "1");
+	public void allocateResourceForFirstServiceTest() {
+
+		AllocateResourceResponse resp = vrmService.allocateResource(CUST1_DN1);
 		assertNotNull(resp);
 
-		assertTrue(resp.getCustomerId().equals(CUST3_CUSTID));
-		
-		ServiceInfoResponse svcResp = vrmService.getServiceInfo(CUST3_CUSTID);
+		assertTrue(resp.getNumber().size() > 0);
+		System.out.println(resp.toString());
+
+		ServiceInfoResponse svcResp = vrmService.getServiceInfo(CUST1_DN1);
 		assertNotNull(svcResp);
 
-		vrmService.releaseResource(CUST3_CUSTID, CUST3_DN1);
+	}
+
+@Ignore
+	@Test
+	public void allocateResourceForSecondServiceTest() {
+
+		AllocateResourceResponse respOne = vrmService.allocateResource(CUST2_DN1);
+		assertNotNull(respOne);
+		assertTrue(respOne.getNumber().size() == 1);
+		ServiceInfoResponse svcRespOne = vrmService.getServiceInfo(CUST2_DN1);
+		assertNotNull(svcRespOne);
+
+		AllocateResourceResponse respTwo = vrmService.allocateResource(CUST2_DN2, CUST2_DN1);
+		assertNotNull(respTwo);
+		assertTrue(respTwo.getNumber().size() == 1);
+		ServiceInfoResponse svcRespTwo = vrmService.getServiceInfo(CUST2_DN2);
+		assertNotNull(svcRespTwo);
+
+	}
+
+	@Ignore
+	@Test
+	public void allocateAndReleaseResourceTest() {
+		
+		AllocateResourceResponse resp = vrmService.allocateResource(CUST3_DN1);
+		assertNotNull(resp);
+
+
+		ServiceInfoResponse svcResp = vrmService.getServiceInfo(CUST3_DN1);
+		assertNotNull(svcResp);
+
+		vrmService.releaseResource(CUST3_DN1);
 		
 	}
 
+	@Ignore
 	@Test(expected = VoiceServiceNotFoundException.class)
 	public void allocateAndReleaseResourceExpectExceptionTest() {
 
-		AllocateResourceResponse resp = vrmService.allocateResource(CUST3_CUSTID, CUST3_SID, CUST3_DN1, "1");
+		AllocateResourceResponse resp = vrmService.allocateResource( CUST3_DN1);
 		assertNotNull(resp);
-
-		assertTrue(resp.getCustomerId().equals(CUST3_CUSTID));
-		
-		ServiceInfoResponse svcResp = vrmService.getServiceInfo(CUST3_CUSTID);
+	
+		ServiceInfoResponse svcResp = vrmService.getServiceInfo(CUST3_DN1);
 		assertNotNull(svcResp);
 
-		vrmService.releaseResource(CUST3_CUSTID, CUST3_DN1);
+		vrmService.releaseResource(CUST3_DN1);
 
 		svcResp = vrmService.getServiceInfo(CUST3_CUSTID);
 		System.out.println(svcResp.toString());

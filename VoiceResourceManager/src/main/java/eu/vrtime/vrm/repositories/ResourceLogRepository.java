@@ -18,9 +18,9 @@ public interface ResourceLogRepository extends JpaRepository<ResourceLog, Long> 
 
 	public Optional<ResourceLog> findByOid(Long oid);
 
-	public Optional<List<ResourceLog>> findByServiceId(String serviceId);
-
-	public Optional<List<ResourceLog>> findByCustomerId(String customerId);
+//	public Optional<List<ResourceLog>> findByServiceId(String serviceId);
+//
+//	public Optional<List<ResourceLog>> findByCustomerId(String customerId);
 
 	public Optional<List<ResourceLog>> findByLen(ResourceIdentifier len);
 

@@ -15,50 +15,55 @@ public class VoiceService extends AbstractBaseEntity {
 
 	private static final long serialVersionUID = 6895257404688974719L;
 
-	@Column(name = "service_id", nullable = false, updatable = true, unique = false)
-	private String serviceId;
+	// @Column(name = "service_id", nullable = false, updatable = true, unique =
+	// false)
+	// private String serviceId;
 
-	@Column(name = "customer_id", nullable = false, updatable = true, unique = false)
-	private String customerId;
+	// @Column(name = "customer_id", nullable = false, updatable = true, unique =
+	// false)
+	// private String customerId;
 
 	@Column(name = "directory_number", nullable = false, updatable = true, unique = true)
 	private String directoryNumber;
 
-	@Column(name = "line_number", nullable = false, updatable = false, unique = false)
-	private Integer lineNo;
+	// @Column(name = "line_number", nullable = false, updatable = false, unique =
+	// false)
+	// private Integer lineNo;
 
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "resourceId")
 	public Resource resource;
 
-	public VoiceService(final String serviceId, final String customerId, final String directoryNumber,
-			final int lineNo) {
-		Validate.notNull(serviceId);
-		Validate.notNull(customerId);
+	public VoiceService(
+			/* final String serviceId, final String customerId, */ final String directoryNumber/*
+																								 * , final int lineNo
+																								 */) {
+		// Validate.notNull(serviceId);
+		// Validate.notNull(customerId);
 		Validate.notNull(directoryNumber);
-		Validate.notNull(lineNo);
+		// Validate.notNull(lineNo);
 
-		this.serviceId = serviceId;
-		this.customerId = customerId;
+		// this.serviceId = serviceId;
+		// this.customerId = customerId;
 		this.directoryNumber = directoryNumber;
-		this.lineNo = lineNo;
+		// this.lineNo = lineNo;
 	}
 
-	public String getServiceId() {
-		return serviceId;
-	}
-
-	public void setServiceId(String serviceId) {
-		this.serviceId = serviceId;
-	}
-
-	public String getCustomerId() {
-		return customerId;
-	}
-
-	public void setCustomerId(String customerId) {
-		this.customerId = customerId;
-	}
+	// public String getServiceId() {
+	// return serviceId;
+	// }
+	//
+	// public void setServiceId(String serviceId) {
+	// this.serviceId = serviceId;
+	// }
+	//
+	// public String getCustomerId() {
+	// return customerId;
+	// }
+	//
+	// public void setCustomerId(String customerId) {
+	// this.customerId = customerId;
+	// }
 
 	public String getDirectoryNumber() {
 		return directoryNumber;
@@ -76,13 +81,13 @@ public class VoiceService extends AbstractBaseEntity {
 		this.resource = resource;
 	}
 
-	public int getLineNo() {
-		return lineNo;
-	}
-
-	public void setLineNo(int lineNo) {
-		this.lineNo = lineNo;
-	}
+	// public int getLineNo() {
+	// return lineNo;
+	// }
+	//
+	// public void setLineNo(int lineNo) {
+	// this.lineNo = lineNo;
+	// }
 
 	@Override
 	public boolean equals(Object o) {
@@ -98,12 +103,20 @@ public class VoiceService extends AbstractBaseEntity {
 		return 31;
 	}
 
+	// @Override
+	// public String toString() {
+	// return "VoiceService [oid=" + oid + ",serviceId=" + serviceId + ",
+	// customerId=" + customerId
+	// + ", directoryNumber=" + directoryNumber + ", lineNo=" + lineNo + ",
+	// resource=" + resource.getOid()
+	// + ", LEN=" + resource.getIdentifier().toString() + ", createDate=" +
+	// createDate + ", lastModified="
+	// + lastModified + "]";
+	// }
+
 	@Override
 	public String toString() {
-		return "VoiceService [oid=" + oid + ",serviceId=" + serviceId + ", customerId=" + customerId
-				+ ", directoryNumber=" + directoryNumber + ", lineNo=" + lineNo + ", resource=" + resource.getOid()
-				+ ", LEN=" + resource.getIdentifier().toString() + ",  createDate=" + createDate + ", lastModified="
-				+ lastModified + "]";
+		return "VoiceService [directoryNumber=" + directoryNumber + ", resource=" + resource + "]";
 	}
 
 	VoiceService() {

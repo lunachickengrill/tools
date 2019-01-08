@@ -107,11 +107,13 @@ public class BasicResourceServiceImpl implements BasicResourceService {
 		VoiceService dbSvc = dbVoiceService.get();
 
 		if (dbSvc.getResource() == null) {
-			throw new ResourceNotFoundException("No Resource for VoiceService " + voiceService.getServiceId());
+			throw new ResourceNotFoundException("No Resource for VoiceService " + voiceService.getDirectoryNumber());
 		}
 
-		ResourceLog logEntry = new ResourceLog(voiceService.getServiceId(), voiceService.getCustomerId(),
-				voiceService.getResource().getIdentifier(), voiceService.getDirectoryNumber());
+//		ResourceLog logEntry = new ResourceLog(voiceService.getServiceId(), voiceService.getCustomerId(),
+//				voiceService.getResource().getIdentifier(), voiceService.getDirectoryNumber());
+		
+		ResourceLog logEntry = new ResourceLog(voiceService.getResource().getIdentifier(), voiceService.getDirectoryNumber());
 
 		Resource res = dbSvc.getResource();
 		serviceRepository.delete(dbSvc);

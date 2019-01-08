@@ -34,6 +34,9 @@ public class Softswitch extends AbstractBaseEntity {
 	 */
 	private static final long serialVersionUID = 7823116495312122813L;
 
+	@Column(name = "len_enabled", nullable = false, updatable = true, unique = false)
+	private Boolean isLenEnabled;
+
 	@Embedded
 	@Column(name = "switch_id", nullable = false, updatable = true, unique = true)
 	private SwitchId switchId;
@@ -53,16 +56,27 @@ public class Softswitch extends AbstractBaseEntity {
 	@OneToMany(mappedBy = "softswitch", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<SessionManager> sessionManagers = new HashSet<>();
 
-	public Softswitch(final SwitchId switchId, final String nic, final String name, final SoftswitchStatus status) {
+	public Softswitch(final SwitchId switchId, final String nic, final String name, final SoftswitchStatus status,
+			final Boolean isLenEnabled) {
 		Validate.notNull(switchId);
 		Validate.notNull(nic);
 		Validate.notNull(name);
 		Validate.notNull(status);
+		Validate.notNull(isLenEnabled);
 
 		this.switchId = switchId;
 		this.nic = nic;
 		this.name = name;
 		this.status = status;
+		this.isLenEnabled = isLenEnabled;
+	}
+
+	public Boolean getIsLenEnabled() {
+		return isLenEnabled;
+	}
+
+	public void setIsLenEnabled(Boolean isLenEnabled) {
+		this.isLenEnabled = isLenEnabled;
 	}
 
 	public SwitchId getSwitchId() {
@@ -147,8 +161,8 @@ public class Softswitch extends AbstractBaseEntity {
 
 	@Override
 	public String toString() {
-		return "Softswitch [switchId=" + switchId + ", nic=" + nic + ", name=" + name + ", status=" + status
-				+ ", description=" + description + ", sessionManagers=" + sessionManagers + "]";
+		return "Softswitch [isLenEnabled=" + isLenEnabled + ", switchId=" + switchId + ", nic=" + nic + ", name=" + name
+				+ ", status=" + status + ", description=" + description + ", sessionManagers=" + sessionManagers + "]";
 	}
 
 	public Softswitch() {

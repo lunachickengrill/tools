@@ -12,11 +12,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import eu.vrtime.vrm.api.exceptions.StatusCodeException;
 import eu.vrtime.vrm.api.messages.AllocateResourceResponse;
 import eu.vrtime.vrm.api.messages.ReleaseResourceResponse;
 import eu.vrtime.vrm.api.messages.ServiceInfoResponse;
+import eu.vrtime.vrm.domain.shared.SwitchId;
 import eu.vrtime.vrm.services.VoiceResourceManagementServiceFacade;
 
 @RestController
@@ -34,21 +37,43 @@ public class VrmRestController {
 	}
 
 	@RequestMapping(value = "/allocateResource", method = RequestMethod.POST, produces = {
-			MediaType.APPLICATION_XML_VALUE})
-	public ResponseEntity<AllocateResourceResponse> allocateResource(
-			@RequestParam(value = "customerId") String customerId, @RequestParam(value = "sid") String sid,
-			@RequestParam(value = "dn") String directoryNumber, @RequestParam(value = "lineNo") String lineNo) {
+			MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<AllocateResourceResponse> allocateResource(@RequestParam(value = "dn") String directoryNumber,
+			@RequestParam(value = "PrimaryNumber") Optional<String> primaryNumber,
+			@RequestParam(value = "SwitchId") Optional<SwitchId> switchId) {
 
-		LOGGER.info("Received request on " + API_PATH + "/allocateResource " + "customerId: " + customerId + " sid: "
-				+ sid + " dn: " + directoryNumber + " lineNo: " + lineNo);
+		LOGGER.info("Received request on " + API_PATH + "/allocateResource " + " dn:" + directoryNumber);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		AllocateResourceResponse resp;
 
 		try {
-			AllocateResourceResponse resp = vrmService.allocateResource(customerId, sid, directoryNumber, lineNo);
+			if (primaryNumber.isPresent()) {
+				System.out.println(primaryNumber.get());
+				resp = vrmService.allocateResource(directoryNumber, primaryNumber.get());
+				LOGGER.debug(resp.toString());
+
+				ResponseEntity<AllocateResourceResponse> re = new ResponseEntity<AllocateResourceResponse>(resp,
+						headers, HttpStatus.OK);
+				LOGGER.info(re.getHeaders() + " " + re.getBody() + " " + re.getStatusCodeValue());
+				return re;
+			}
+
+			if (switchId.isPresent()) {
+				resp = vrmService.allocateResource(directoryNumber, switchId.get());
+				LOGGER.debug(resp.toString());
+				ResponseEntity<AllocateResourceResponse> re = new ResponseEntity<AllocateResourceResponse>(resp,
+						headers, HttpStatus.OK);
+				LOGGER.info(re.getHeaders() + " " + re.getBody() + " " + re.getStatusCodeValue());
+
+				return re;
+			}
+			resp = vrmService.allocateResource(directoryNumber);
 			LOGGER.debug(resp.toString());
 
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_XML);
-			ResponseEntity<AllocateResourceResponse> re = new ResponseEntity<AllocateResourceResponse>(resp, headers, HttpStatus.OK);
+			ResponseEntity<AllocateResourceResponse> re = new ResponseEntity<AllocateResourceResponse>(resp, headers,
+					HttpStatus.OK);
 			LOGGER.info(re.getHeaders() + " " + re.getBody() + " " + re.getStatusCodeValue());
 			return re;
 		} catch (StatusCodeException ex) {
@@ -57,21 +82,24 @@ public class VrmRestController {
 	}
 
 	@RequestMapping(value = "/releaseResource", method = RequestMethod.POST, produces = {
-			MediaType.APPLICATION_XML_VALUE })
+			MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<ReleaseResourceResponse> releaseResource(
-			@RequestParam(value = "customerId") String customerId, @RequestParam(value = "sid") String sid,
-			@RequestParam(value = "dn") String directoryNumber, @RequestParam(value = "lineNo") String lineNo) {
-		LOGGER.info("Received request on " + API_PATH + "/releaseResource " + "customerId: " + customerId + " sid: "
-				+ sid + " dn: " + directoryNumber + " lineNo: " + lineNo);
+			@RequestParam(value = "dn") String directoryNumber) {
+		LOGGER.info("Received request on " + API_PATH + "/releaseResource " +  " dn:" + directoryNumber);
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		ReleaseResourceResponse resp;
+		
 		try {
-			ReleaseResourceResponse resp = vrmService.releaseResource(customerId, directoryNumber);
+			resp = vrmService.releaseResource(directoryNumber);
 			LOGGER.debug(resp.toString());
 
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_XML);
-
-			ResponseEntity<ReleaseResourceResponse> re = new ResponseEntity<ReleaseResourceResponse>(resp, headers, HttpStatus.OK);
+			ResponseEntity<ReleaseResourceResponse> re = new ResponseEntity<ReleaseResourceResponse>(resp, headers,
+					HttpStatus.OK);
+			
 			LOGGER.info(re.getHeaders() + " " + re.getBody() + " " + re.getStatusCodeValue());
+			
 			return re;
 		} catch (StatusCodeException ex) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
@@ -79,7 +107,7 @@ public class VrmRestController {
 	}
 
 	@RequestMapping(value = "/getServiceInfo", method = RequestMethod.GET, produces = {
-			MediaType.APPLICATION_XML_VALUE })
+			MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<ServiceInfoResponse> getServiceInfo(@RequestParam(value = "customerId") String customerId) {
 		LOGGER.info("Received request on " + API_PATH + "/getServiceInfo " + "customerId: " + customerId);
 		try {
@@ -87,9 +115,10 @@ public class VrmRestController {
 			LOGGER.debug(resp.toString());
 
 			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_XML);
+			headers.setContentType(MediaType.APPLICATION_JSON);
 
-			ResponseEntity<ServiceInfoResponse> re = new ResponseEntity<ServiceInfoResponse>(resp, headers, HttpStatus.OK);
+			ResponseEntity<ServiceInfoResponse> re = new ResponseEntity<ServiceInfoResponse>(resp, headers,
+					HttpStatus.OK);
 			LOGGER.info(re.getHeaders() + " " + re.getBody() + " " + re.getStatusCodeValue());
 			return re;
 		} catch (StatusCodeException ex) {
@@ -115,6 +144,10 @@ public class VrmRestController {
 		ResponseEntity<ServiceInfoResponse> re = new ResponseEntity<ServiceInfoResponse>(resp, headers, HttpStatus.OK);
 		LOGGER.info(re.getHeaders() + " " + re.getBody() + " " + re.getStatusCodeValue());
 		return re;
+	}
+	
+	public VrmRestController() {
+		// TODO Auto-generated constructor stub
 	}
 
 }

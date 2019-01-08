@@ -3,13 +3,13 @@ package eu.vrtime.vrm.services;
 import eu.vrtime.vrm.domain.model.Resource;
 import eu.vrtime.vrm.domain.model.SessionManager;
 import eu.vrtime.vrm.domain.model.Softswitch;
-import eu.vrtime.vrm.domain.model.VoiceService;
 import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
 import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
+import eu.vrtime.vrm.domain.shared.SwitchId;
 
 public interface BasicInfrastructureService {
 
-	public Softswitch addSoftswitch(String switchId,String nic, String name, SoftswitchStatus status);
+	public Softswitch addSoftswitch(String switchId,String nic, String name, SoftswitchStatus status, Boolean isLenEnabled);
 
 	public SessionManager addSessionManager(String smId, Softswitch softswitch);
 
@@ -30,6 +30,10 @@ public interface BasicInfrastructureService {
 	public void addResource(ResourceIdentifier identifier, SessionManager sessionManager);
 
 	public SessionManager getSessionManagerWithMaxFreeResources();
+	
+	public SessionManager getSessionManagerWithMaxFreeResourcesLenEnabled();
+	
+	public SessionManager getSessionManagerWithMaxFreeResources(SwitchId switchId);
 
 	public Resource getFirstFreeeResourceBySessionManager(SessionManager sessionManager);
 

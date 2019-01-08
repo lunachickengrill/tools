@@ -15,11 +15,11 @@ public class ResourceLog extends AbstractBaseEntity {
 
 	private static final long serialVersionUID = -4735534488791568579L;
 
-	@Column(name = "service_id", unique = false, nullable = false)
-	private String serviceId;
-
-	@Column(name = "customer_id", unique = false, nullable = false)
-	private String customerId;
+	// @Column(name = "service_id", unique = false, nullable = false)
+	// private String serviceId;
+	//
+	// @Column(name = "customer_id", unique = false, nullable = false)
+	// private String customerId;
 
 	@Embedded
 	@Column(name = "resource_id", unique = false, nullable = false)
@@ -28,25 +28,26 @@ public class ResourceLog extends AbstractBaseEntity {
 	@Column(name = "directory_number", unique = false, nullable = false)
 	private String dn;
 
-	public ResourceLog(final String serviceId, final String customerId, final ResourceIdentifier len, final String dn) {
-		Validate.notNull(serviceId);
-		Validate.notNull(customerId);
+	public ResourceLog(/* final String serviceId, final String customerId, */ final ResourceIdentifier len,
+			final String dn) {
+		// Validate.notNull(serviceId);
+		// Validate.notNull(customerId);
 		Validate.notNull(len);
 		Validate.notNull(dn);
 
-		this.serviceId = serviceId;
-		this.customerId = customerId;
+		// this.serviceId = serviceId;
+		// this.customerId = customerId;
 		this.len = len;
 		this.dn = dn;
 	}
 
-	public String getServiceId() {
-		return serviceId;
-	}
-
-	public String getCustomerId() {
-		return customerId;
-	}
+	// public String getServiceId() {
+	// return serviceId;
+	// }
+	//
+	// public String getCustomerId() {
+	// return customerId;
+	// }
 
 	public ResourceIdentifier getLen() {
 		return len;
@@ -56,10 +57,16 @@ public class ResourceLog extends AbstractBaseEntity {
 		return dn;
 	}
 
+	// @Override
+	// public String toString() {
+	// return "ResourceLog [serviceId=" + serviceId + ", customerId=" + customerId +
+	// ", len=" + len + ", dn=" + dn
+	// + "]";
+	// }
+
 	@Override
 	public String toString() {
-		return "ResourceLog [serviceId=" + serviceId + ", customerId=" + customerId + ", len=" + len + ", dn=" + dn
-				+ "]";
+		return "ResourceLog [len=" + len + ", dn=" + dn + "]";
 	}
 
 	ResourceLog() {
