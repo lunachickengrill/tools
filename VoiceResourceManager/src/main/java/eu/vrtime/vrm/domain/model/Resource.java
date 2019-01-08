@@ -36,8 +36,8 @@ public class Resource extends AbstractBaseEntity {
 	private ResourceStatus status;
 
 	public Resource(final ResourceIdentifier identifier, ResourceStatus status) {
-		Validate.notNull(identifier);
-		Validate.notNull(status);
+		Validate.notNull(identifier, "identifier is null");
+		Validate.notNull(status, "status is null");
 
 		this.identifier = identifier;
 		this.status = status;

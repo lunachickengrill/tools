@@ -58,11 +58,11 @@ public class Softswitch extends AbstractBaseEntity {
 
 	public Softswitch(final SwitchId switchId, final String nic, final String name, final SoftswitchStatus status,
 			final Boolean isLenEnabled) {
-		Validate.notNull(switchId);
-		Validate.notNull(nic);
-		Validate.notNull(name);
-		Validate.notNull(status);
-		Validate.notNull(isLenEnabled);
+		Validate.notNull(switchId, "switchId is null");
+		Validate.notNull(nic, "nic is null");
+		Validate.notNull(name, "name is null");
+		Validate.notNull(status, "status is null");
+		Validate.notNull(isLenEnabled, "isLenEnabled is null");
 
 		this.switchId = switchId;
 		this.nic = nic;

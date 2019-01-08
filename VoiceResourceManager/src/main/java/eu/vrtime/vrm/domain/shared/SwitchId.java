@@ -11,7 +11,7 @@ public class SwitchId implements ValueObject<SwitchId> {
 	private String swId;
 
 	public SwitchId(final String swId) {
-		Validate.notEmpty(swId);
+		Validate.notNull(swId, "swId is null");
 		setSwId(swId);
 	}
 

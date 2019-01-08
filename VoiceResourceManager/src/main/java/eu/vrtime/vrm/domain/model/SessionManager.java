@@ -35,8 +35,8 @@ public class SessionManager extends AbstractBaseEntity {
 	private Set<Resource> resources = new HashSet<>();
 
 	public SessionManager(final String smId, final Softswitch softswitch) {
-		Validate.notNull(smId);
-		Validate.notNull(softswitch);
+		Validate.notNull(smId, "smId is null");
+		Validate.notNull(softswitch, "softswitch is null");
 		
 		this.smId = smId;
 		this.softswitch = softswitch;

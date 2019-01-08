@@ -1,5 +1,6 @@
 package eu.vrtime.vrm.domain.shared;
 
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class VoiceNumber implements ValueObject<VoiceNumber> {
@@ -9,6 +10,9 @@ public class VoiceNumber implements ValueObject<VoiceNumber> {
 	private String len;
 
 	public VoiceNumber(final String dn, final String len) {
+		Validate.notNull(dn, "dn is null");
+		Validate.notNull(len,"len is null");
+		
 		this.dn = dn;
 		this.len = len;
 	}

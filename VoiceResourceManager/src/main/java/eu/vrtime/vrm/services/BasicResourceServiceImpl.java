@@ -46,8 +46,8 @@ public class BasicResourceServiceImpl implements BasicResourceService {
 	@Override
 	@Transactional
 	public void allocateResourceForVoiceService(final Resource resource, final VoiceService voiceService) {
-		Validate.notNull(resource);
-		Validate.notNull(voiceService);
+		Validate.notNull(resource, "resource is null");
+		Validate.notNull(voiceService, "voiceservice is null");
 
 		Optional<Resource> dbResource = resourceRepository.findById(resource.getOid());
 		if (!(dbResource.isPresent())) {
@@ -64,8 +64,7 @@ public class BasicResourceServiceImpl implements BasicResourceService {
 
 	@Override
 	public Resource getFirstAvailableResource(SessionManager sessionManager) {
-		Validate.notNull(sessionManager);
-		Validate.notNull(sessionManager.getOid());
+		Validate.notNull(sessionManager, "sessionManager is null");
 		
 		Optional<Resource> dbResource = resourceRepository
 				.findTopByStatusAndSessionManagerOrderByOid(ResourceStatus.FREE, sessionManager);
@@ -78,8 +77,7 @@ public class BasicResourceServiceImpl implements BasicResourceService {
 
 	@Override
 	public Resource getResourceForSecondService(VoiceService voiceService) {
-		Validate.notNull(voiceService);
-		Validate.notNull(voiceService.getOid());
+		Validate.notNull(voiceService, "voiceService is null");
 		
 		Optional<VoiceService> dbService = serviceRepository.findByOid(voiceService.getOid());
 		VoiceService svc = dbService.get();
@@ -96,8 +94,7 @@ public class BasicResourceServiceImpl implements BasicResourceService {
 	@Override
 	@Transactional
 	public void releaseResouceForVoiceService(VoiceService voiceService) {
-		Validate.notNull(voiceService);
-		Validate.notNull(voiceService.getOid());
+		Validate.notNull(voiceService, "voiceService is null");
 
 		Optional<VoiceService> dbVoiceService = serviceRepository.findByOid(voiceService.getOid());
 		if (!(dbVoiceService.isPresent())) {
@@ -109,9 +106,6 @@ public class BasicResourceServiceImpl implements BasicResourceService {
 		if (dbSvc.getResource() == null) {
 			throw new ResourceNotFoundException("No Resource for VoiceService " + voiceService.getDirectoryNumber());
 		}
-
-//		ResourceLog logEntry = new ResourceLog(voiceService.getServiceId(), voiceService.getCustomerId(),
-//				voiceService.getResource().getIdentifier(), voiceService.getDirectoryNumber());
 		
 		ResourceLog logEntry = new ResourceLog(voiceService.getResource().getIdentifier(), voiceService.getDirectoryNumber());
 

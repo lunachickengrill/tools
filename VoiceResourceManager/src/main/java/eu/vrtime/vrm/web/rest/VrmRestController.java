@@ -14,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import eu.vrtime.vrm.api.exceptions.StatusCodeException;
 import eu.vrtime.vrm.api.messages.AllocateResourceResponse;
@@ -39,8 +40,8 @@ public class VrmRestController {
 	@RequestMapping(value = "/allocateResource", method = RequestMethod.POST, produces = {
 			MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<AllocateResourceResponse> allocateResource(@RequestParam(value = "dn") String directoryNumber,
-			@RequestParam(value = "PrimaryNumber") Optional<String> primaryNumber,
-			@RequestParam(value = "SwitchId") Optional<SwitchId> switchId) {
+			@RequestParam(value = "primaryNumber") Optional<String> primaryNumber,
+			@RequestParam(value = "switchId") Optional<String> switchId) {
 
 		LOGGER.info("Received request on " + API_PATH + "/allocateResource " + " dn:" + directoryNumber);
 
@@ -61,7 +62,7 @@ public class VrmRestController {
 			}
 
 			if (switchId.isPresent()) {
-				resp = vrmService.allocateResource(directoryNumber, switchId.get());
+				resp = vrmService.allocateResource(directoryNumber, new SwitchId(switchId.get()));
 				LOGGER.debug(resp.toString());
 				ResponseEntity<AllocateResourceResponse> re = new ResponseEntity<AllocateResourceResponse>(resp,
 						headers, HttpStatus.OK);
@@ -85,6 +86,7 @@ public class VrmRestController {
 			MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<ReleaseResourceResponse> releaseResource(
 			@RequestParam(value = "dn") String directoryNumber) {
+		Validate.notNull(directoryNumber, "dn is null");
 		LOGGER.info("Received request on " + API_PATH + "/releaseResource " +  " dn:" + directoryNumber);
 		
 		HttpHeaders headers = new HttpHeaders();
@@ -108,10 +110,12 @@ public class VrmRestController {
 
 	@RequestMapping(value = "/getServiceInfo", method = RequestMethod.GET, produces = {
 			MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<ServiceInfoResponse> getServiceInfo(@RequestParam(value = "customerId") String customerId) {
-		LOGGER.info("Received request on " + API_PATH + "/getServiceInfo " + "customerId: " + customerId);
+	public ResponseEntity<ServiceInfoResponse> getServiceInfo(@RequestParam(value = "customerId") String directoryNumber) {
+		Validate.notNull(directoryNumber, "dn is null");
+		LOGGER.info("Received request on " + API_PATH + "/getServiceInfo " + "dn: " + directoryNumber);
+		
 		try {
-			ServiceInfoResponse resp = vrmService.getServiceInfo(customerId);
+			ServiceInfoResponse resp = vrmService.getServiceInfo(directoryNumber);
 			LOGGER.debug(resp.toString());
 
 			HttpHeaders headers = new HttpHeaders();
@@ -131,12 +135,10 @@ public class VrmRestController {
 		LOGGER.info("Received request on " + API_PATH + "/testXml");
 
 		ServiceInfoResponse resp = new ServiceInfoResponse();
-		resp.setCustomerId("TEST123");
 		resp.addNumber("0123456", "SS 00 01 02");
-		resp.addNumber("0198765", "SS 00 02 03");
 		resp.setNic("123456");
 		resp.setSmId("100");
-		resp.setSwitchId("TEST SWICHT");
+		resp.setSwitchId("TEST SWITCH");
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_XML);

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,58 +53,13 @@ public class VoiceResourceManagementServiceFacadeImpl implements VoiceResourceMa
 		this.switchRepository = switchRepository;
 	}
 
-	// @Override
-	// @Transactional
-	// public AllocateResourceResponse allocateResource(String customerId, String
-	// SID, String directoryNumber,
-	// String lineNo) {
-	// LOGGER.debug("allocateResource: " + customerId + " " + SID + " " +
-	// directoryNumber);
-	// AllocateResourceResponse resp = new AllocateResourceResponse();
-	// VoiceService vs = new VoiceService(SID, customerId, directoryNumber,
-	// Integer.parseInt(lineNo));
-	//
-	// if (lineNo.equals("1")) {
-	//
-	// SessionManager dbSm = infraService.getSessionManagerWithMaxFreeResources();
-	// Softswitch dbSw = dbSm.getSoftswitch();
-	// Resource dbRes = resourceService.getFirstAvailableResource(dbSm);
-	// resourceService.allocateResourceForVoiceService(dbRes, vs);
-	// VoiceService dbVs = serviceRepository.findByResource(dbRes).get();
-	//
-	// resp.setSwitchId(dbSw.getSwitchId().toStringSwId());
-	// resp.setNic(dbSw.getNic());
-	// resp.setSmId(dbSm.getSmId());
-	// resp.setCustomerId(dbVs.getCustomerId());
-	//
-	// resp.addNumber(directoryNumber, dbRes.getIdentifier().getIdentifier());
-	// LOGGER.debug(resp.toString());
-	//
-	// } else {
-	//
-	// VoiceService dbVsExisting =
-	// serviceRepository.findByCustomerIdAndLineNo(customerId, 1).get();
-	// Resource dbRes = resourceService.getResourceForSecondService(dbVsExisting);
-	// SessionManager dbSm = dbRes.getSessionManager();
-	// Softswitch dbSw = dbSm.getSoftswitch();
-	// resourceService.allocateResourceForVoiceService(dbRes, vs);
-	// VoiceService dbVs = serviceRepository.findByResource(dbRes).get();
-	//
-	// resp.setSwitchId(dbSw.getSwitchId().toStringSwId());
-	// resp.setNic(dbSw.getNic());
-	// resp.setSmId(dbSm.getSmId());
-	// resp.setCustomerId(dbVs.getCustomerId());
-	// resp.addNumber(directoryNumber, dbRes.getIdentifier().getIdentifier());
-	// LOGGER.debug(resp.toString());
-	//
-	// }
-	// return resp;
-	// }
 
 	@Override
 	@Transactional
 	public AllocateResourceResponse allocateResource(String directoryNumber) {
+		Validate.notNull(directoryNumber, "DN is null");
 		LOGGER.debug("allocateResource for: " + directoryNumber);
+		
 		AllocateResourceResponse resp = new AllocateResourceResponse();
 		VoiceService vs = new VoiceService(directoryNumber);
 
@@ -123,7 +79,10 @@ public class VoiceResourceManagementServiceFacadeImpl implements VoiceResourceMa
 	@Override
 	@Transactional
 	public AllocateResourceResponse allocateResource(String directoryNumber, String primaryNumber) {
-		LOGGER.debug("allocateResource for: " + directoryNumber);
+		Validate.notNull(directoryNumber, "DN is null");
+		Validate.notNull(primaryNumber, "PrimaryNumber is null");	
+		LOGGER.debug("allocateResource for: " + directoryNumber + ", primaryNumber: " + primaryNumber);
+		
 		AllocateResourceResponse resp = new AllocateResourceResponse();
 		VoiceService vs = new VoiceService(directoryNumber);
 
@@ -132,6 +91,8 @@ public class VoiceResourceManagementServiceFacadeImpl implements VoiceResourceMa
 			throw new VoiceServiceNotFoundException("VoiceService for PrimaryNumber " + primaryNumber + " not found");
 		}
 		Resource dbRes = resourceService.getResourceForSecondService(vs);
+		System.out.println(dbRes.toString());
+		
 		SessionManager dbSm = dbRes.getSessionManager();
 		Softswitch dbSw = dbSm.getSoftswitch();
 		resourceService.allocateResourceForVoiceService(dbRes, vs);

@@ -2,6 +2,7 @@ package eu.vrtime.vrm.domain.shared;
 
 import javax.persistence.Embeddable;
 
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 @Embeddable
@@ -10,6 +11,8 @@ public class ResourceIdentifier implements ValueObject<ResourceIdentifier> {
 	private String identifier;
 
 	public ResourceIdentifier(final String identifier) {
+		Validate.notNull(identifier, "identifier is null");
+		
 		setIdentifier(identifier);
 	}
 
