@@ -1,8 +1,10 @@
 package eu.vrtime.vrm.services;
 
 import eu.vrtime.vrm.api.messages.AllocateResourceResponse;
+import eu.vrtime.vrm.api.messages.LockResourceResponse;
 import eu.vrtime.vrm.api.messages.ReleaseResourceResponse;
 import eu.vrtime.vrm.api.messages.ServiceInfoResponse;
+import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
 import eu.vrtime.vrm.domain.shared.SwitchId;
 
 public interface VoiceResourceManagementServiceFacade {
@@ -19,5 +21,10 @@ public interface VoiceResourceManagementServiceFacade {
 	public ReleaseResourceResponse releaseResource(String directoryNumber);
 
 	public ServiceInfoResponse getServiceInfo(String directoryNumber);
+	
+	public LockResourceResponse lockResource(ResourceIdentifier resourceIdentifier);
+	
+	
+	
 
 }

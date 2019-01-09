@@ -1,27 +1,28 @@
 package eu.vrtime.vrm.services;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import eu.vrtime.vrm.api.exceptions.ResourceNotFoundException;
 import eu.vrtime.vrm.api.exceptions.SessionManagerNotFoundException;
 import eu.vrtime.vrm.api.exceptions.SoftswitchNotFoundException;
 import eu.vrtime.vrm.api.exceptions.VoiceServiceNotFoundException;
 import eu.vrtime.vrm.api.messages.AllocateResourceResponse;
+import eu.vrtime.vrm.api.messages.LockResourceResponse;
 import eu.vrtime.vrm.api.messages.ReleaseResourceResponse;
 import eu.vrtime.vrm.api.messages.ServiceInfoResponse;
 import eu.vrtime.vrm.domain.model.Resource;
 import eu.vrtime.vrm.domain.model.SessionManager;
 import eu.vrtime.vrm.domain.model.Softswitch;
 import eu.vrtime.vrm.domain.model.VoiceService;
+import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
 import eu.vrtime.vrm.domain.shared.SwitchId;
 import eu.vrtime.vrm.repositories.ResourceRepository;
 import eu.vrtime.vrm.repositories.SessionManagerRepository;
@@ -53,13 +54,12 @@ public class VoiceResourceManagementServiceFacadeImpl implements VoiceResourceMa
 		this.switchRepository = switchRepository;
 	}
 
-
 	@Override
 	@Transactional
 	public AllocateResourceResponse allocateResource(String directoryNumber) {
-		Validate.notNull(directoryNumber, "DN is null");
+		Assert.notNull(directoryNumber, "DN is null");
 		LOGGER.debug("allocateResource for: " + directoryNumber);
-		
+
 		AllocateResourceResponse resp = new AllocateResourceResponse(directoryNumber);
 		VoiceService vs = new VoiceService(directoryNumber);
 
@@ -68,7 +68,9 @@ public class VoiceResourceManagementServiceFacadeImpl implements VoiceResourceMa
 		Resource dbRes = resourceService.getFirstAvailableResource(dbSm);
 		resourceService.allocateResourceForVoiceService(dbRes, vs);
 
-		resp.setSwitchId(dbSw.getSwitchId().toStringSwId());
+		if (dbSw.getIsLenEnabled().booleanValue() == true) {
+			resp.setSwitchId(dbSw.getSwitchId().toStringSwId());
+		}
 		resp.setNic(dbSw.getNic());
 		resp.setSmId(dbSm.getSmId());
 		resp.addNumber(directoryNumber, dbRes.getIdentifier().getIdentifier());
@@ -79,10 +81,10 @@ public class VoiceResourceManagementServiceFacadeImpl implements VoiceResourceMa
 	@Override
 	@Transactional
 	public AllocateResourceResponse allocateResource(String directoryNumber, String primaryNumber) {
-		Validate.notNull(directoryNumber, "DN is null");
-		Validate.notNull(primaryNumber, "PrimaryNumber is null");	
+		Assert.notNull(directoryNumber, "DN is null");
+		Assert.notNull(primaryNumber, "PrimaryNumber is null");
 		LOGGER.debug("allocateResource for: " + directoryNumber + ", primaryNumber: " + primaryNumber);
-		
+
 		AllocateResourceResponse resp = new AllocateResourceResponse(directoryNumber);
 		VoiceService vs = new VoiceService(directoryNumber);
 
@@ -91,12 +93,14 @@ public class VoiceResourceManagementServiceFacadeImpl implements VoiceResourceMa
 			throw new VoiceServiceNotFoundException("VoiceService for PrimaryNumber " + primaryNumber + " not found");
 		}
 		Resource dbRes = resourceService.getResourceForSecondService(vs, dbPrimary.get());
-		
+
 		SessionManager dbSm = dbRes.getSessionManager();
 		Softswitch dbSw = dbSm.getSoftswitch();
 		resourceService.allocateResourceForVoiceService(dbRes, vs);
 
-		resp.setSwitchId(dbSw.getSwitchId().toStringSwId());
+		if (dbSw.getIsLenEnabled().booleanValue() == true) {
+			resp.setSwitchId(dbSw.getSwitchId().toStringSwId());
+		}
 		resp.setNic(dbSw.getNic());
 		resp.setSmId(dbSm.getSmId());
 		resp.addNumber(directoryNumber, dbRes.getIdentifier().getIdentifier());
@@ -106,6 +110,7 @@ public class VoiceResourceManagementServiceFacadeImpl implements VoiceResourceMa
 
 	@Override
 	public AllocateResourceResponse allocateResource(String directoryNumber, SwitchId switchId) {
+		Assert.isTrue((directoryNumber != null || switchId != null), "directoryNumber or switchId is null");
 		LOGGER.debug("allocateResource for: " + directoryNumber);
 		AllocateResourceResponse resp = new AllocateResourceResponse(directoryNumber);
 		VoiceService vs = new VoiceService(directoryNumber);
@@ -115,7 +120,9 @@ public class VoiceResourceManagementServiceFacadeImpl implements VoiceResourceMa
 		Resource dbRes = resourceService.getFirstAvailableResource(dbSm);
 		resourceService.allocateResourceForVoiceService(dbRes, vs);
 
-		resp.setSwitchId(dbSw.getSwitchId().toStringSwId());
+		if (dbSw.getIsLenEnabled() == true) {
+			resp.setSwitchId(dbSw.getSwitchId().toStringSwId());
+		}
 		resp.setNic(dbSw.getNic());
 		resp.setSmId(dbSm.getSmId());
 		resp.addNumber(directoryNumber, dbRes.getIdentifier().getIdentifier());
@@ -126,6 +133,7 @@ public class VoiceResourceManagementServiceFacadeImpl implements VoiceResourceMa
 	@Override
 	@Transactional
 	public ReleaseResourceResponse releaseResource(String directoryNumber) {
+		Assert.notNull(directoryNumber, "directoryNumber is null");
 		ReleaseResourceResponse resp = new ReleaseResourceResponse(directoryNumber);
 		LOGGER.debug("releaseResource " + directoryNumber);
 		Optional<VoiceService> dbVs = serviceRepository.findByDirectoryNumber(directoryNumber);
@@ -143,7 +151,7 @@ public class VoiceResourceManagementServiceFacadeImpl implements VoiceResourceMa
 
 	@Override
 	public ServiceInfoResponse getServiceInfo(String directoryNumber) {
-
+		Assert.notNull(directoryNumber, "directoryNumber is null");
 		LOGGER.debug("getServiceInfo " + directoryNumber);
 
 		ServiceInfoResponse resp = new ServiceInfoResponse(directoryNumber);
@@ -160,24 +168,40 @@ public class VoiceResourceManagementServiceFacadeImpl implements VoiceResourceMa
 			throw new ResourceNotFoundException("Resource not found for DN " + directoryNumber);
 		}
 
-		resp.addNumber(vcs.getDirectoryNumber(), res.get().getIdentifier().getIdentifier());
-
 		Optional<SessionManager> sm = sessionManagerRepository.findBySmId(res.get().getSessionManager().getSmId());
 		if (!(sm.isPresent())) {
 			throw new SessionManagerNotFoundException("SessionManager not found for DN " + directoryNumber);
 		}
-
-		resp.setSmId(sm.get().getSmId());
 
 		Optional<Softswitch> sw = switchRepository.findByOid(sm.get().getSoftswitch().getOid());
 		if (!(sw.isPresent())) {
 			throw new SoftswitchNotFoundException("Softswitch not found for DN " + directoryNumber);
 		}
 
+		if (sw.get().getIsLenEnabled().booleanValue() == true) {
+			resp.addNumber(vcs.getDirectoryNumber(), res.get().getIdentifier().getIdentifier());
+		}
+		resp.setSmId(sm.get().getSmId());
 		resp.setSwitchId(sw.get().getSwitchId().toStringSwId());
 		resp.setNic(sw.get().getNic());
 
 		LOGGER.debug(resp.toString());
+
+		return resp;
+	}
+
+	@Override
+	public LockResourceResponse lockResource(ResourceIdentifier resourceIdentifier) {
+		LOGGER.debug("lockResource " + resourceIdentifier);
+
+		Optional<Resource> res = resourceRepository.findByIdentifier(resourceIdentifier);
+		if (!(res.isPresent())) {
+			throw new ResourceNotFoundException("Resource not found: " + resourceIdentifier.getIdentifier());
+		}
+
+		infraService.lockResource(res.get());
+
+		LockResourceResponse resp = new LockResourceResponse(resourceIdentifier.getIdentifier());
 
 		return resp;
 	}
