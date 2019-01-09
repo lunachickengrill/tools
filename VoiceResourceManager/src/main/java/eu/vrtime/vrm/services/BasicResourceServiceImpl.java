@@ -76,11 +76,14 @@ public class BasicResourceServiceImpl implements BasicResourceService {
 	}
 
 	@Override
-	public Resource getResourceForSecondService(VoiceService voiceService) {
+	public Resource getResourceForSecondService(VoiceService voiceService, VoiceService primary) {
 		Validate.notNull(voiceService, "voiceService is null");
 		
-		Optional<VoiceService> dbService = serviceRepository.findByOid(voiceService.getOid());
-		VoiceService svc = dbService.get();
+		Optional<VoiceService> dbPrimary = serviceRepository.findByDirectoryNumber(primary.getDirectoryNumber());
+		if(!(dbPrimary.isPresent())) {
+			throw new VoiceServiceNotFoundException("VoiceService not found for primaryNumber: " + voiceService.getDirectoryNumber());
+		}
+		VoiceService svc = dbPrimary.get();
 		Resource res = svc.getResource();
 		Optional<Resource> dbRes = resourceRepository.findTopByStatusAndSessionManagerOrderByOid(ResourceStatus.FREE,
 				res.getSessionManager());

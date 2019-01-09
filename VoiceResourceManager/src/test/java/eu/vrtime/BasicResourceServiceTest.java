@@ -92,7 +92,7 @@ public class BasicResourceServiceTest extends BaseTest {
 		assertNotNull("VoiceService is null", dbVs1);
 		assertTrue("DN not matching", dbVs1.getDirectoryNumber().equals(CUST2_DN1));
 
-		Resource res2 = resourceService.getResourceForSecondService(dbVs1);
+		Resource res2 = resourceService.getResourceForSecondService(VS_CUST2_DN2,dbVs1);
 		assertNotNull("No resource", res2);
 
 		SessionManager dbSm2 = res2.getSessionManager();

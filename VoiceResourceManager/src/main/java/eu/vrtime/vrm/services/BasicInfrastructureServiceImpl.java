@@ -58,10 +58,10 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	@Transactional
 	public Softswitch addSoftswitch(final String switchId, final String nic, final String name,
 			final SoftswitchStatus status, final Boolean isLenEnabled) {
-		Validate.notNull(switchId);
-		Validate.notNull(nic);
-		Validate.notNull(name);
-		Validate.notNull(status);
+		Validate.notNull(switchId, "switchId is null");
+		Validate.notNull(nic, "nic is null");
+		Validate.notNull(name, "name is null");
+		Validate.notNull(status, "status is null");
 
 		SwitchId swId = new SwitchId(switchId);
 
@@ -72,9 +72,8 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	@Override
 	@Transactional
 	public SessionManager addSessionManager(final String smId, final Softswitch softswitch) {
-		Validate.notNull(smId);
-		Validate.notNull(softswitch);
-		Validate.notNull(softswitch.getOid());
+		Validate.notNull(smId, "smId is null");
+		Validate.notNull(softswitch, "softswitch is null");
 
 		Optional<Softswitch> dbSw = switchRepository.findById(softswitch.getOid());
 		if (!(dbSw.isPresent())) {
@@ -90,8 +89,7 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	@Override
 	@Transactional
 	public Softswitch changeSoftswitch(final Softswitch softswitch) {
-		Validate.notNull(softswitch);
-		Validate.notNull(softswitch.getOid());
+		Validate.notNull(softswitch, "softswitch is null");
 
 		return switchRepository.saveAndFlush(softswitch);
 	}
@@ -99,8 +97,7 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	@Override
 	@Transactional
 	public SessionManager changeSessionManager(final SessionManager sessionManager) {
-		Validate.notNull(sessionManager);
-		Validate.notNull(sessionManager.getOid());
+		Validate.notNull(sessionManager, "sessionManager is null");
 
 		Optional<SessionManager> dbSessionManager = sessionManagerRepository.findByOid(sessionManager.getOid());
 		if (!(dbSessionManager.isPresent())) {
@@ -113,8 +110,7 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	@Override
 	@Transactional
 	public Resource changeResource(final Resource resource) {
-		Validate.notNull(resource);
-		Validate.notNull(resource.getOid());
+		Validate.notNull(resource, "resource is null");
 
 		return resourceRepository.saveAndFlush(resource);
 	}
@@ -122,8 +118,7 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	@Override
 	@Transactional
 	public void deleteSoftswitch(final Softswitch softswitch) {
-		Validate.notNull(softswitch);
-		Validate.notNull(softswitch.getOid());
+		Validate.notNull(softswitch, "softswitch is null");
 
 		Optional<Softswitch> dbSoftswitch = switchRepository.findByOid(softswitch.getOid());
 		if (!(dbSoftswitch.isPresent())) {
@@ -135,8 +130,7 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	@Override
 	@Transactional
 	public void deleteSessionManager(final SessionManager sessionManager) {
-		Validate.notNull(sessionManager);
-		Validate.notNull(sessionManager.getOid());
+		Validate.notNull(sessionManager, "sessionManager is null");
 
 		Optional<SessionManager> dbSessionManager = sessionManagerRepository.findByOid(sessionManager.getOid());
 		if (!(dbSessionManager.isPresent())) {
@@ -148,8 +142,7 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	@Override
 	@Transactional
 	public void deleteResource(final Resource resource) {
-		Validate.notNull(resource);
-		Validate.notNull(resource.getOid());
+		Validate.notNull(resource, "resource is null");
 
 		Optional<Resource> dbResource = resourceRepository.findByOid(resource.getOid());
 		if (!(dbResource.isPresent())) {
@@ -176,7 +169,9 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	@Override
 	@Transactional
 	public SessionManager getSessionManagerWithMaxFreeResources(SwitchId switchId) {
-		List<ResourceCountingResult> result = resourceRepository.queryResouces();
+		Validate.notNull(switchId, "switchid is null");
+		
+		List<ResourceCountingResult> result = resourceRepository.queryResourcesBySwitchId(switchId);
 		result.sort(Comparator.comparing(ResourceCountingResult::getCnt).reversed());
 		Optional<ResourceCountingResult> sm = result.stream().findFirst();
 		if (!(sm.isPresent())) {
@@ -200,8 +195,8 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	@Override
 	@Transactional
 	public Resource addResource(final String smId, final Resource resource) {
-		Validate.notEmpty(smId);
-		Validate.notNull(resource);
+		Validate.notEmpty(smId, "smId is null");
+		Validate.notNull(resource, "resource is null");
 
 		Optional<SessionManager> dbSessionManager = sessionManagerRepository.findBySmId(smId);
 		if (!(dbSessionManager.isPresent())) {
@@ -217,9 +212,8 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	@Override
 	@Transactional
 	public void addResource(final ResourceIdentifier identifier, final SessionManager sessionManager) {
-		Validate.notNull(identifier);
-		Validate.notNull(sessionManager);
-		Validate.notNull(sessionManager.getOid());
+		Validate.notNull(identifier, "identifier is null");
+		Validate.notNull(sessionManager, "sessionManager is null");
 
 		Optional<SessionManager> dbSessionManager = sessionManagerRepository.findById(sessionManager.getOid());
 
@@ -236,8 +230,7 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	@Override
 	@Transactional
 	public Resource getFirstFreeeResourceBySessionManager(final SessionManager sessionManager) {
-		Validate.notNull(sessionManager);
-		Validate.notNull(sessionManager.getOid());
+		Validate.notNull(sessionManager, "sessionManager is null");
 
 		Optional<Resource> dbResource = resourceRepository
 				.findTopByStatusAndSessionManagerOrderByOid(ResourceStatus.FREE, sessionManager);
@@ -250,8 +243,7 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	@Override
 	@Transactional
 	public void lockResource(final Resource resource) {
-		Validate.notNull(resource);
-		Validate.notNull(resource.getOid());
+		Validate.notNull(resource, "resource is null");
 
 		Optional<Resource> dbResource = resourceRepository.findByOid(resource.getOid());
 		if (!(dbResource.isPresent())) {
@@ -266,8 +258,7 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 
 	@Override
 	public void unlockResource(final Resource resource) {
-		Validate.notNull(resource);
-		Validate.notNull(resource.getOid());
+		Validate.notNull(resource, "resource is null");
 
 		Optional<Resource> dbResource = resourceRepository.findByOid(resource.getOid());
 		if (!(dbResource.isPresent())) {

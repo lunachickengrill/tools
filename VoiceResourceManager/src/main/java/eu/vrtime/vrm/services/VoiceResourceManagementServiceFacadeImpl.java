@@ -60,7 +60,7 @@ public class VoiceResourceManagementServiceFacadeImpl implements VoiceResourceMa
 		Validate.notNull(directoryNumber, "DN is null");
 		LOGGER.debug("allocateResource for: " + directoryNumber);
 		
-		AllocateResourceResponse resp = new AllocateResourceResponse();
+		AllocateResourceResponse resp = new AllocateResourceResponse(directoryNumber);
 		VoiceService vs = new VoiceService(directoryNumber);
 
 		SessionManager dbSm = infraService.getSessionManagerWithMaxFreeResourcesLenEnabled();
@@ -83,15 +83,14 @@ public class VoiceResourceManagementServiceFacadeImpl implements VoiceResourceMa
 		Validate.notNull(primaryNumber, "PrimaryNumber is null");	
 		LOGGER.debug("allocateResource for: " + directoryNumber + ", primaryNumber: " + primaryNumber);
 		
-		AllocateResourceResponse resp = new AllocateResourceResponse();
+		AllocateResourceResponse resp = new AllocateResourceResponse(directoryNumber);
 		VoiceService vs = new VoiceService(directoryNumber);
 
-		Optional<VoiceService> dbVs = serviceRepository.findByDirectoryNumber(primaryNumber);
-		if (!(dbVs.isPresent())) {
+		Optional<VoiceService> dbPrimary = serviceRepository.findByDirectoryNumber(primaryNumber);
+		if (!(dbPrimary.isPresent())) {
 			throw new VoiceServiceNotFoundException("VoiceService for PrimaryNumber " + primaryNumber + " not found");
 		}
-		Resource dbRes = resourceService.getResourceForSecondService(vs);
-		System.out.println(dbRes.toString());
+		Resource dbRes = resourceService.getResourceForSecondService(vs, dbPrimary.get());
 		
 		SessionManager dbSm = dbRes.getSessionManager();
 		Softswitch dbSw = dbSm.getSoftswitch();
@@ -101,13 +100,14 @@ public class VoiceResourceManagementServiceFacadeImpl implements VoiceResourceMa
 		resp.setNic(dbSw.getNic());
 		resp.setSmId(dbSm.getSmId());
 		resp.addNumber(directoryNumber, dbRes.getIdentifier().getIdentifier());
+		resp.addNumber(primaryNumber, dbPrimary.get().getResource().getIdentifier().toStringIdentifier());
 		return resp;
 	}
 
 	@Override
 	public AllocateResourceResponse allocateResource(String directoryNumber, SwitchId switchId) {
 		LOGGER.debug("allocateResource for: " + directoryNumber);
-		AllocateResourceResponse resp = new AllocateResourceResponse();
+		AllocateResourceResponse resp = new AllocateResourceResponse(directoryNumber);
 		VoiceService vs = new VoiceService(directoryNumber);
 
 		SessionManager dbSm = infraService.getSessionManagerWithMaxFreeResources(switchId);
@@ -126,7 +126,7 @@ public class VoiceResourceManagementServiceFacadeImpl implements VoiceResourceMa
 	@Override
 	@Transactional
 	public ReleaseResourceResponse releaseResource(String directoryNumber) {
-		ReleaseResourceResponse resp = new ReleaseResourceResponse();
+		ReleaseResourceResponse resp = new ReleaseResourceResponse(directoryNumber);
 		LOGGER.debug("releaseResource " + directoryNumber);
 		Optional<VoiceService> dbVs = serviceRepository.findByDirectoryNumber(directoryNumber);
 		if (!(dbVs.isPresent())) {
@@ -146,7 +146,7 @@ public class VoiceResourceManagementServiceFacadeImpl implements VoiceResourceMa
 
 		LOGGER.debug("getServiceInfo " + directoryNumber);
 
-		ServiceInfoResponse resp = new ServiceInfoResponse();
+		ServiceInfoResponse resp = new ServiceInfoResponse(directoryNumber);
 
 		Optional<VoiceService> dbVs = serviceRepository.findByDirectoryNumber(directoryNumber);
 		if (!(dbVs.isPresent())) {

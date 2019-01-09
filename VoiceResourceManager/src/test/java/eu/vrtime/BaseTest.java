@@ -59,6 +59,9 @@ public class BaseTest {
 
 	public static final VoiceService VS_CUST3_DN1 = new VoiceService(CUST3_DN1);
 	public static final VoiceService VS_CUST3_DN2 = new VoiceService(CUST3_DN2);
+	
+	public static final String SWID_CS2K = "CS2K_AUSTRIA";
+	public static final String SWID_NGCP = "NGCP_AUSTRIA";
 
 	@Autowired
 	protected SoftswitchRepository switchRepository;

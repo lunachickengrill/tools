@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import eu.vrtime.vrm.api.exceptions.VoiceServiceNotFoundException;
 import eu.vrtime.vrm.api.messages.AllocateResourceResponse;
 import eu.vrtime.vrm.api.messages.ServiceInfoResponse;
+import eu.vrtime.vrm.domain.shared.SwitchId;
 import eu.vrtime.vrm.services.VoiceResourceManagementServiceFacade;
 
 //Enable @Transactional annotation if you want the transaction be rolled back after the test has finished. Disable to get the data written to the test db
@@ -43,7 +44,7 @@ public class VoiceResourceManagerServiceTest extends BaseTest {
 		AllocateResourceResponse resp = vrmService.allocateResource(CUST1_DN1);
 		assertNotNull(resp);
 
-		assertTrue(resp.getNumber().size() > 0);
+		assertTrue(resp.getNumbers().size() > 0);
 		System.out.println(resp.toString());
 
 		ServiceInfoResponse svcResp = vrmService.getServiceInfo(CUST1_DN1);
@@ -51,25 +52,24 @@ public class VoiceResourceManagerServiceTest extends BaseTest {
 
 	}
 
-@Ignore
+
 	@Test
 	public void allocateResourceForSecondServiceTest() {
 
-		AllocateResourceResponse respOne = vrmService.allocateResource(CUST2_DN1);
+		AllocateResourceResponse respOne = vrmService.allocateResource(CUST2_DN1,new SwitchId(SWID_NGCP));
 		assertNotNull(respOne);
-		assertTrue(respOne.getNumber().size() == 1);
+		assertTrue(respOne.getNumbers().size() == 1);
 		ServiceInfoResponse svcRespOne = vrmService.getServiceInfo(CUST2_DN1);
-		assertNotNull(svcRespOne);
+		assertTrue(svcRespOne.getSwitchId().equals(SWID_NGCP));
 
 		AllocateResourceResponse respTwo = vrmService.allocateResource(CUST2_DN2, CUST2_DN1);
 		assertNotNull(respTwo);
-		assertTrue(respTwo.getNumber().size() == 1);
+		assertTrue(respTwo.getNumbers().size() == 2);
 		ServiceInfoResponse svcRespTwo = vrmService.getServiceInfo(CUST2_DN2);
 		assertNotNull(svcRespTwo);
 
 	}
 
-	@Ignore
 	@Test
 	public void allocateAndReleaseResourceTest() {
 		
@@ -84,7 +84,6 @@ public class VoiceResourceManagerServiceTest extends BaseTest {
 		
 	}
 
-	@Ignore
 	@Test(expected = VoiceServiceNotFoundException.class)
 	public void allocateAndReleaseResourceExpectExceptionTest() {
 

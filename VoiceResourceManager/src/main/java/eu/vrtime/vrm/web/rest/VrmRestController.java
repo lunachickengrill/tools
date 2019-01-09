@@ -17,6 +17,7 @@ import java.util.Optional;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import eu.vrtime.vrm.api.exceptions.StatusCodeException;
+import eu.vrtime.vrm.api.messages.AbstractVrmResponse;
 import eu.vrtime.vrm.api.messages.AllocateResourceResponse;
 import eu.vrtime.vrm.api.messages.ReleaseResourceResponse;
 import eu.vrtime.vrm.api.messages.ServiceInfoResponse;
@@ -38,70 +39,65 @@ public class VrmRestController {
 	}
 
 	@RequestMapping(value = "/allocateResource", method = RequestMethod.POST, produces = {
-			MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<AllocateResourceResponse> allocateResource(@RequestParam(value = "dn") String directoryNumber,
+			MediaType.APPLICATION_XML_VALUE })
+	public ResponseEntity<AllocateResourceResponse> allocateResource(@RequestParam(value = "directoryNumber") String directoryNumber,
 			@RequestParam(value = "primaryNumber") Optional<String> primaryNumber,
-			@RequestParam(value = "switchId") Optional<String> switchId) {
-
-		LOGGER.info("Received request on " + API_PATH + "/allocateResource " + " dn:" + directoryNumber);
+			@RequestParam(value = "switchId") Optional<SwitchId> switchId) {
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		AllocateResourceResponse resp;
+		headers.setContentType(MediaType.APPLICATION_XML);
 
 		try {
-			if (primaryNumber.isPresent()) {
-				System.out.println(primaryNumber.get());
-				resp = vrmService.allocateResource(directoryNumber, primaryNumber.get());
-				LOGGER.debug(resp.toString());
+			if (primaryNumber.isPresent() && (!(switchId.isPresent()))) {
+				System.out.println("PrimaryNumber is present: " + primaryNumber.get());
+				AllocateResourceResponse resp = vrmService.allocateResource(directoryNumber, primaryNumber.get());
+
+				ResponseEntity<AllocateResourceResponse> re = new ResponseEntity<AllocateResourceResponse>(resp,
+						headers, HttpStatus.OK);
+				LOGGER.info(re.getHeaders() + " " + re.getBody() + " " + re.getStatusCodeValue());
+				return re;
+			} else if ((!(primaryNumber.isPresent())) && (switchId.isPresent())) {
+				System.out.println("SwitchId is present: " + switchId.toString());
+				AllocateResourceResponse resp = vrmService.allocateResource(directoryNumber, switchId.get());
+
+				ResponseEntity<AllocateResourceResponse> re = new ResponseEntity<AllocateResourceResponse>(resp,
+						headers, HttpStatus.OK);
+				LOGGER.info(re.getHeaders() + " " + re.getBody() + " " + re.getStatusCodeValue());
+
+				return re;
+			} else {
+				System.out.println("directoryNumber is present: " + directoryNumber);
+				AllocateResourceResponse resp = vrmService.allocateResource(directoryNumber);
 
 				ResponseEntity<AllocateResourceResponse> re = new ResponseEntity<AllocateResourceResponse>(resp,
 						headers, HttpStatus.OK);
 				LOGGER.info(re.getHeaders() + " " + re.getBody() + " " + re.getStatusCodeValue());
 				return re;
 			}
-
-			if (switchId.isPresent()) {
-				resp = vrmService.allocateResource(directoryNumber, new SwitchId(switchId.get()));
-				LOGGER.debug(resp.toString());
-				ResponseEntity<AllocateResourceResponse> re = new ResponseEntity<AllocateResourceResponse>(resp,
-						headers, HttpStatus.OK);
-				LOGGER.info(re.getHeaders() + " " + re.getBody() + " " + re.getStatusCodeValue());
-
-				return re;
-			}
-			resp = vrmService.allocateResource(directoryNumber);
-			LOGGER.debug(resp.toString());
-
-			ResponseEntity<AllocateResourceResponse> re = new ResponseEntity<AllocateResourceResponse>(resp, headers,
-					HttpStatus.OK);
-			LOGGER.info(re.getHeaders() + " " + re.getBody() + " " + re.getStatusCodeValue());
-			return re;
 		} catch (StatusCodeException ex) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
 		}
 	}
 
 	@RequestMapping(value = "/releaseResource", method = RequestMethod.POST, produces = {
-			MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<ReleaseResourceResponse> releaseResource(
-			@RequestParam(value = "dn") String directoryNumber) {
-		Validate.notNull(directoryNumber, "dn is null");
-		LOGGER.info("Received request on " + API_PATH + "/releaseResource " +  " dn:" + directoryNumber);
-		
+			MediaType.APPLICATION_XML_VALUE })
+	public ResponseEntity<ReleaseResourceResponse> releaseResource(@RequestParam(value = "directoryNumber") String directoryNumber) {
+		Validate.notNull(directoryNumber, "directoryNumber is null");
+		LOGGER.info("Received request on " + API_PATH + "/releaseResource " + " directoryNumber:");
+
 		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.setContentType(MediaType.APPLICATION_XML);
 		ReleaseResourceResponse resp;
-		
+
 		try {
 			resp = vrmService.releaseResource(directoryNumber);
 			LOGGER.debug(resp.toString());
 
 			ResponseEntity<ReleaseResourceResponse> re = new ResponseEntity<ReleaseResourceResponse>(resp, headers,
 					HttpStatus.OK);
-			
+
 			LOGGER.info(re.getHeaders() + " " + re.getBody() + " " + re.getStatusCodeValue());
-			
+
 			return re;
 		} catch (StatusCodeException ex) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
@@ -109,17 +105,18 @@ public class VrmRestController {
 	}
 
 	@RequestMapping(value = "/getServiceInfo", method = RequestMethod.GET, produces = {
-			MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<ServiceInfoResponse> getServiceInfo(@RequestParam(value = "customerId") String directoryNumber) {
+			MediaType.APPLICATION_XML_VALUE })
+	public ResponseEntity<ServiceInfoResponse> getServiceInfo(
+			@RequestParam(value = "directoryNumber") String directoryNumber) {
 		Validate.notNull(directoryNumber, "dn is null");
-		LOGGER.info("Received request on " + API_PATH + "/getServiceInfo " + "dn: " + directoryNumber);
-		
+		LOGGER.info("Received request on " + API_PATH + "/getServiceInfo " + "directoryNumber: " + directoryNumber);
+
 		try {
 			ServiceInfoResponse resp = vrmService.getServiceInfo(directoryNumber);
 			LOGGER.debug(resp.toString());
 
 			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.setContentType(MediaType.APPLICATION_XML);
 
 			ResponseEntity<ServiceInfoResponse> re = new ResponseEntity<ServiceInfoResponse>(resp, headers,
 					HttpStatus.OK);
@@ -134,7 +131,7 @@ public class VrmRestController {
 	public ResponseEntity<ServiceInfoResponse> testXml() {
 		LOGGER.info("Received request on " + API_PATH + "/testXml");
 
-		ServiceInfoResponse resp = new ServiceInfoResponse();
+		ServiceInfoResponse resp = new ServiceInfoResponse("0123456");
 		resp.addNumber("0123456", "SS 00 01 02");
 		resp.setNic("123456");
 		resp.setSmId("100");
@@ -147,7 +144,7 @@ public class VrmRestController {
 		LOGGER.info(re.getHeaders() + " " + re.getBody() + " " + re.getStatusCodeValue());
 		return re;
 	}
-	
+
 	public VrmRestController() {
 		// TODO Auto-generated constructor stub
 	}

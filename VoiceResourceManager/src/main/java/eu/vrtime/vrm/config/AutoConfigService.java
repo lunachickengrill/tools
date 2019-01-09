@@ -73,7 +73,7 @@ public class AutoConfigService {
 			Softswitch dbSw1 = switchRepository.save(new Softswitch(new SwitchId(SOFTSWITCH_CS2K_ID),
 					SOFTSWITCH_CS2K_NIC, SOFTSWITCH_CS2K_NAME, SoftswitchStatus.ONLINE, Boolean.parseBoolean(SOFTSWITCH_CS2K_ISLENENABLED)));
 			Softswitch dbSw2 = switchRepository.save(new Softswitch(new SwitchId(SOFTSWITCH_NGCP_ID),
-					SOFTSWITCH_NGCP_NIC, SOFTSWITCH_NGCP_NAME, SoftswitchStatus.OFFLINE, Boolean.parseBoolean(SOFTSWITCH_NGCP_ISLENENABLED)));
+					SOFTSWITCH_NGCP_NIC, SOFTSWITCH_NGCP_NAME, SoftswitchStatus.ONLINE, Boolean.parseBoolean(SOFTSWITCH_NGCP_ISLENENABLED)));
 
 			SessionManager sm1 = new SessionManager("1", dbSw1);
 			Set<Resource> res1 = fillResources(10, 100);

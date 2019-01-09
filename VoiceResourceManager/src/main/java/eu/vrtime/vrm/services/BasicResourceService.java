@@ -10,7 +10,7 @@ public interface BasicResourceService {
 	
 	public Resource getFirstAvailableResource(final SessionManager sessionManager);
 	
-	public Resource getResourceForSecondService(final VoiceService voiceService);
+	public Resource getResourceForSecondService(final VoiceService voiceService, final VoiceService primary);
 	
 	public void releaseResouceForVoiceService(final VoiceService voiceService);
 	
