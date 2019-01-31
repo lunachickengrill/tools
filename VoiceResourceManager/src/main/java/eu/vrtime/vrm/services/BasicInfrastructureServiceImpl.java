@@ -21,11 +21,9 @@ import eu.vrtime.vrm.domain.model.Resource;
 import eu.vrtime.vrm.domain.model.SessionManager;
 import eu.vrtime.vrm.domain.model.Softswitch;
 import eu.vrtime.vrm.domain.shared.ResourceCountingResult;
-<<<<<<< HEAD
-import eu.vrtime.vrm.domain.shared.ResourceNotFoundException;
-=======
+
 import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
->>>>>>> branch 'master' of https://github.com/lunachickengrill/JavaStuff.git
+
 import eu.vrtime.vrm.domain.shared.ResourceStatus;
 import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
 import eu.vrtime.vrm.domain.shared.SwitchId;
@@ -60,12 +58,6 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 
 	@Override
 	@Transactional
-<<<<<<< HEAD
-	public void addSoftswitch(String switchId, String name, SoftswitchStatus status, String nic) {
-		Softswitch sw = new Softswitch(switchId, name, status, nic);
-		logger.debug(name + " " + status);
-		switchRepository.saveAndFlush(sw);
-=======
 	public Softswitch addSoftswitch(final String switchId, final String nic, final String name,
 			final SoftswitchStatus status, final Boolean isLenEnabled) {
 		Validate.notNull(switchId, "switchId is null");
@@ -93,19 +85,11 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 		Softswitch sw = dbSw.get();
 		SessionManager sm = new SessionManager(smId, sw);
 		return sessionManagerRepository.saveAndFlush(sm);
->>>>>>> branch 'master' of https://github.com/lunachickengrill/JavaStuff.git
 
 	}
 
 	@Override
 	@Transactional
-<<<<<<< HEAD
-	public void addSessionManager(final String smId, final Softswitch softswitch) {
-		Long oid = softswitch.getOid();
-		Optional<Softswitch> dbSw = switchRepository.findById(oid);
-		if (!dbSw.isPresent()) {
-			throw new ResourceNotFoundException("Softswitch with oid " + oid + " not found");
-=======
 	public Softswitch changeSoftswitch(final Softswitch softswitch) {
 		Validate.notNull(softswitch, "softswitch is null");
 
@@ -120,7 +104,6 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 		Optional<SessionManager> dbSessionManager = sessionManagerRepository.findByOid(sessionManager.getOid());
 		if (!(dbSessionManager.isPresent())) {
 			throw new SessionManagerNotFoundException("SessionManager not found");
->>>>>>> branch 'master' of https://github.com/lunachickengrill/JavaStuff.git
 		}
 
 		return sessionManagerRepository.saveAndFlush(sessionManager);
@@ -178,14 +161,9 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 		List<ResourceCountingResult> result = resourceRepository.queryResouces();
 		result.sort(Comparator.comparing(ResourceCountingResult::getCnt).reversed());
 		Optional<ResourceCountingResult> sm = result.stream().findFirst();
-<<<<<<< HEAD
 
-		if (!sm.isPresent()) {
-			throw new ResourceNotFoundException("No softswitch found");
-=======
 		if (!(sm.isPresent())) {
 			throw new NoFreeResourcesException("No SessionManager with free Resources found");
->>>>>>> branch 'master' of https://github.com/lunachickengrill/JavaStuff.git
 		}
 		return sm.get().getSessionManager();
 
@@ -193,60 +171,41 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 
 	@Override
 	@Transactional
-<<<<<<< HEAD
-	public void addResource(final String smId, final Resource resource) {
-		Optional<SessionManager> dbSm = sessionManagerRepository.findBySmId(smId);
-
-		if (!dbSm.isPresent()) {
-			throw new ResourceNotFoundException("No sessionManager not found for SessionManagerId " + smId);
-=======
 	public SessionManager getSessionManagerWithMaxFreeResources(SwitchId switchId) {
 		Validate.notNull(switchId, "switchid is null");
-		
+
 		List<ResourceCountingResult> result = resourceRepository.queryResourcesBySwitchId(switchId);
 		result.sort(Comparator.comparing(ResourceCountingResult::getCnt).reversed());
 		Optional<ResourceCountingResult> sm = result.stream().findFirst();
 		if (!(sm.isPresent())) {
 			throw new NoFreeResourcesException("No SessionManager with free Resources found on Softswitch " + switchId);
->>>>>>> branch 'master' of https://github.com/lunachickengrill/JavaStuff.git
-		}
-<<<<<<< HEAD
 
-		SessionManager sm = dbSm.get();
-		sm.addResource(resource);
-		resource.setSessionManager(sm);
-		resourceRepository.saveAndFlush(resource);
-
-	}
-
-	@Override
-	@Transactional
-	public Resource getFirstFreeeResourceBySessionManager(SessionManager sessionManager) {
-		Optional<Resource> rsc = resourceRepository.findTopByStatusAndSessionManagerOrderByOid(ResourceStatus.FREE,
-				sessionManager);
-
-		if (!rsc.isPresent()) {
-			throw new ResourceNotFoundException("No free resource found on SessionManager " + sessionManager.getSmId());
 		}
 
-		return rsc.get();
-=======
 		return sm.get().getSessionManager();
->>>>>>> branch 'master' of https://github.com/lunachickengrill/JavaStuff.git
+
 	}
+
+	// @Override
+	// @Transactional
+	// public Resource getFirstFreeeResourceBySessionManager(SessionManager
+	// sessionManager) {
+	// Optional<Resource> rsc =
+	// resourceRepository.findTopByStatusAndSessionManagerOrderByOid(ResourceStatus.FREE,
+	// sessionManager);
+	//
+	// if (!rsc.isPresent()) {
+	// throw new ResourceNotFoundException("No free resource found on SessionManager
+	// " + sessionManager.getSmId());
+	// }
+	//
+	// return rsc.get();
+	//
+	//
+	// }
 
 	@Override
 	@Transactional
-<<<<<<< HEAD
-	public void lockResource(Resource resource) {
-		Optional<Resource> rsc = resourceRepository.findById(resource.getOid());
-		if (!rsc.isPresent()) {
-			throw new ResourceNotFoundException("Resource with oid " + resource.getOid() + " not found");
-		}
-
-		rsc.get().setStatus(ResourceStatus.LOCKED);
-		resourceRepository.saveAndFlush(rsc.get());
-=======
 	public SessionManager getSessionManagerWithMaxFreeResourcesLenEnabled() {
 		List<ResourceCountingResult> result = resourceRepository.queryResourcesLenEnabled();
 		result.sort(Comparator.comparing(ResourceCountingResult::getCnt).reversed());
@@ -333,7 +292,6 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 		Resource dbRes = dbResource.get();
 		dbRes.setStatus(ResourceStatus.FREE);
 		resourceRepository.saveAndFlush(dbRes);
->>>>>>> branch 'master' of https://github.com/lunachickengrill/JavaStuff.git
 
 	}
 

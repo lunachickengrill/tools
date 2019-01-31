@@ -24,6 +24,7 @@ import eu.vrtime.vrm.domain.shared.ResourceCountingResult;
 import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
 import eu.vrtime.vrm.domain.shared.ResourceStatus;
 import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
+import eu.vrtime.vrm.domain.shared.SwitchId;
 import eu.vrtime.vrm.repositories.ResourceLogRepository;
 import eu.vrtime.vrm.repositories.ResourceRepository;
 import eu.vrtime.vrm.repositories.SessionManagerRepository;
@@ -36,19 +37,20 @@ import eu.vrtime.vrm.services.BasicResourceService;
 @SpringBootTest(classes = VoiceResourceManagerApplication.class)
 public class BaseTest {
 
-<<<<<<< HEAD
 	public static final String SWID_1 = "1";
 	public static final String SWID_2 = "2";
 	public static final String SWID_3 = "3";
 	
+	public static final String SWNAME_1="CS2K";
+	public static final String SWNAME_2="NGCP";
+
 	public static final String NIC_1 = "886600";
 	public static final String NIC_2 = "990055";
-=======
+
 	public static final String CUST1_SID = "VOIP000001";
 	public static final String CUST1_CUSTID = "1234567";
 	public static final String CUST1_DN1 = "0111111";
 	public static final String CUST1_DN2 = "0111112";
->>>>>>> branch 'master' of https://github.com/lunachickengrill/JavaStuff.git
 
 	public static final String CUST2_SID = "VOIP000002";
 	public static final String CUST2_CUSTID = "456789";
@@ -63,19 +65,25 @@ public class BaseTest {
 	public static final VoiceService VS_CUST1_DN1 = new VoiceService(CUST1_DN1);
 	public static final VoiceService VS_CUST1_DN2 = new VoiceService(CUST1_DN2);
 
-	public static final VoiceService VS_CUST2_DN1 = new VoiceService( CUST2_DN1);
+	public static final VoiceService VS_CUST2_DN1 = new VoiceService(CUST2_DN1);
 	public static final VoiceService VS_CUST2_DN2 = new VoiceService(CUST2_DN2);
 
-<<<<<<< HEAD
-	public static final Softswitch CS2K = new Softswitch("1", "cs2k", SoftswitchStatus.ONLINE,NIC_1);
-	public static final Softswitch NGCP = new Softswitch("2", "ngcp", SoftswitchStatus.ONLINE,NIC_2);
-=======
+	// public static final Softswitch CS2K = new Softswitch("1", "cs2k",
+	// SoftswitchStatus.ONLINE,NIC_1, true);
+	public static final Softswitch CS2K = new Softswitch(new SwitchId(SWID_1), NIC_1, SWNAME_1, SoftswitchStatus.ONLINE,
+			true);
+	// public static final Softswitch NGCP = new Softswitch("2", "ngcp",
+	// SoftswitchStatus.ONLINE,NIC_2, false);
+	public static final Softswitch NGCP = new Softswitch(new SwitchId(SWID_2), NIC_2, SWNAME_2, SoftswitchStatus.ONLINE,
+			false);
+	public static final Softswitch dummy = new Softswitch(new SwitchId(SWID_1), NIC_1, "dummy", SoftswitchStatus.ONLINE,
+			true);
+
 	public static final VoiceService VS_CUST3_DN1 = new VoiceService(CUST3_DN1);
 	public static final VoiceService VS_CUST3_DN2 = new VoiceService(CUST3_DN2);
-	
+
 	public static final String SWID_CS2K = "CS2K_AUSTRIA";
 	public static final String SWID_NGCP = "NGCP_AUSTRIA";
->>>>>>> branch 'master' of https://github.com/lunachickengrill/JavaStuff.git
 
 	@Autowired
 	protected SoftswitchRepository switchRepository;
@@ -94,7 +102,7 @@ public class BaseTest {
 
 	@Autowired
 	protected BasicResourceService resourceService;
-	
+
 	@Autowired
 	protected ResourceLogRepository logRepository;
 

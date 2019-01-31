@@ -52,35 +52,25 @@ public class Softswitch extends AbstractBaseEntity {
 
 	@Column(name = "description", nullable = true, updatable = true, unique = false)
 	private String description;
-	
-	@Column(name="NIC", nullable=false, updatable=true, unique=false)
-	private String nic;
-	
 
 	@OneToMany(mappedBy = "softswitch", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<SessionManager> sessionManagers = new HashSet<>();
 
-<<<<<<< HEAD
-	public Softswitch(String switchId, String name, SoftswitchStatus status, String nic) {
-=======
 	public Softswitch(final SwitchId switchId, final String nic, final String name, final SoftswitchStatus status,
-			final Boolean isLenEnabled) {
+			final boolean isLenEnabled) {
 		Validate.notNull(switchId, "switchId is null");
 		Validate.notNull(nic, "nic is null");
 		Validate.notNull(name, "name is null");
 		Validate.notNull(status, "status is null");
 		Validate.notNull(isLenEnabled, "isLenEnabled is null");
 
->>>>>>> branch 'master' of https://github.com/lunachickengrill/JavaStuff.git
 		this.switchId = switchId;
 		this.nic = nic;
 		this.name = name;
 		this.status = status;
-<<<<<<< HEAD
-		this.nic =nic;
-=======
+
 		this.isLenEnabled = isLenEnabled;
->>>>>>> branch 'master' of https://github.com/lunachickengrill/JavaStuff.git
+
 	}
 
 	public Boolean getIsLenEnabled() {
@@ -97,14 +87,6 @@ public class Softswitch extends AbstractBaseEntity {
 
 	public void setSwitchId(SwitchId switchId) {
 		this.switchId = switchId;
-	}
-
-	public String getNic() {
-		return nic;
-	}
-
-	public void setNic(String nic) {
-		this.nic = nic;
 	}
 
 	public String getName() {
@@ -130,7 +112,7 @@ public class Softswitch extends AbstractBaseEntity {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	public String getNic() {
 		return this.nic;
 	}
@@ -138,7 +120,7 @@ public class Softswitch extends AbstractBaseEntity {
 	public void setNic(String nic) {
 		this.nic = nic;
 	}
-	
+
 	public Date getCreateDate() {
 		return this.createDate;
 	}

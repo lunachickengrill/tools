@@ -21,6 +21,7 @@ import eu.vrtime.vrm.domain.model.Softswitch;
 import eu.vrtime.vrm.domain.model.VoiceService;
 import eu.vrtime.vrm.domain.shared.ResourceCountingResult;
 import eu.vrtime.vrm.domain.shared.ResourceStatus;
+import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
 
 public class BasicStructureTest extends BaseTest {
 
@@ -43,7 +44,7 @@ public class BasicStructureTest extends BaseTest {
 	@Test
 	public void testCreateStructure() {
 
-		infraService.addSoftswitch(SWID_1, SWNAME_1, SWSTATUS_1,NIC_1);
+		infraService.addSoftswitch(SWID_1, SWNAME_1, SoftswitchStatus.ONLINE,NIC_1);
 		Optional<Softswitch> dbSw = switchRepository.findBySwitchId(SWID_1);
 		assertTrue(dbSw.isPresent());
 
