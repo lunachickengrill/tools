@@ -16,6 +16,7 @@ import eu.vrtime.vrm.domain.model.SessionManager;
 import eu.vrtime.vrm.domain.model.Softswitch;
 import eu.vrtime.vrm.domain.model.VoiceService;
 import eu.vrtime.vrm.domain.shared.ResourceCountingResult;
+import eu.vrtime.vrm.domain.shared.ResourceNotFoundException;
 import eu.vrtime.vrm.domain.shared.ResourceStatus;
 import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
 import eu.vrtime.vrm.repositories.ResourceRepository;
@@ -25,7 +26,7 @@ import eu.vrtime.vrm.repositories.VoiceServiceRepository;
 
 @Service
 public class BasicInfrastructureServiceImpl implements BasicInfrastructureService {
-	
+
 	final Logger logger = LoggerFactory.getLogger(BasicInfrastructureServiceImpl.class);
 
 	private SoftswitchRepository switchRepository;
@@ -49,9 +50,9 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 
 	@Override
 	@Transactional
-	public void addSoftswitch(String switchId, String name, SoftswitchStatus status) {
-		Softswitch sw = new Softswitch(switchId, name, status);
-		logger.debug(name +  " " + status);
+	public void addSoftswitch(String switchId, String name, SoftswitchStatus status, String nic) {
+		Softswitch sw = new Softswitch(switchId, name, status, nic);
+		logger.debug(name + " " + status);
 		switchRepository.saveAndFlush(sw);
 
 	}
@@ -62,7 +63,7 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 		Long oid = softswitch.getOid();
 		Optional<Softswitch> dbSw = switchRepository.findById(oid);
 		if (!dbSw.isPresent()) {
-			// TODO throw exception
+			throw new ResourceNotFoundException("Softswitch with oid " + oid + " not found");
 		}
 
 		Softswitch sw = dbSw.get();
@@ -80,7 +81,7 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 		Optional<ResourceCountingResult> sm = result.stream().findFirst();
 
 		if (!sm.isPresent()) {
-			// TODO throw exception
+			throw new ResourceNotFoundException("No softswitch found");
 		}
 
 		return sm.get().getSessionManager();
@@ -93,7 +94,7 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 		Optional<SessionManager> dbSm = sessionManagerRepository.findBySmId(smId);
 
 		if (!dbSm.isPresent()) {
-			// TODO throw exception
+			throw new ResourceNotFoundException("No sessionManager not found for SessionManagerId " + smId);
 		}
 
 		SessionManager sm = dbSm.get();
@@ -103,25 +104,29 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 
 	}
 
-
 	@Override
 	@Transactional
 	public Resource getFirstFreeeResourceBySessionManager(SessionManager sessionManager) {
-		Optional<Resource> r = resourceRepository.findTopByStatusAndSessionManagerOrderByOid(ResourceStatus.FREE,
+		Optional<Resource> rsc = resourceRepository.findTopByStatusAndSessionManagerOrderByOid(ResourceStatus.FREE,
 				sessionManager);
 
-		if (!r.isPresent()) {
-			// TODO throw exception
+		if (!rsc.isPresent()) {
+			throw new ResourceNotFoundException("No free resource found on SessionManager " + sessionManager.getSmId());
 		}
 
-		// TODO Auto-generated method stub
-		return null;
+		return rsc.get();
 	}
 
 	@Override
 	@Transactional
 	public void lockResource(Resource resource) {
-		// TODO Auto-generated method stub
+		Optional<Resource> rsc = resourceRepository.findById(resource.getOid());
+		if (!rsc.isPresent()) {
+			throw new ResourceNotFoundException("Resource with oid " + resource.getOid() + " not found");
+		}
+
+		rsc.get().setStatus(ResourceStatus.LOCKED);
+		resourceRepository.saveAndFlush(rsc.get());
 
 	}
 

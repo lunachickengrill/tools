@@ -3,12 +3,11 @@ package eu.vrtime.vrm.services;
 import eu.vrtime.vrm.domain.model.Resource;
 import eu.vrtime.vrm.domain.model.SessionManager;
 import eu.vrtime.vrm.domain.model.Softswitch;
-import eu.vrtime.vrm.domain.model.VoiceService;
 import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
 
 public interface BasicInfrastructureService {
 
-	public void addSoftswitch(String switchId, String name, SoftswitchStatus status);
+	public void addSoftswitch(String switchId, String name, SoftswitchStatus status, String nic);
 	
 	public void addSessionManager(String smId, Softswitch softswitch);
 	

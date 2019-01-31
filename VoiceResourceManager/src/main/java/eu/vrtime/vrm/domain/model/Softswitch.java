@@ -35,14 +35,19 @@ public class Softswitch extends AbstractBaseEntity {
 
 	@Column(name = "description", nullable = true, updatable = true, unique = false)
 	private String description;
+	
+	@Column(name="NIC", nullable=false, updatable=true, unique=false)
+	private String nic;
+	
 
 	@OneToMany(mappedBy = "softswitch", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<SessionManager> sessionManagers = new HashSet<>();
 
-	public Softswitch(String switchId, String name, SoftswitchStatus status) {
+	public Softswitch(String switchId, String name, SoftswitchStatus status, String nic) {
 		this.switchId = switchId;
 		this.name = name;
 		this.status = status;
+		this.nic =nic;
 	}
 
 	public String getSwitchId() {
@@ -76,7 +81,15 @@ public class Softswitch extends AbstractBaseEntity {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+	public String getNic() {
+		return this.nic;
+	}
 
+	public void setNic(String nic) {
+		this.nic = nic;
+	}
+	
 	public Date getCreateDate() {
 		return this.createDate;
 	}

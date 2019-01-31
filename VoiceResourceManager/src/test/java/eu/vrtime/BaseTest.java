@@ -28,6 +28,9 @@ public class BaseTest {
 	public static final String SWID_1 = "1";
 	public static final String SWID_2 = "2";
 	public static final String SWID_3 = "3";
+	
+	public static final String NIC_1 = "886600";
+	public static final String NIC_2 = "990055";
 
 	public static final String SWNAME_1 = "cs2k";
 	public static final String SWNAME_2 = "ngcp";
@@ -44,8 +47,8 @@ public class BaseTest {
 	public static final String CUSTID_1 = "1234567";
 	public static final String DN_1 = "01987654";
 
-	public static final Softswitch CS2K = new Softswitch("1", "cs2k", SoftswitchStatus.ONLINE);
-	public static final Softswitch NGCP = new Softswitch("2", "ngcp", SoftswitchStatus.ONLINE);
+	public static final Softswitch CS2K = new Softswitch("1", "cs2k", SoftswitchStatus.ONLINE,NIC_1);
+	public static final Softswitch NGCP = new Softswitch("2", "ngcp", SoftswitchStatus.ONLINE,NIC_2);
 
 	@Autowired
 	protected SoftswitchRepository switchRepository;
