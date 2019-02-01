@@ -15,24 +15,14 @@ public class HomePage extends AbstractBasePage {
 	public HomePage() {
 		super();
 		add(new Label("homePageLabel", "home page text"));
-		initForm();
+		
+		/**
+		 * Strange label and text in textboxes?!
+		 */
+		add(new HomePageForm("homePageForm"));
 
 	}
 
-	private void initForm() {
-		Form<HomePage> form = new Form<HomePage>("form");
-		add(form);
-		TextField<String> textField1 = new TextField<>("textField1", Model.of(""));
-		TextField<String> textField2 = new TextField<>("textField2", Model.of(""));
-		form.add(textField1);
-		form.add(textField2);
-		Button submitBtn = new Button("submitBtn") {
-			@Override
-			public void onSubmit() {
-				System.out.println("onSubmit, value =" + textField1);
-			}
-		};
-		form.add(submitBtn);
-	}
+
 
 }
