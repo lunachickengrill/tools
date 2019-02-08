@@ -18,22 +18,22 @@ public abstract class AbstractVrmResponse implements Serializable {
 	private String switchId;
 	private String smId;
 	private String nic;
-	private String directoryNumber;
+	private String requestParam;
 
 	private List<VoiceNumber> numbers = new ArrayList<>();
 
-	public AbstractVrmResponse(String directoryNumber) {
-		Validate.notNull(directoryNumber, "directoryNumber is null");
+	public AbstractVrmResponse(String requestParam) {
+		Validate.notNull(requestParam, "directoryNumber is null");
 
-		this.directoryNumber = directoryNumber;
+		this.requestParam = requestParam;
 	}
 
-	public String getDirectoryNumber() {
-		return directoryNumber;
+	public String getRequestParam() {
+		return requestParam;
 	}
 
-	public void setDirectoryNumber(String directoryNumber) {
-		this.directoryNumber = directoryNumber;
+	public void setRequestParam(String requestParam) {
+		this.requestParam = requestParam;
 	}
 
 	public String getSmId() {
@@ -74,7 +74,7 @@ public abstract class AbstractVrmResponse implements Serializable {
 
 	@Override
 	public String toString() {
-		return "AbstractVrmResponse [directoryNumber=" + directoryNumber + ", smId=" + smId + ", nic=" + nic
+		return "AbstractVrmResponse [requestParam=" + requestParam + ", smId=" + smId + ", nic=" + nic
 				+ ", switchId=" + switchId + ", numbers=" + numbers + "]";
 	}
 

@@ -69,6 +69,7 @@ public class PersistenceConfig {
 		dataSourceConfig.setJdbcUrl(env.getRequiredProperty(PROPERTY_NAME_DB_URL));
 		dataSourceConfig.setUsername(env.getRequiredProperty(PROPERTY_NAME_DB_USER));
 		dataSourceConfig.setPassword(env.getRequiredProperty(PROPERTY_NAME_DB_PASSWORD));
+		dataSourceConfig.setMaximumPoolSize(10);
 
 		return new HikariDataSource(dataSourceConfig);
 	}

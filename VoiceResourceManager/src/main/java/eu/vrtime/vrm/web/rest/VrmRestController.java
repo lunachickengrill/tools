@@ -6,6 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,8 +20,10 @@ import org.slf4j.Logger;
 import eu.vrtime.vrm.api.exceptions.StatusCodeException;
 import eu.vrtime.vrm.api.messages.AbstractVrmResponse;
 import eu.vrtime.vrm.api.messages.AllocateResourceResponse;
+import eu.vrtime.vrm.api.messages.LockResourceResponse;
 import eu.vrtime.vrm.api.messages.ReleaseResourceResponse;
 import eu.vrtime.vrm.api.messages.ServiceInfoResponse;
+import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
 import eu.vrtime.vrm.domain.shared.SwitchId;
 import eu.vrtime.vrm.services.VoiceResourceManagementServiceFacade;
 
@@ -40,7 +43,8 @@ public class VrmRestController {
 
 	@RequestMapping(value = "/allocateResource", method = RequestMethod.POST, produces = {
 			MediaType.APPLICATION_XML_VALUE })
-	public ResponseEntity<AllocateResourceResponse> allocateResource(@RequestParam(value = "directoryNumber") String directoryNumber,
+	public ResponseEntity<AllocateResourceResponse> allocateResource(
+			@RequestParam(value = "directoryNumber") String directoryNumber,
 			@RequestParam(value = "primaryNumber") Optional<String> primaryNumber,
 			@RequestParam(value = "switchId") Optional<SwitchId> switchId) {
 
@@ -81,7 +85,8 @@ public class VrmRestController {
 
 	@RequestMapping(value = "/releaseResource", method = RequestMethod.POST, produces = {
 			MediaType.APPLICATION_XML_VALUE })
-	public ResponseEntity<ReleaseResourceResponse> releaseResource(@RequestParam(value = "directoryNumber") String directoryNumber) {
+	public ResponseEntity<ReleaseResourceResponse> releaseResource(
+			@RequestParam(value = "directoryNumber") String directoryNumber) {
 		Validate.notNull(directoryNumber, "directoryNumber is null");
 		LOGGER.info("Received request on " + API_PATH + "/releaseResource " + " directoryNumber:");
 
@@ -111,19 +116,41 @@ public class VrmRestController {
 		Validate.notNull(directoryNumber, "dn is null");
 		LOGGER.info("Received request on " + API_PATH + "/getServiceInfo " + "directoryNumber: " + directoryNumber);
 
-		try {
-			ServiceInfoResponse resp = vrmService.getServiceInfo(directoryNumber);
-			LOGGER.debug(resp.toString());
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_XML);
+		ServiceInfoResponse resp;
 
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_XML);
+		try {
+			resp = vrmService.getServiceInfo(directoryNumber);
 
 			ResponseEntity<ServiceInfoResponse> re = new ResponseEntity<ServiceInfoResponse>(resp, headers,
 					HttpStatus.OK);
-			LOGGER.info(re.getHeaders() + " " + re.getBody() + " " + re.getStatusCodeValue());
+			LOGGER.debug(re.getHeaders() + " " + re.getBody() + " " + re.getStatusCodeValue());
 			return re;
 		} catch (StatusCodeException ex) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+		}
+	}
+
+	@RequestMapping(value = "/lockResource", method = RequestMethod.PUT, produces = { MediaType.APPLICATION_XML_VALUE })
+	public ResponseEntity<LockResourceResponse> lockResource(
+			@RequestParam(value = "resourceIdentifier") ResourceIdentifier resourceIdentifier) {
+		Assert.notNull(resourceIdentifier, "resourceIdentifier is null");
+		LOGGER.info("Received request on " + API_PATH + "/lockResource " + "resourceIdentifier: " + resourceIdentifier);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_XML);
+		LockResourceResponse resp;
+
+		try {
+			resp = vrmService.lockResource(resourceIdentifier);
+
+			ResponseEntity<LockResourceResponse> re = new ResponseEntity<LockResourceResponse>(resp, headers,
+					HttpStatus.OK);
+			LOGGER.debug(re.getHeaders() + " " + re.getBody() + " " + re.getStatusCodeValue());
+			return re;
+		} catch (StatusCodeException ex) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getStatusCode());
 		}
 	}
 
