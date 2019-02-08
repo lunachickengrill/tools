@@ -1,8 +1,4 @@
-<<<<<<< HEAD:VoiceResourceManager/src/main/java/eu/vrtime/vrm/domain/model/AbstractBaseEntity.java
-package eu.vrtime.vrm.domain.model;
-=======
 package eu.vrtime.vrm.domain.shared;
->>>>>>> 8dc4866f8ccba5a3c2d16602cbcc6c1b79c5597a:VoiceResourceManager/src/main/java/eu/vrtime/vrm/domain/shared/AbstractBaseEntity.java
 
 import java.io.Serializable;
 import java.util.Date;
@@ -47,20 +43,9 @@ public class AbstractBaseEntity implements Serializable {
 	public Long getOid() {
 		return oid;
 	}
-<<<<<<< HEAD:VoiceResourceManager/src/main/java/eu/vrtime/vrm/domain/model/AbstractBaseEntity.java
 
-=======
-	
->>>>>>> 8dc4866f8ccba5a3c2d16602cbcc6c1b79c5597a:VoiceResourceManager/src/main/java/eu/vrtime/vrm/domain/shared/AbstractBaseEntity.java
 	public String toStringOid() {
 		return oid.toString();
 	}
 
-
-
-<<<<<<< HEAD:VoiceResourceManager/src/main/java/eu/vrtime/vrm/domain/model/AbstractBaseEntity.java
-
 }
-=======
-}
->>>>>>> 8dc4866f8ccba5a3c2d16602cbcc6c1b79c5597a:VoiceResourceManager/src/main/java/eu/vrtime/vrm/domain/shared/AbstractBaseEntity.java

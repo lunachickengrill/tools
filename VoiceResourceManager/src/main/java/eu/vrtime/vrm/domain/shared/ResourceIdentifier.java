@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package eu.vrtime.vrm.domain.shared;
 
 import javax.persistence.Embeddable;
@@ -13,7 +12,7 @@ public class ResourceIdentifier implements ValueObject<ResourceIdentifier> {
 
 	public ResourceIdentifier(final String identifier) {
 		Validate.notNull(identifier, "identifier is null");
-		
+
 		setIdentifier(identifier);
 	}
 
@@ -62,59 +61,3 @@ public class ResourceIdentifier implements ValueObject<ResourceIdentifier> {
 	}
 
 }
-=======
-package eu.vrtime.vrm.domain.shared;
-
-import javax.persistence.Embeddable;
-
-@Embeddable
-public class ResourceIdentifier implements ValueObject<ResourceIdentifier> {
-
-	private String identifier;
-
-	public ResourceIdentifier(final String identifier) {
-		setIdentifier(identifier);
-	}
-
-	public String getIdentifier() {
-		return identifier;
-	}
-
-	private void setIdentifier(String identifier) {
-		if (identifier == null || identifier.isEmpty()) {
-			throw new IllegalArgumentException("Identifier is null or empty");
-		}
-		this.identifier = identifier;
-	}
-
-	@Override
-	public boolean sameValueAs(ResourceIdentifier other) {
-		return other != null && identifier.equals(other.identifier);
-	}
-
-	@Override
-	public int hashCode() {
-		return identifier.hashCode();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null || getClass() != obj.getClass())
-			return false;
-
-		final ResourceIdentifier resourceIdentifier = (ResourceIdentifier) obj;
-		return sameValueAs(resourceIdentifier);
-	}
-
-	@Override
-	public String toString() {
-		return "ResourceIdentifier [identifier=" + identifier + "]";
-	}
-
-	ResourceIdentifier() {
-	}
-
-}
->>>>>>> 8dc4866f8ccba5a3c2d16602cbcc6c1b79c5597a
