@@ -1,40 +1,33 @@
 package eu.vrtime.vrm.domain.shared;
 
-import javax.persistence.Embeddable;
-
-import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
-@Embeddable
 public class SwitchId implements ValueObject<SwitchId> {
 
-	private String swId;
+	private String identifier;
 
-	public SwitchId(final String swId) {
-		Validate.notNull(swId, "swId is null");
-		setSwId(swId);
+	public SwitchId(final String identifier) {
+		setIdentifier(identifier);
 	}
 
-	public String getSwId() {
-		return swId;
+	public String getIdentifier() {
+		return identifier;
 	}
 
-	private void setSwId(final String swId) {
-		this.swId = swId;
-	}
+	private void setIdentifier(final String identifier) {
+		if (identifier == null || identifier.isEmpty()) {
+			throw new IllegalArgumentException("SwitchId is null");
+		}
 
-	public String toStringSwId() {
-		return swId;
+		this.identifier = identifier;
 	}
 
 	@Override
 	public boolean sameValueAs(SwitchId other) {
-		return other != null && swId.equals(other.swId);
+		return other != null && identifier.equals(other.identifier);
 	}
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder().append(swId).build();
+		return identifier.hashCode();
 	}
 
 	@Override
@@ -49,7 +42,7 @@ public class SwitchId implements ValueObject<SwitchId> {
 
 	@Override
 	public String toString() {
-		return "SwitchId [swId=" + swId + "]";
+		return "SwitchId [identifier=" + identifier + "]";
 	}
 
 	SwitchId() {

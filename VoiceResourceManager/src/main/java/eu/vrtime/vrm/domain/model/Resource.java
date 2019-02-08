@@ -8,15 +8,12 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 
-import org.apache.commons.lang3.Validate;
-
+import eu.vrtime.vrm.domain.shared.AbstractBaseEntity;
 import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
 import eu.vrtime.vrm.domain.shared.ResourceStatus;
 
 @Entity
-@Table(name = "T_RESOURCE")
 public class Resource extends AbstractBaseEntity {
 
 	/**
@@ -25,7 +22,7 @@ public class Resource extends AbstractBaseEntity {
 	private static final long serialVersionUID = 6150543763294953271L;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "FK_SESSIONMANAGER")
+	@JoinColumn(name = "FK_SESSIONMANAGER", nullable = false, updatable = true, unique = false)
 	private SessionManager sessionManager;
 
 	@Embedded
@@ -36,9 +33,6 @@ public class Resource extends AbstractBaseEntity {
 	private ResourceStatus status;
 
 	public Resource(final ResourceIdentifier identifier, ResourceStatus status) {
-		Validate.notNull(identifier, "identifier is null");
-		Validate.notNull(status, "status is null");
-
 		this.identifier = identifier;
 		this.status = status;
 	}
@@ -65,20 +59,6 @@ public class Resource extends AbstractBaseEntity {
 
 	public void setStatus(ResourceStatus status) {
 		this.status = status;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (!(o instanceof Resource))
-			return true;
-		return oid != null && oid.equals(((Resource) o).oid);
-	}
-
-	@Override
-	public int hashCode() {
-		return 31;
 	}
 
 	@Override

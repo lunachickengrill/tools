@@ -17,7 +17,5 @@ public interface SessionManagerRepository extends JpaRepository<SessionManager, 
 	public Optional<SessionManager> findBySmId(String smId);
 	
 	public Set<SessionManager> findBySoftswitch(Softswitch softswitch);
-	
-	public Optional<SessionManager> findByOid(Long oid);
 
 }
