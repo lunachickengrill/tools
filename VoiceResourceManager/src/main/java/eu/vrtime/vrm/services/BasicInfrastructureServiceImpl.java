@@ -6,29 +6,32 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import eu.vrtime.vrm.api.exceptions.DataNotFoundException;
-import eu.vrtime.vrm.api.exceptions.NoFreeResourcesException;
-import eu.vrtime.vrm.api.exceptions.ResourceNotFoundException;
-import eu.vrtime.vrm.api.exceptions.SessionManagerNotFoundException;
-import eu.vrtime.vrm.api.exceptions.SoftswitchNotFoundException;
 import eu.vrtime.vrm.domain.model.Resource;
 import eu.vrtime.vrm.domain.model.SessionManager;
 import eu.vrtime.vrm.domain.model.Softswitch;
+import eu.vrtime.vrm.domain.model.VoiceService;
 import eu.vrtime.vrm.domain.shared.ResourceCountingResult;
+<<<<<<< HEAD
 <<<<<<< HEAD
 import eu.vrtime.vrm.domain.shared.ResourceNotFoundException;
 =======
 import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
 >>>>>>> branch 'master' of https://github.com/lunachickengrill/JavaStuff.git
+=======
+
+import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
+
+=======
+import eu.vrtime.vrm.domain.shared.ResourceNotFoundException;
+>>>>>>> parent of cc1bf15... Merge branch 'master' of
+>>>>>>> 8dc4866f8ccba5a3c2d16602cbcc6c1b79c5597a
 import eu.vrtime.vrm.domain.shared.ResourceStatus;
 import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
-import eu.vrtime.vrm.domain.shared.SwitchId;
 import eu.vrtime.vrm.repositories.ResourceRepository;
 import eu.vrtime.vrm.repositories.SessionManagerRepository;
 import eu.vrtime.vrm.repositories.SoftswitchRepository;
@@ -61,11 +64,14 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	@Override
 	@Transactional
 <<<<<<< HEAD
+<<<<<<< HEAD
 	public void addSoftswitch(String switchId, String name, SoftswitchStatus status, String nic) {
 		Softswitch sw = new Softswitch(switchId, name, status, nic);
 		logger.debug(name + " " + status);
 		switchRepository.saveAndFlush(sw);
 =======
+=======
+>>>>>>> 8dc4866f8ccba5a3c2d16602cbcc6c1b79c5597a
 	public Softswitch addSoftswitch(final String switchId, final String nic, final String name,
 			final SoftswitchStatus status, final Boolean isLenEnabled) {
 		Validate.notNull(switchId, "switchId is null");
@@ -93,12 +99,22 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 		Softswitch sw = dbSw.get();
 		SessionManager sm = new SessionManager(smId, sw);
 		return sessionManagerRepository.saveAndFlush(sm);
+<<<<<<< HEAD
 >>>>>>> branch 'master' of https://github.com/lunachickengrill/JavaStuff.git
+=======
+=======
+	public void addSoftswitch(String switchId, String name, SoftswitchStatus status, String nic) {
+		Softswitch sw = new Softswitch(switchId, name, status, nic);
+		logger.debug(name + " " + status);
+		switchRepository.saveAndFlush(sw);
+>>>>>>> parent of cc1bf15... Merge branch 'master' of
+>>>>>>> 8dc4866f8ccba5a3c2d16602cbcc6c1b79c5597a
 
 	}
 
 	@Override
 	@Transactional
+<<<<<<< HEAD
 <<<<<<< HEAD
 	public void addSessionManager(final String smId, final Softswitch softswitch) {
 		Long oid = softswitch.getOid();
@@ -106,6 +122,8 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 		if (!dbSw.isPresent()) {
 			throw new ResourceNotFoundException("Softswitch with oid " + oid + " not found");
 =======
+=======
+>>>>>>> 8dc4866f8ccba5a3c2d16602cbcc6c1b79c5597a
 	public Softswitch changeSoftswitch(final Softswitch softswitch) {
 		Validate.notNull(softswitch, "softswitch is null");
 
@@ -120,54 +138,22 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 		Optional<SessionManager> dbSessionManager = sessionManagerRepository.findByOid(sessionManager.getOid());
 		if (!(dbSessionManager.isPresent())) {
 			throw new SessionManagerNotFoundException("SessionManager not found");
+<<<<<<< HEAD
 >>>>>>> branch 'master' of https://github.com/lunachickengrill/JavaStuff.git
+=======
+=======
+	public void addSessionManager(final String smId, final Softswitch softswitch) {
+		Long oid = softswitch.getOid();
+		Optional<Softswitch> dbSw = switchRepository.findById(oid);
+		if (!dbSw.isPresent()) {
+			throw new ResourceNotFoundException("Softswitch with oid " + oid + " not found");
+>>>>>>> parent of cc1bf15... Merge branch 'master' of
+>>>>>>> 8dc4866f8ccba5a3c2d16602cbcc6c1b79c5597a
 		}
 
-		return sessionManagerRepository.saveAndFlush(sessionManager);
-	}
-
-	@Override
-	@Transactional
-	public Resource changeResource(final Resource resource) {
-		Validate.notNull(resource, "resource is null");
-
-		return resourceRepository.saveAndFlush(resource);
-	}
-
-	@Override
-	@Transactional
-	public void deleteSoftswitch(final Softswitch softswitch) {
-		Validate.notNull(softswitch, "softswitch is null");
-
-		Optional<Softswitch> dbSoftswitch = switchRepository.findByOid(softswitch.getOid());
-		if (!(dbSoftswitch.isPresent())) {
-			throw new SoftswitchNotFoundException("Softswitch not found");
-		}
-		switchRepository.delete(softswitch);
-	}
-
-	@Override
-	@Transactional
-	public void deleteSessionManager(final SessionManager sessionManager) {
-		Validate.notNull(sessionManager, "sessionManager is null");
-
-		Optional<SessionManager> dbSessionManager = sessionManagerRepository.findByOid(sessionManager.getOid());
-		if (!(dbSessionManager.isPresent())) {
-			throw new SessionManagerNotFoundException("SessionManager not found");
-		}
-		sessionManagerRepository.delete(sessionManager);
-	}
-
-	@Override
-	@Transactional
-	public void deleteResource(final Resource resource) {
-		Validate.notNull(resource, "resource is null");
-
-		Optional<Resource> dbResource = resourceRepository.findByOid(resource.getOid());
-		if (!(dbResource.isPresent())) {
-			throw new ResourceNotFoundException("Resource not found");
-		}
-		resourceRepository.delete(resource);
+		Softswitch sw = dbSw.get();
+		SessionManager sm = new SessionManager(smId, sw);
+		sessionManagerRepository.saveAndFlush(sm);
 
 	}
 
@@ -179,6 +165,7 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 		result.sort(Comparator.comparing(ResourceCountingResult::getCnt).reversed());
 		Optional<ResourceCountingResult> sm = result.stream().findFirst();
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 		if (!sm.isPresent()) {
 			throw new ResourceNotFoundException("No softswitch found");
@@ -186,7 +173,18 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 		if (!(sm.isPresent())) {
 			throw new NoFreeResourcesException("No SessionManager with free Resources found");
 >>>>>>> branch 'master' of https://github.com/lunachickengrill/JavaStuff.git
+=======
+
+<<<<<<< HEAD
+		if (!(sm.isPresent())) {
+			throw new NoFreeResourcesException("No SessionManager with free Resources found");
+=======
+		if (!sm.isPresent()) {
+			throw new ResourceNotFoundException("No softswitch found");
+>>>>>>> parent of cc1bf15... Merge branch 'master' of
+>>>>>>> 8dc4866f8ccba5a3c2d16602cbcc6c1b79c5597a
 		}
+
 		return sm.get().getSessionManager();
 
 	}
@@ -194,23 +192,36 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 	@Override
 	@Transactional
 <<<<<<< HEAD
+<<<<<<< HEAD
 	public void addResource(final String smId, final Resource resource) {
 		Optional<SessionManager> dbSm = sessionManagerRepository.findBySmId(smId);
 
 		if (!dbSm.isPresent()) {
 			throw new ResourceNotFoundException("No sessionManager not found for SessionManagerId " + smId);
 =======
+=======
+>>>>>>> 8dc4866f8ccba5a3c2d16602cbcc6c1b79c5597a
 	public SessionManager getSessionManagerWithMaxFreeResources(SwitchId switchId) {
 		Validate.notNull(switchId, "switchid is null");
-		
+
 		List<ResourceCountingResult> result = resourceRepository.queryResourcesBySwitchId(switchId);
 		result.sort(Comparator.comparing(ResourceCountingResult::getCnt).reversed());
 		Optional<ResourceCountingResult> sm = result.stream().findFirst();
 		if (!(sm.isPresent())) {
 			throw new NoFreeResourcesException("No SessionManager with free Resources found on Softswitch " + switchId);
+<<<<<<< HEAD
 >>>>>>> branch 'master' of https://github.com/lunachickengrill/JavaStuff.git
 		}
 <<<<<<< HEAD
+=======
+=======
+	public void addResource(final String smId, final Resource resource) {
+		Optional<SessionManager> dbSm = sessionManagerRepository.findBySmId(smId);
+
+		if (!dbSm.isPresent()) {
+			throw new ResourceNotFoundException("No sessionManager not found for SessionManagerId " + smId);
+		}
+>>>>>>> 8dc4866f8ccba5a3c2d16602cbcc6c1b79c5597a
 
 		SessionManager sm = dbSm.get();
 		sm.addResource(resource);
@@ -218,6 +229,7 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 		resourceRepository.saveAndFlush(resource);
 
 	}
+<<<<<<< HEAD
 
 	@Override
 	@Transactional
@@ -233,10 +245,41 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 =======
 		return sm.get().getSessionManager();
 >>>>>>> branch 'master' of https://github.com/lunachickengrill/JavaStuff.git
+=======
+>>>>>>> parent of cc1bf15... Merge branch 'master' of
+
+		}
+
+<<<<<<< HEAD
+		return sm.get().getSessionManager();
+
+=======
+		return rsc.get();
+>>>>>>> parent of cc1bf15... Merge branch 'master' of
+>>>>>>> 8dc4866f8ccba5a3c2d16602cbcc6c1b79c5597a
 	}
+
+	// @Override
+	// @Transactional
+	// public Resource getFirstFreeeResourceBySessionManager(SessionManager
+	// sessionManager) {
+	// Optional<Resource> rsc =
+	// resourceRepository.findTopByStatusAndSessionManagerOrderByOid(ResourceStatus.FREE,
+	// sessionManager);
+	//
+	// if (!rsc.isPresent()) {
+	// throw new ResourceNotFoundException("No free resource found on SessionManager
+	// " + sessionManager.getSmId());
+	// }
+	//
+	// return rsc.get();
+	//
+	//
+	// }
 
 	@Override
 	@Transactional
+<<<<<<< HEAD
 <<<<<<< HEAD
 	public void lockResource(Resource resource) {
 		Optional<Resource> rsc = resourceRepository.findById(resource.getOid());
@@ -247,6 +290,8 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 		rsc.get().setStatus(ResourceStatus.LOCKED);
 		resourceRepository.saveAndFlush(rsc.get());
 =======
+=======
+>>>>>>> 8dc4866f8ccba5a3c2d16602cbcc6c1b79c5597a
 	public SessionManager getSessionManagerWithMaxFreeResourcesLenEnabled() {
 		List<ResourceCountingResult> result = resourceRepository.queryResourcesLenEnabled();
 		result.sort(Comparator.comparing(ResourceCountingResult::getCnt).reversed());
@@ -333,7 +378,20 @@ public class BasicInfrastructureServiceImpl implements BasicInfrastructureServic
 		Resource dbRes = dbResource.get();
 		dbRes.setStatus(ResourceStatus.FREE);
 		resourceRepository.saveAndFlush(dbRes);
+<<<<<<< HEAD
 >>>>>>> branch 'master' of https://github.com/lunachickengrill/JavaStuff.git
+=======
+=======
+	public void lockResource(Resource resource) {
+		Optional<Resource> rsc = resourceRepository.findById(resource.getOid());
+		if (!rsc.isPresent()) {
+			throw new ResourceNotFoundException("Resource with oid " + resource.getOid() + " not found");
+		}
+
+		rsc.get().setStatus(ResourceStatus.LOCKED);
+		resourceRepository.saveAndFlush(rsc.get());
+>>>>>>> parent of cc1bf15... Merge branch 'master' of
+>>>>>>> 8dc4866f8ccba5a3c2d16602cbcc6c1b79c5597a
 
 	}
 
