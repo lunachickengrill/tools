@@ -3,12 +3,15 @@ package eu.vrtime.vrm.services;
 import eu.vrtime.vrm.domain.model.Resource;
 import eu.vrtime.vrm.domain.model.SessionManager;
 import eu.vrtime.vrm.domain.model.Softswitch;
+<<<<<<< HEAD
 import eu.vrtime.vrm.domain.shared.ResourceIdentifier;
+=======
+>>>>>>> parent of cc1bf15... Merge branch 'master' of
 import eu.vrtime.vrm.domain.shared.SoftswitchStatus;
-import eu.vrtime.vrm.domain.shared.SwitchId;
 
 public interface BasicInfrastructureService {
 
+<<<<<<< HEAD
 	public Softswitch addSoftswitch(String switchId, String nic, String name, SoftswitchStatus status,
 			Boolean isLenEnabled);
 
@@ -35,11 +38,23 @@ public interface BasicInfrastructureService {
 	public SessionManager getSessionManagerWithMaxFreeResourcesLenEnabled();
 
 	public SessionManager getSessionManagerWithMaxFreeResources(SwitchId switchId);
+=======
+	public void addSoftswitch(String switchId, String name, SoftswitchStatus status, String nic);
+	
+	public void addSessionManager(String smId, Softswitch softswitch);
+	
+	public void addResource(String smId,Resource resource);
+
+	public SessionManager getSessionManagerWithMaxFreeResources();
+>>>>>>> parent of cc1bf15... Merge branch 'master' of
 
 	public Resource getFirstFreeeResourceBySessionManager(SessionManager sessionManager);
 
 	public void lockResource(Resource resource);
+<<<<<<< HEAD
 
 	public void unlockResource(Resource resource);
+=======
+>>>>>>> parent of cc1bf15... Merge branch 'master' of
 
 }
