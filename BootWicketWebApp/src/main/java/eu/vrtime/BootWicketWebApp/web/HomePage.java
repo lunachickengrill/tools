@@ -6,7 +6,6 @@ public class HomePage extends AbstractBasePage{
 	
 	public HomePage() {
 		super();
-		
 		add(new Label("homePageLable", "this is the homePage"));
 	}
 

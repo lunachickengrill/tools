@@ -6,6 +6,7 @@ import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.protocol.http.WicketFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
@@ -19,7 +20,7 @@ public class BootWicketWebAppApplication {
 	@Bean
 	public Filter getWicketFilter() {
 		WicketApplication webApplication=new WicketApplication();
-		webApplication.setConfigurationType(RuntimeConfigurationType.DEPLOYMENT);
+		webApplication.setConfigurationType(RuntimeConfigurationType.DEVELOPMENT);
 		WicketFilter filter = new WicketFilter(webApplication);
 		filter.setFilterPath("/");
 		return filter;
