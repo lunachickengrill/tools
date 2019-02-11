@@ -1,3 +1,15 @@
 <wicket:panel>
-	<div wicket:id="form">text replaced</div>
+	<h3 wicket:id="formLabel">text replaced</h3>
+	<form wicket:id="form">
+		<fieldset>
+			<div>
+				<label wicket:for="firstName"><wicket:label>First Name</wicket:label></label>
+				<input wicket:id="firstName" type="text">
+				<label wicket:for="lastName"><wicket:label>Last Name</wicket:label></label>
+				<input wicket:id="lastName" type="text"><br />
+				<label wicket:for="email"><wicket:label>Email</wicket:label></label>
+				<input wicket:id="email" type="text">
+			</div>
+		</fieldset>
+	</form>
 </wicket:panel>
