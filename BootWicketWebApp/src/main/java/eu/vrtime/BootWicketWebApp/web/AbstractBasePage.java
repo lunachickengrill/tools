@@ -1,6 +1,7 @@
 package eu.vrtime.BootWicketWebApp.web;
 
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 
 public abstract class AbstractBasePage extends WebPage {
 
@@ -12,6 +13,7 @@ public abstract class AbstractBasePage extends WebPage {
 	public AbstractBasePage() {
 		super();
 		add(new HeaderPanel("headerPanel"));
+		add(new BookmarkablePageLink("home", HomePage.class));
 
 	}
 
