@@ -25,11 +25,18 @@ public class InputForm extends Form<Customer> {
 
 	public InputForm(String id) {
 		super(id);
+		CompoundPropertyModel<Customer> model = new CompoundPropertyModel<Customer>(customer);
+		setDefaultModel(model);
+		
+		add(new TextField<String>("customerId"));
+		add(new TextField<String>("firstName"));
+		add(new TextField<String>("lastName"));
+		add(new TextField<String>("email"));
 
-		add(new TextField<String>("customerId", new PropertyModel<String>(customer, "customerId")));
-		add(new TextField<String>("firstName", new PropertyModel<String>(customer, "firstName")));
-		add(new TextField<String>("lastName", new PropertyModel<String>(customer, "lastName")));
-		add(new TextField<String>("email", new PropertyModel<String>(customer, "email")));
+//		add(new TextField<String>("customerId", new PropertyModel<String>(customer, "customerId")));
+//		add(new TextField<String>("firstName", new PropertyModel<String>(customer, "firstName")));
+//		add(new TextField<String>("lastName", new PropertyModel<String>(customer, "lastName")));
+//		add(new TextField<String>("email", new PropertyModel<String>(customer, "email")));
 		add(addSubmitButton());
 
 	}
@@ -43,7 +50,7 @@ public class InputForm extends Form<Customer> {
 				super.onSubmit();
 				
 				System.out.println(">>> SUBMITBUTTON CLICKED <<<");
-				Customer dbCustomer = customerRepo.save(customer);
+				Customer dbCustomer = customerRepo.saveAndFlush(customer);
 				System.out.println(">>> dbCustomerdb <<<" + dbCustomer.toString());
 			}
 
