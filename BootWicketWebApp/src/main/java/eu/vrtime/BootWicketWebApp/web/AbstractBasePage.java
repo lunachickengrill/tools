@@ -14,6 +14,7 @@ public abstract class AbstractBasePage extends WebPage {
 		super();
 		add(new HeaderPanel("headerPanel"));
 		add(new BookmarkablePageLink("home", HomePage.class));
+		add(new BookmarkablePageLink<>("search", SearchPage.class));
 
 	}
 

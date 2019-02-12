@@ -26,15 +26,16 @@ public class Customer extends AbstractBaseEntity implements Serializable {
 
 	@Column(name = "email", nullable = false, updatable = true, unique = true)
 	private String email;
-
-	public Customer(final String customerId, final String email) {
-		this.customerId = customerId;
-		this.email = customerId;
-	}
-
+	
 	public Customer() {
 
 	}
+
+	public Customer(final String customerId, final String email) {
+		this.customerId = customerId;
+		this.email = email;
+	}
+
 
 	public Customer(final Customer customer) {
 		toClone(customer);
@@ -51,6 +52,10 @@ public class Customer extends AbstractBaseEntity implements Serializable {
 		if (!(customer.getEmail().isEmpty()) && customer.getEmail() != null)
 			this.email = customer.getEmail();
 	}
+	
+//	public Long getOid() {
+//		return super.getOid();
+//	}
 
 	public String getCustomerId() {
 		return customerId;

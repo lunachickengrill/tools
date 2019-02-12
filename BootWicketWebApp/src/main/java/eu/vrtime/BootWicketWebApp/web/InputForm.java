@@ -46,7 +46,7 @@ public class InputForm extends Form<Customer> {
 
 			@Override
 			public void onSubmit() {
-				// TODO Auto-generated method stub
+
 				super.onSubmit();
 				
 				System.out.println(">>> SUBMITBUTTON CLICKED <<<");

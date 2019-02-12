@@ -12,7 +12,7 @@ public class InputFormPanel extends Panel {
 
 	public InputFormPanel(String id) {
 		super(id);
-		add(new Label("formLabel", "here goes the form"));
+		add(new Label("formLabel", "this is the inputFormPanel"));
 		add(new InputForm("form"));
 	}
 

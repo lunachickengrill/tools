@@ -7,7 +7,7 @@ public class HeaderPanel  extends Panel {
 	
 	public HeaderPanel(String id) {
 		super(id);
-		add(new Label("headerLabel", "header text"));
+		add(new Label("headerLabel", "HERE GOES THE HEADER"));
 	}
 
 }
