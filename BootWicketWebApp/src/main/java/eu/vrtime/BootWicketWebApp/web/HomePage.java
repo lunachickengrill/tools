@@ -7,7 +7,7 @@ public class HomePage extends AbstractBasePage {
 	public HomePage() {
 		super();
 		add(new Label("homePageLabel", "this is the homePage Label"));
-		add(new InputFormPanel("formPanel"));
+		add(new InputFormPanel("inputFormPanel"));
 	}
 
 }

@@ -1,28 +1,39 @@
 package eu.vrtime.BootWicketWebApp.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="T_CUSTOMER")
-public class Customer extends AbstractBaseEntity{
-	
-	@Column(name="customer_id", nullable=false, updatable=false, unique=true)
+@Table(name = "T_CUSTOMER")
+public class Customer extends AbstractBaseEntity implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 972304658324448565L;
+
+	@Column(name = "customer_id", nullable = false, updatable = false, unique = true)
 	private String customerId;
-	
-	@Column(name="first_name", nullable=true, updatable=true, unique=false)
+
+	@Column(name = "first_name", nullable = true, updatable = true, unique = false)
 	private String firstName;
-	
-	@Column(name="last_name", nullable=true, updatable=true, unique=false)
+
+	@Column(name = "last_name", nullable = true, updatable = true, unique = false)
 	private String lastName;
-	
-	@Column(name="email", nullable=false, updatable=true, unique=true)
+
+	@Column(name = "email", nullable = false, updatable = true, unique = true)
 	private String email;
-	
+
 	public Customer(final String customerId, final String email) {
-		this.customerId=customerId;
-		this.email=customerId;
+		this.customerId = customerId;
+		this.email = customerId;
+	}
+
+	public Customer() {
+
 	}
 
 	public String getCustomerId() {
@@ -55,6 +66,12 @@ public class Customer extends AbstractBaseEntity{
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	@Override
+	public String toString() {
+		return "Customer [customerId=" + customerId + ", firstName=" + firstName + ", lastName=" + lastName + ", email="
+				+ email + "]";
 	}
 	
 	

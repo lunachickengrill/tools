@@ -2,14 +2,19 @@
 	<h3 wicket:id="formLabel">text replaced</h3>
 	<form wicket:id="form">
 		<fieldset>
-			<div>
-				<label wicket:for="firstName"><wicket:label>First Name</wicket:label></label>
-				<input wicket:id="firstName" type="text">
-				<label wicket:for="lastName"><wicket:label>Last Name</wicket:label></label>
-				<input wicket:id="lastName" type="text"><br />
-				<label wicket:for="email"><wicket:label>Email</wicket:label></label>
-				<input wicket:id="email" type="text">
-			</div>
+
+				<div class="well">
+					<label>customerId</label><br/>
+					<input wicket:id="customerId" type="text" title="enter customerId"><br />
+					<label>Firstname</label><br />
+					<input wicket:id="firstName" type="text" title="enter Firstname here"><br />
+					<label>Lastname</label><br />
+					<input wicket:id="lastName" type="text"	title="enter Lastname here"><br />
+					<label>Email</label><br />
+					<input	wicket:id="email" type="text" title="enter email address"><br />
+				</div>
+
 		</fieldset>
+		<input wicket:id="submitButton" type="submit" value="submit">
 	</form>
 </wicket:panel>
