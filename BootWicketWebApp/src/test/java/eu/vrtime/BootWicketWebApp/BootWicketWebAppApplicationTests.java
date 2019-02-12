@@ -29,6 +29,11 @@ public class BootWicketWebAppApplicationTests extends BootWicketWebAppTestBase {
 		assertTrue(dbCustomer.getCustomerId().equals(CUSTOMERID_1));
 		assertTrue(dbCustomer.getLastName().equals(LASTNAME_1));
 		
+		Customer cust2 = new Customer(CUSTOMERID_2, EMAIL_2);
+		cust2.setLastName(LASTNAME_2);
+		Customer dbCustomer2 = customerRepo.saveAndFlush(cust2);
+		assertTrue(dbCustomer2.getCustomerId().equals(CUSTOMERID_2));
+		assertTrue(dbCustomer2.getLastName().equals(LASTNAME_2));
 	}
 }
 

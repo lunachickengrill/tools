@@ -50,8 +50,10 @@ public class InputForm extends Form<Customer> {
 				super.onSubmit();
 				
 				System.out.println(">>> SUBMITBUTTON CLICKED <<<");
-				Customer dbCustomer = customerRepo.saveAndFlush(customer);
-				System.out.println(">>> dbCustomerdb <<<" + dbCustomer.toString());
+				Customer toSave = new Customer(customer);
+				Customer dbCustomer = customerRepo.saveAndFlush(toSave);
+				System.out.println(">>> dbCustomer <<<" + dbCustomer.toStringOid());
+				System.out.println(">>> dbCustomer <<<" + dbCustomer.toString());
 			}
 
 		};

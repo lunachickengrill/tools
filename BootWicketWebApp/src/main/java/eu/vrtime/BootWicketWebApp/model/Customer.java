@@ -36,6 +36,22 @@ public class Customer extends AbstractBaseEntity implements Serializable {
 
 	}
 
+	public Customer(final Customer customer) {
+		toClone(customer);
+
+	}
+
+	private void toClone(Customer customer) {
+		if (!(customer.getCustomerId().isEmpty()) && customer.getCustomerId() != null)
+			this.customerId = customer.getCustomerId();
+		if (!(customer.getFirstName().isEmpty()) && customer.getFirstName() != null)
+			this.firstName = customer.getFirstName();
+		if (!(customer.getLastName().isEmpty()) && customer.getLastName() != null)
+			this.lastName = customer.getLastName();
+		if (!(customer.getEmail().isEmpty()) && customer.getEmail() != null)
+			this.email = customer.getEmail();
+	}
+
 	public String getCustomerId() {
 		return customerId;
 	}
@@ -73,7 +89,5 @@ public class Customer extends AbstractBaseEntity implements Serializable {
 		return "Customer [customerId=" + customerId + ", firstName=" + firstName + ", lastName=" + lastName + ", email="
 				+ email + "]";
 	}
-	
-	
 
 }
