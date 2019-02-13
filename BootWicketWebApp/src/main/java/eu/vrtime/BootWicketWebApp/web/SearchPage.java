@@ -32,7 +32,8 @@ public class SearchPage extends AbstractBasePage {
 
 		add(new Label("searchPageLabel", "this is the search page"));
 		add(createSearchForm("searchForm"));
-		add(createModalWindow("createCustomerWindow"));
+//		add(createModalWithPage("createCustomerWindow"));
+		add(createModalWithPanel("createCustomerWindow"));
 
 	}
 
@@ -57,42 +58,62 @@ public class SearchPage extends AbstractBasePage {
 		return searchForm;
 	}
 
-	private ModalWindow createModalWindow(String id) {
+	private ModalWindow createModalWithPanel(String id) {
 		ModalWindow modalWindow = new ModalWindow(id);
-		modalWindow.setTitle("Create Customer Window");
-		modalWindow.setInitialHeight(600);
-		modalWindow.setInitialWidth(800);
-		modalWindow.setPageCreator(new PageCreator() {
+//		modalWindow.add(new ModalPanel(modalWindow.getContentId()));
+		modalWindow.setContent(new ModalPanel(modalWindow.getContentId()));
+		modalWindow.setTitle("modal panel");
+		modalWindow.setCookieName("modal-2");
 
-			private static final long serialVersionUID = 5604936321711681759L;
-
-			@Override
-			public Page createPage() {
-				return new CreateCustomerPage();
-			}
-		});
-		modalWindow.setWindowClosedCallback(new WindowClosedCallback() {
-
-			private static final long serialVersionUID = -5323526267968000929L;
-
-			@Override
-			public void onClose(AjaxRequestTarget target) {
-				System.out.println("ModalWindow closed");
-			}
-		});
-
-		add(new AjaxLink<String>("createCustomer") {
-
-			private static final long serialVersionUID = 4683399799357833525L;
+		add(new AjaxLink<Void>("createCustomer") {
+			private static final long serialVersionUID = 8016610384377578300L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				modalWindow.show(target);
-				System.out.println(">>> createCustomer clicked <<<");
+				System.out.println(">>> modal window panel link clicked <<<");
 			}
 
 		});
 		return modalWindow;
 	}
+
+//	private ModalWindow createModalWithPage(String id) {
+//		ModalWindow modalWindow = new ModalWindow(id);
+//		modalWindow.setTitle("Create Customer Window");
+//		modalWindow.setInitialHeight(600);
+//		modalWindow.setInitialWidth(800);
+//		modalWindow.setPageCreator(new PageCreator() {
+//
+//			private static final long serialVersionUID = 5604936321711681759L;
+//
+//			@Override
+//			public Page createPage() {
+//				return new CreateCustomerPage();
+//			}
+//		});
+//		modalWindow.setWindowClosedCallback(new WindowClosedCallback() {
+//
+//			private static final long serialVersionUID = -5323526267968000929L;
+//
+//			@Override
+//			public void onClose(AjaxRequestTarget target) {
+//				System.out.println("ModalWindow closed");
+//			}
+//		});
+//
+//		add(new AjaxLink<String>("createCustomer") {
+//
+//			private static final long serialVersionUID = 4683399799357833525L;
+//
+//			@Override
+//			public void onClick(AjaxRequestTarget target) {
+//				modalWindow.show(target);
+//				System.out.println(">>> createCustomer clicked <<<");
+//			}
+//
+//		});
+//		return modalWindow;
+//	}
 
 }
