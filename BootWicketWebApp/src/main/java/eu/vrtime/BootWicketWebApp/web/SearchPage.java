@@ -66,6 +66,7 @@ public class SearchPage extends AbstractBasePage {
 			@Override
 			public void onSubmit() {
 				System.out.println(">>> searchForm submit clicked <<<");
+				Customer customer = mapper.map(this.getModelObject(), Customer.class);
 			}
 
 		});
