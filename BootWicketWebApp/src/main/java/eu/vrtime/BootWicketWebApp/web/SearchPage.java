@@ -1,26 +1,67 @@
 package eu.vrtime.BootWicketWebApp.web;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow.PageCreator;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow.WindowClosedCallback;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.model.CompoundPropertyModel;
+
+import eu.vrtime.BootWicketWebApp.model.CustomerDTO;
+import eu.vrtime.BootWicketWebApp.repositories.CustomerRepository;
 
 public class SearchPage extends AbstractBasePage {
 
-	private ModalWindow modalWindow;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7434379495347757123L;
+
+	@Inject
+	private CustomerRepository customerRepository;
 
 	public SearchPage() {
 		super();
-		modalWindow = new ModalWindow("modalWindow");
 
 		add(new Label("searchPageLabel", "this is the search page"));
-		add(new SearchFormPanel("searchFormPanel"));
+		add(createSearchForm("searchForm"));
+		add(createModalWindow("createCustomerWindow"));
 
-		modalWindow.setTitle("create Customer");
+	}
+
+	private Form<CustomerDTO> createSearchForm(String id) {
+
+		Form<CustomerDTO> searchForm = new Form<CustomerDTO>(id);
+		CustomerDTO dto = new CustomerDTO();
+		searchForm.add(new TextField<String>("customerId"));
+		searchForm.add(new TextField<String>("email"));
+		CompoundPropertyModel<CustomerDTO> model = new CompoundPropertyModel<CustomerDTO>(dto);
+		setDefaultModel(model);
+		searchForm.add(new Button("submit") {
+
+			private static final long serialVersionUID = 6187115801164320555L;
+
+			@Override
+			public void onSubmit() {
+				System.out.println(">>> searchForm submit clicked <<<");
+			}
+
+		});
+		return searchForm;
+	}
+
+	private ModalWindow createModalWindow(String id) {
+		ModalWindow modalWindow = new ModalWindow(id);
+		modalWindow.setTitle("Create Customer Window");
+		modalWindow.setInitialHeight(600);
+		modalWindow.setInitialWidth(800);
 		modalWindow.setPageCreator(new PageCreator() {
 
 			private static final long serialVersionUID = 5604936321711681759L;
@@ -36,7 +77,6 @@ public class SearchPage extends AbstractBasePage {
 
 			@Override
 			public void onClose(AjaxRequestTarget target) {
-				// TODO Auto-generated method stub
 				System.out.println("ModalWindow closed");
 			}
 		});
@@ -47,14 +87,12 @@ public class SearchPage extends AbstractBasePage {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				// TODO Auto-generated method stub
 				modalWindow.show(target);
+				System.out.println(">>> createCustomer clicked <<<");
 			}
 
 		});
-
-		add(modalWindow);
-
+		return modalWindow;
 	}
 
 }
