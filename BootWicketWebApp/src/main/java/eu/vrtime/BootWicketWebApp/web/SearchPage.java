@@ -33,6 +33,15 @@ public class SearchPage extends AbstractBasePage {
 	 */
 	private static final long serialVersionUID = -7434379495347757123L;
 
+	private static final String TEXTFIELD_CUSTOMERID = "customerId";
+	private static final String TEXTFIELD_FIRSTNAME = "firstName";
+	private static final String TEXTFIELD_LASTNAME = "lastName";
+	private static final String TEXTFIELD_EMAIL = "email";
+	private static final String BUTTON_SUBMIT = "submit";
+	private static final String AJAX_LINK = "createCustomer";
+	private static final String MODALWINDOW_TITLE = "modal panel";
+	private static final String MODALWINDOW_COOKIENAME = "modal-2";
+
 	@Inject
 	private CustomerRepository customerRepository;
 
@@ -44,7 +53,6 @@ public class SearchPage extends AbstractBasePage {
 
 		add(new Label("searchPageLabel", "this is the search page"));
 		add(createSearchForm("searchForm"));
-		add(createDataView(dataProvider));
 		add(createModalWithPanel("createCustomerWindow"));
 
 	}
@@ -53,13 +61,13 @@ public class SearchPage extends AbstractBasePage {
 
 		Form<CustomerDTO> searchForm = new Form<CustomerDTO>(id);
 		CustomerDTO dto = new CustomerDTO();
-		searchForm.add(new TextField<String>("customerId"));
-		searchForm.add(new TextField<String>("firstName"));
-		searchForm.add(new TextField<String>("lastName"));
-		searchForm.add(new TextField<String>("email"));
+		searchForm.add(new TextField<String>(TEXTFIELD_CUSTOMERID));
+		searchForm.add(new TextField<String>(TEXTFIELD_FIRSTNAME));
+		searchForm.add(new TextField<String>(TEXTFIELD_LASTNAME));
+		searchForm.add(new TextField<String>(TEXTFIELD_EMAIL));
 		CompoundPropertyModel<CustomerDTO> model = new CompoundPropertyModel<CustomerDTO>(dto);
 		setDefaultModel(model);
-		searchForm.add(new Button("submit") {
+		searchForm.add(new Button(BUTTON_SUBMIT) {
 
 			private static final long serialVersionUID = 6187115801164320555L;
 
@@ -67,16 +75,17 @@ public class SearchPage extends AbstractBasePage {
 			public void onSubmit() {
 				System.out.println(">>> searchForm submit clicked <<<");
 				Customer customer = mapper.map(this.getModelObject(), Customer.class);
+				// TODO implement search and fill DataView
 			}
 
 		});
 		return searchForm;
 	}
-	
+
 	private DataView<CustomerDTO> createDataView(ListDataProvider<CustomerDTO> dataProvider) {
-		DataView<CustomerDTO> customerView = new DataView<CustomerDTO>("rows",dataProvider) {
+		DataView<CustomerDTO> customerView = new DataView<CustomerDTO>("rows", dataProvider) {
 			private static final long serialVersionUID = -1877962082971422231L;
-			
+
 			@Override
 			protected void populateItem(Item<CustomerDTO> item) {
 				CustomerDTO dto = item.getModelObject();
@@ -86,9 +95,9 @@ public class SearchPage extends AbstractBasePage {
 				repeatingView.add(new Label(repeatingView.newChildId(), dto.getLastName()));
 				repeatingView.add(new Label(repeatingView.newChildId(), dto.getEmail()));
 				item.add(repeatingView);
-				
+
 			}
-			
+
 		};
 
 		return customerView;
@@ -97,10 +106,12 @@ public class SearchPage extends AbstractBasePage {
 	private ModalWindow createModalWithPanel(String id) {
 		ModalWindow modalWindow = new ModalWindow(id);
 		modalWindow.setContent(new CreateCustomerPanel(modalWindow.getContentId()));
-		modalWindow.setTitle("modal panel");
-		modalWindow.setCookieName("modal-2");
+		modalWindow.setTitle(MODALWINDOW_TITLE);
+		modalWindow.setCookieName(MODALWINDOW_COOKIENAME);
 
 		modalWindow.setWindowClosedCallback(new WindowClosedCallback() {
+
+			private static final long serialVersionUID = 6440918971662021509L;
 
 			@Override
 			public void onClose(AjaxRequestTarget target) {
@@ -108,7 +119,7 @@ public class SearchPage extends AbstractBasePage {
 			}
 		});
 
-		add(new AjaxLink<Void>("createCustomer") {
+		add(new AjaxLink<Void>(AJAX_LINK) {
 			private static final long serialVersionUID = 8016610384377578300L;
 
 			@Override
@@ -120,7 +131,5 @@ public class SearchPage extends AbstractBasePage {
 		});
 		return modalWindow;
 	}
-	
-	
 
 }
