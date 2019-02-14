@@ -1,5 +1,8 @@
 package eu.vrtime.cheesr.web;
 
+import java.io.Serializable;
+import java.text.NumberFormat;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -18,6 +21,7 @@ public class Index extends CheesrPage {
 	 */
 	private static final long serialVersionUID = 6159103287733661538L;
 
+	@SuppressWarnings("unchecked")
 	public Index() {
 		add(new ListView("cheeses", getCheeses()) {
 
@@ -47,7 +51,9 @@ public class Index extends CheesrPage {
 
 		});
 
-		add(new ListView("cart", new PropertyModel<>(this, "cart.cheeses")) {
+//		Both is working but (this, "cart.cheese") feels unatural.
+		add(new ListView("cart", new PropertyModel<>(getCart(), "cheeses")) {
+//		add(new ListView("cart", new PropertyModel<>(this, "cart.cheeses")) {
 
 			private static final long serialVersionUID = 7593895543854509389L;
 
@@ -72,7 +78,20 @@ public class Index extends CheesrPage {
 			}
 
 		});
-		add(new Label("total", "$" + getCart().getTotal()));
+		// not working as model is only set once at construction time
+//		add(new Label("total", "$" + getCart().getTotal()));
+
+//		Overriding  Model.getObject is working as getObject() is called every time the lable renders
+		add(new Label("total", new Model() {
+
+			@Override
+			public Serializable getObject() {
+				NumberFormat nf = NumberFormat.getCurrencyInstance();
+				return nf.format(getCart().getTotal());
+
+			}
+		}));
+
 	}
 
 }
