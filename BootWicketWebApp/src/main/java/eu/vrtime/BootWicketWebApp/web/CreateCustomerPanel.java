@@ -32,6 +32,8 @@ public class CreateCustomerPanel extends Panel {
 	private TextField<String> firstName = new TextField<String>(TEXTFIELD_FIRSTNAME);
 	private TextField<String> lastName = new TextField<String>(TEXTFIELD_LASTNAME);
 	private TextField<String> email = new TextField<String>(TEXTFIELD_EMAIL);
+	
+	private CompoundPropertyModel<CustomerDTO> model;
 
 	@Inject
 	private CustomerRepository customerRepository;
@@ -41,12 +43,12 @@ public class CreateCustomerPanel extends Panel {
 
 	public CreateCustomerPanel(String id) {
 		super(id);
+		model = new CompoundPropertyModel<CustomerDTO>(custDto);
 		add(createForm(FORM_NAME));
 	}
 
 	private Form<CustomerDTO> createForm(String id) {
 		Form<CustomerDTO> createCustomerForm = new Form<CustomerDTO>(FORM_NAME);
-		CompoundPropertyModel<CustomerDTO> model = new CompoundPropertyModel<CustomerDTO>(custDto);
 		createCustomerForm.setDefaultModel(model);
 		createCustomerForm.add(customerId);
 		createCustomerForm.add(firstName);

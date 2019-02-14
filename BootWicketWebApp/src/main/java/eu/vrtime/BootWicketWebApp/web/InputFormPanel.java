@@ -10,10 +10,14 @@ public class InputFormPanel extends Panel {
 	 */
 	private static final long serialVersionUID = 8656817797213862686L;
 
+	private static final String PANEL_LABEL_ID = "formLabel";
+	private static final String PANEL_LABEL_MODEL = "this is the inputFormPanel";
+	private static final String FORM_ID = "form";
+
 	public InputFormPanel(String id) {
 		super(id);
-		add(new Label("formLabel", "this is the inputFormPanel"));
-		add(new InputForm("form"));
+		add(new Label(PANEL_LABEL_ID, PANEL_LABEL_MODEL));
+		add(new InputForm(FORM_ID));
 	}
 
 }
