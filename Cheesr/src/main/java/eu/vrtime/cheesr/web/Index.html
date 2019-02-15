@@ -9,40 +9,19 @@
 		<div id="contents">
 			<div id="main">
 				<div id="cart">
-					<h3>Your selection</h3>
-					<table>
-						<tbody>
-							<tr wicket:id="cart">
-								<td wicket:id="name">Gouda</td>
-								<td wicket:id="price">2.99</td>
-								<td><a wicket:id="remove" href="#">remove</a></td>
-							</tr>
-							<wicket:remove>
-								<tr>
-									<td>Emmental</td>
-									<td>$1.99</td>
-									<td><a href="#">remove</a></td>
-								</tr>
-								</wicket:remove>
-						</tbody>
-						<tfoot>
-							<tr class="total">
-								<th>Total</th>
-								<td wicket:id="total">$1.99</td>
-								<td>&nbsp;</td>
-							</tr>
-						</tfoot>
-					</table>
-					<input type="button" value="Check out" />
+					
+					<!-- <input type="button" value="Check out" />  -->
+					<input type="button" wicket:id="checkout" value="Check out" />
 				</div>
 				<div wicket:id="cheeses" class="cheese">
 					<h3 wicket:id="name">Gouda</h3>
 					<p wicket:id="description">Gouda is a Dutch...</p>
 					<p>
-						<span wicket:id="price">$1.99</span><a wicket:id="add" href="#">add
+						<span wicket:id="price">$2.99</span><a wicket:id="add" href="#">add
 							to cart</a>
 					</p>
 				</div>
+				<div wicket:id="navigator"></div>
 				<wicket:remove>
 					<div class="cheese">
 						<h3>Emmental</h3>

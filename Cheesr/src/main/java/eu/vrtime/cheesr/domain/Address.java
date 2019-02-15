@@ -9,10 +9,10 @@ public class Address implements Serializable {
 	 */
 	private static final long serialVersionUID = 1841298505811649682L;
 
-	private String name = new String();
-	private String street = new String();
-	private String zipcode = new String();
-	private String city = new String();
+	private String name;
+	private String street;
+	private Integer zipcode;
+	private String city;
 
 	public Address() {
 
@@ -34,11 +34,11 @@ public class Address implements Serializable {
 		this.street = street;
 	}
 
-	public String getZipcode() {
+	public Integer getZipcode() {
 		return zipcode;
 	}
 
-	public void setZipcode(String zipcode) {
+	public void setZipcode(Integer zipcode) {
 		this.zipcode = zipcode;
 	}
 
