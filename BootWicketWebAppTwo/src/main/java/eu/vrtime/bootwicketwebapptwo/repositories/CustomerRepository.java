@@ -35,9 +35,9 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	public <S extends Customer> S saveAndFlush(S entity);
 
 	public Page<Customer> findAll(Pageable pageable);
-	
-	public Optional<List<Customer>> findByCustomerId(Long customerId);
-	
-	
+
+	public List<Customer> findByCustomerId(Long customerId);
+
+
 
 }

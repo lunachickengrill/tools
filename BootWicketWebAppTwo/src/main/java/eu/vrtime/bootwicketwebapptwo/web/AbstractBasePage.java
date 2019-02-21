@@ -6,14 +6,20 @@ import org.apache.wicket.markup.html.panel.Panel;
 public abstract class AbstractBasePage extends WebPage {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 2966238955891585644L;
 
 	public AbstractBasePage() {
 		super();
-		add(createLinkPanel("linkPanel"));
 
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+
+		add(createLinkPanel("linkPanel"));
 	}
 
 	private LinkPanel createLinkPanel(String id) {

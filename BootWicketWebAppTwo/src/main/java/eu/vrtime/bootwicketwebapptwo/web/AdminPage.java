@@ -1,11 +1,9 @@
 package eu.vrtime.bootwicketwebapptwo.web;
 
-import java.util.ArrayList;
+import static java.util.Collections.emptyList;
+
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-
-import javax.inject.Inject;
-
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -14,9 +12,10 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.vrtime.bootwicketwebapptwo.model.Customer;
 import eu.vrtime.bootwicketwebapptwo.repositories.CustomerRepository;
@@ -24,77 +23,84 @@ import eu.vrtime.bootwicketwebapptwo.repositories.CustomerServiceRepository;
 
 public class AdminPage extends AbstractBasePage {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 9076868135610334317L;
-	private static final String LABEL_ADMINPAGE_ID = "labelAdminPage";
-	private static final String LABLE_ADMINPAGE_MODEL = "Admin Page Label";
-	private static final String FORMPANEL_ID = "formPanel";
-	private static final String LISTVIEWPANEL_ID = "listViewPanel";
-	private static final String LISTVIEW_ID = "listView";
-	private static final String FORM_ID = "form";
-	private static final String FORM_CUSTOMERID = "customerId";
-	private static final String FORM_SUBMIT = "submit";
-	private FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
-	Customer customer = new Customer();
+    /**
+     *
+     */
+    private static final long serialVersionUID = 9076868135610334317L;
+    private static final String LABEL_ADMINPAGE_ID = "labelAdminPage";
+    private static final String LABLE_ADMINPAGE_MODEL = "Admin Page Label";
+    private static final String LISTVIEW_ID = "listView";
+    private static final String FORM_ID = "form";
+    private static final String FORM_CUSTOMERID = "customerId";
+    private static final String FORM_SUBMIT = "submit";
+    private FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
 
-	List<Customer> customers;
+    private Long customerId;
 
-	@SpringBean
-	private CustomerRepository customerRepository;
+    private IModel<List<Customer>> customerListModel = new LoadableDetachableModel<List<Customer>>() {
+        @Override
+        protected List<Customer> load() {
+            return customerId != null ? customerRepository.findByCustomerId(customerId) : emptyList();
+        }
+    };
+    
+    Customer customer = new Customer();
 
-	@SpringBean
-	private CustomerServiceRepository serviceRepository;
+    @SpringBean
+    private CustomerRepository customerRepository;
 
-	public AdminPage() {
-		super();
-		add(new Label(LABEL_ADMINPAGE_ID, LABLE_ADMINPAGE_MODEL));
-		add(feedbackPanel);
+    @SpringBean
+    private CustomerServiceRepository serviceRepository;
 
-		Form form = new Form(FORM_ID);
-		CompoundPropertyModel<Customer> model = new CompoundPropertyModel<Customer>(customer);
+    public AdminPage() {
+        super();
+    }
 
-		form.setDefaultModel(model);
-		form.add(new TextField<>(FORM_CUSTOMERID));
-		form.add(new Button(FORM_SUBMIT) {
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
 
-			private static final long serialVersionUID = -2644986353744688237L;
+        add(new Label(LABEL_ADMINPAGE_ID, LABLE_ADMINPAGE_MODEL));
+        add(feedbackPanel);
 
-			@Override
-			public void onSubmit() {
+        Form form = new Form(FORM_ID);
 
-				if (model.getObject().getCustomerId() != null) {
-					Long customerId = model.getObject().getCustomerId();
+        CompoundPropertyModel<Customer> model = new CompoundPropertyModel<Customer>(customer);
 
-					info(">>> submit with value " + model.getObject().getCustomerId() + " <<<");
+        form.setDefaultModel(model);
+        form.add(new TextField<>(FORM_CUSTOMERID));
+        form.add(new Button(FORM_SUBMIT) {
 
-					customers = customerRepository.findByCustomerId(customerId).get();
-					for (Customer cust : customers) {
-						System.out.println(cust.toString());
-					}
+            private static final long serialVersionUID = -2644986353744688237L;
 
-				} else {
-					info(">>> clicked without value <<<");
-				}
-			}
+            @Override
+            public void onSubmit() {
 
-		});
-		add(form);
+                if (model.getObject().getCustomerId() != null) {
+                    customerId = model.getObject().getCustomerId();
 
-		PageableListView listView = new PageableListView(LISTVIEW_ID, customers, 5) {
+                    info(">>> submit with value " + customerId + " <<<");
 
-			@Override
-			protected void populateItem(ListItem item) {
-				Customer cust = (Customer) item.getModelObject();
-				item.add(new Label("customerId", Model.of(cust.getCustomerId())));
-				item.add(new Label("firstName", Model.of(cust.getFirstName())));
-				item.add(new Label("lastName", Model.of(cust.getLastName())));
+                } else {
+                    info(">>> clicked without value <<<");
+                }
+            }
 
-			}
+        });
+        add(form);
 
-		};
-		add(listView);
-	}
+        PageableListView<Customer> listView = new PageableListView<Customer>(LISTVIEW_ID, customerListModel, 5) {
 
+            @Override
+            protected void populateItem(ListItem<Customer> item) {
+                Customer cust = item.getModelObject();
+                item.add(new Label("customerId", Model.of(cust.getCustomerId())));
+                item.add(new Label("firstName", Model.of(cust.getFirstName())));
+                item.add(new Label("lastName", Model.of(cust.getLastName())));
+
+            }
+
+        };
+        add(listView);
+    }
 }
