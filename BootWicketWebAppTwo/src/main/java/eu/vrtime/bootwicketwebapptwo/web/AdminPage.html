@@ -1,0 +1,19 @@
+<wicket:extend>
+	<div class="well" wicket:id="labelAdminPage"></div>
+	<form wicket:id="form">
+		<fieldset>
+			<label>customerId</label><br /> <input wicket:id="customerId"><br />
+		</fieldset>
+		<br /> <input wicket:id="submit" type="submit" value="search">
+	</form>
+	<span wicket:id="feedback">feedbackmessages will be put here</span>
+	<div class="well">
+		<table>
+			<tr wicket:id="listView">
+				<td><span wicket:id="customerId"></span></td>
+				<td><span wicket:id="firstName"></span></td>
+				<td><span wicket:id="lastName"></span></td>
+			</tr>
+		</table>
+	</div>
+</wicket:extend>
