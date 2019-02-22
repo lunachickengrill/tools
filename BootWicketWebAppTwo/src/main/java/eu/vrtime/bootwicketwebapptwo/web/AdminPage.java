@@ -32,10 +32,16 @@ public class AdminPage extends AbstractBasePage {
 	private static final String LISTVIEW_ID = "listView";
 	private static final String FORM_ID = "form";
 	private static final String FORM_CUSTOMERID = "customerId";
+	private static final String FORM_FIRSTNAME = "firstName";
+	private static final String FORM_LASTNAME ="lastName";
 	private static final String FORM_SUBMIT = "submit";
 	private FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
 
 	private Long customerId;
+	private String firstName;
+	private String lastName;
+
+//	private Long customerId;
 
 	private IModel<List<Customer>> customerListModel = new LoadableDetachableModel<List<Customer>>() {
 		@Override
@@ -65,10 +71,16 @@ public class AdminPage extends AbstractBasePage {
 
 		Form form = new Form(FORM_ID);
 
-		CompoundPropertyModel<Customer> model = new CompoundPropertyModel<Customer>(customer);
+		/**
+		 * changing the CompoundPropertyModel from Customer.class to AdminPage.class
+		 */
+//		CompoundPropertyModel<Customer> model = new CompoundPropertyModel<Customer>(customer);
+		CompoundPropertyModel<AdminPage> model = new CompoundPropertyModel<AdminPage>(this);
 
 		form.setDefaultModel(model);
 		form.add(new TextField<>(FORM_CUSTOMERID));
+		form.add(new TextField<>(FORM_FIRSTNAME));
+		form.add(new TextField<>(FORM_LASTNAME));
 		form.add(new Button(FORM_SUBMIT) {
 
 			private static final long serialVersionUID = -2644986353744688237L;
@@ -103,4 +115,29 @@ public class AdminPage extends AbstractBasePage {
 		};
 		add(listView);
 	}
+
+	public Long getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(Long customerId) {
+		this.customerId = customerId;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
 }
