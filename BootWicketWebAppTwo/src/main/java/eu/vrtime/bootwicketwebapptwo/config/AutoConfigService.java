@@ -1,5 +1,10 @@
 package eu.vrtime.bootwicketwebapptwo.config;
 
+
+
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +20,13 @@ public class AutoConfigService {
 	private static final String CUST1_FIRSTNAME = "Hansi";
 	private static final String CUST1_LASTNAME = "Meier";
 	
+	private static final Long CUST2_ID = new Long("456");
+	private static final String CUST2_FIRSTNAME ="Hugo";
+	private static final String CUST2_LASTNAME = "Pürstl";
+	
+	private List<Customer> customerList = new ArrayList<>();
+	
+	
 	private CustomerRepository customerRepository;
 	
 	@Autowired
@@ -24,10 +36,12 @@ public class AutoConfigService {
 	
 	@PostConstruct
 	private void createDummyCustomer() {
-		Customer cust = new Customer(CUST1_ID);
-		cust.setFirstName(CUST1_FIRSTNAME);
-		cust.setLastName(CUST1_LASTNAME);
-		customerRepository.saveAndFlush(cust);
+		customerList.add(new Customer(CUST1_ID, CUST1_FIRSTNAME,CUST1_LASTNAME));
+		customerList.add(new Customer(CUST2_ID, CUST2_FIRSTNAME, CUST2_LASTNAME));
+		
+		customerRepository.saveAll(customerList);
+		customerRepository.flush();
+
 	}
 
 }

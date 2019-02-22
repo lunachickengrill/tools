@@ -16,10 +16,12 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.springframework.data.jpa.domain.Specification;
 
 import eu.vrtime.bootwicketwebapptwo.model.Customer;
 import eu.vrtime.bootwicketwebapptwo.repositories.CustomerRepository;
 import eu.vrtime.bootwicketwebapptwo.repositories.CustomerServiceRepository;
+import eu.vrtime.bootwicketwebapptwo.repositories.CustomerSpecification;
 
 public class AdminPage extends AbstractBasePage {
 
@@ -33,20 +35,23 @@ public class AdminPage extends AbstractBasePage {
 	private static final String FORM_ID = "form";
 	private static final String FORM_CUSTOMERID = "customerId";
 	private static final String FORM_FIRSTNAME = "firstName";
-	private static final String FORM_LASTNAME ="lastName";
+	private static final String FORM_LASTNAME = "lastName";
 	private static final String FORM_SUBMIT = "submit";
 	private FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
 
-	private Long customerId;
-	private String firstName;
-	private String lastName;
+	// private Long customerId;
+	// private String firstName;
+	// private String lastName;
 
-//	private Long customerId;
+	private Long customerId;
+	
+	private Specification<Customer> spec;
 
 	private IModel<List<Customer>> customerListModel = new LoadableDetachableModel<List<Customer>>() {
 		@Override
 		protected List<Customer> load() {
-			return customerId != null ? customerRepository.findByCustomerId(customerId) : emptyList();
+//			return customerId != null ? customerRepository.findByCustomerId(customerId) : emptyList();
+			return customerRepository.findAll(spec);
 		}
 	};
 
@@ -74,8 +79,14 @@ public class AdminPage extends AbstractBasePage {
 		/**
 		 * changing the CompoundPropertyModel from Customer.class to AdminPage.class
 		 */
-//		CompoundPropertyModel<Customer> model = new CompoundPropertyModel<Customer>(customer);
-		CompoundPropertyModel<AdminPage> model = new CompoundPropertyModel<AdminPage>(this);
+		CompoundPropertyModel<Customer> model = new CompoundPropertyModel<Customer>(customer);
+
+		/**
+		 * switching to CompoundPropertyModel AdminPage to Customer to test JPA
+		 * specifications
+		 */
+		// CompoundPropertyModel<AdminPage> model = new
+		// CompoundPropertyModel<AdminPage>(this);
 
 		form.setDefaultModel(model);
 		form.add(new TextField<>(FORM_CUSTOMERID));
@@ -87,15 +98,17 @@ public class AdminPage extends AbstractBasePage {
 
 			@Override
 			public void onSubmit() {
+				
+				spec = new CustomerSpecification(customer);
 
-				if (model.getObject().getCustomerId() != null) {
-					customerId = model.getObject().getCustomerId();
-
-					info(">>> submit with value " + customerId + " <<<");
-
-				} else {
-					info(">>> clicked without value <<<");
-				}
+//				if (model.getObject().getCustomerId() != null) {
+//					customerId = model.getObject().getCustomerId();
+//
+//					info(">>> submit with value " + customerId + " <<<");
+//
+//				} else {
+//					info(">>> clicked without value <<<");
+//				}
 			}
 
 		});
@@ -124,20 +137,24 @@ public class AdminPage extends AbstractBasePage {
 		this.customerId = customerId;
 	}
 
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+	/**
+	 * switching to CompoundPropertyModel AdminPage to Customer to test JPA
+	 * specifications
+	 */
+	// public String getFirstName() {
+	// return firstName;
+	// }
+	//
+	// public void setFirstName(String firstName) {
+	// this.firstName = firstName;
+	// }
+	//
+	// public String getLastName() {
+	// return lastName;
+	// }
+	//
+	// public void setLastName(String lastName) {
+	// this.lastName = lastName;
+	// }
 
 }

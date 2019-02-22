@@ -34,6 +34,12 @@ public class Customer extends AbstractBaseEntity implements Serializable {
 	public Customer(final Long customerId) {
 		this.customerId = customerId;
 	}
+	
+	public Customer(final Long customerId, final String firstName, final String lastName) {
+		this.customerId=customerId;
+		this.firstName=firstName;
+		this.lastName=lastName;
+	}
 
 	public Long getCustomerId() {
 		return customerId;

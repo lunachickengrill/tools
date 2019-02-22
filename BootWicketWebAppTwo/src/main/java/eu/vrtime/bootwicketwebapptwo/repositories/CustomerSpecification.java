@@ -1,0 +1,44 @@
+package eu.vrtime.bootwicketwebapptwo.repositories;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
+import org.springframework.data.jpa.domain.Specification;
+
+import eu.vrtime.bootwicketwebapptwo.model.Customer;
+
+public class CustomerSpecification implements Specification<Customer> {
+
+	private Customer filter;
+
+	public CustomerSpecification(final Customer filter) {
+		super();
+		this.filter = filter;
+	}
+
+	@Override
+	public Predicate toPredicate(Root<Customer> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+
+		Predicate predicate = criteriaBuilder.conjunction();
+
+		if (filter.getCustomerId() != null) {
+			predicate.getExpressions().add(criteriaBuilder.equal(root.get("customerId"), filter.getCustomerId()));
+		}
+
+		if (filter.getFirstName() != null) {
+			predicate.getExpressions().add(criteriaBuilder.like(root.get("firstName"), filter.getFirstName()));
+		}
+
+		if (filter.getLastName() != null) {
+			predicate.getExpressions().add(criteriaBuilder.like(root.get("lastName"), filter.getLastName()));
+		}
+
+		if (filter.getCustomerId() == null & filter.getFirstName() == null && filter.getLastName() == null) {
+			predicate.getExpressions().add(criteriaBuilder.equal(root.get("customerId"), -1));
+		}
+		return predicate;
+	}
+
+}
