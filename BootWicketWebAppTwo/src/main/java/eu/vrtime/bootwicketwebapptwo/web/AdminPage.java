@@ -2,8 +2,8 @@ package eu.vrtime.bootwicketwebapptwo.web;
 
 import static java.util.Collections.emptyList;
 
-import java.util.Collections;
 import java.util.List;
+
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -23,84 +23,84 @@ import eu.vrtime.bootwicketwebapptwo.repositories.CustomerServiceRepository;
 
 public class AdminPage extends AbstractBasePage {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 9076868135610334317L;
-    private static final String LABEL_ADMINPAGE_ID = "labelAdminPage";
-    private static final String LABLE_ADMINPAGE_MODEL = "Admin Page Label";
-    private static final String LISTVIEW_ID = "listView";
-    private static final String FORM_ID = "form";
-    private static final String FORM_CUSTOMERID = "customerId";
-    private static final String FORM_SUBMIT = "submit";
-    private FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 9076868135610334317L;
+	private static final String LABEL_ADMINPAGE_ID = "labelAdminPage";
+	private static final String LABLE_ADMINPAGE_MODEL = "Admin Page Label";
+	private static final String LISTVIEW_ID = "listView";
+	private static final String FORM_ID = "form";
+	private static final String FORM_CUSTOMERID = "customerId";
+	private static final String FORM_SUBMIT = "submit";
+	private FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
 
-    private Long customerId;
+	private Long customerId;
 
-    private IModel<List<Customer>> customerListModel = new LoadableDetachableModel<List<Customer>>() {
-        @Override
-        protected List<Customer> load() {
-            return customerId != null ? customerRepository.findByCustomerId(customerId) : emptyList();
-        }
-    };
-    
-    Customer customer = new Customer();
+	private IModel<List<Customer>> customerListModel = new LoadableDetachableModel<List<Customer>>() {
+		@Override
+		protected List<Customer> load() {
+			return customerId != null ? customerRepository.findByCustomerId(customerId) : emptyList();
+		}
+	};
 
-    @SpringBean
-    private CustomerRepository customerRepository;
+	Customer customer = new Customer();
 
-    @SpringBean
-    private CustomerServiceRepository serviceRepository;
+	@SpringBean
+	private CustomerRepository customerRepository;
 
-    public AdminPage() {
-        super();
-    }
+	@SpringBean
+	private CustomerServiceRepository serviceRepository;
 
-    @Override
-    protected void onInitialize() {
-        super.onInitialize();
+	public AdminPage() {
+		super();
+	}
 
-        add(new Label(LABEL_ADMINPAGE_ID, LABLE_ADMINPAGE_MODEL));
-        add(feedbackPanel);
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
 
-        Form form = new Form(FORM_ID);
+		add(new Label(LABEL_ADMINPAGE_ID, LABLE_ADMINPAGE_MODEL));
+		add(feedbackPanel);
 
-        CompoundPropertyModel<Customer> model = new CompoundPropertyModel<Customer>(customer);
+		Form form = new Form(FORM_ID);
 
-        form.setDefaultModel(model);
-        form.add(new TextField<>(FORM_CUSTOMERID));
-        form.add(new Button(FORM_SUBMIT) {
+		CompoundPropertyModel<Customer> model = new CompoundPropertyModel<Customer>(customer);
 
-            private static final long serialVersionUID = -2644986353744688237L;
+		form.setDefaultModel(model);
+		form.add(new TextField<>(FORM_CUSTOMERID));
+		form.add(new Button(FORM_SUBMIT) {
 
-            @Override
-            public void onSubmit() {
+			private static final long serialVersionUID = -2644986353744688237L;
 
-                if (model.getObject().getCustomerId() != null) {
-                    customerId = model.getObject().getCustomerId();
+			@Override
+			public void onSubmit() {
 
-                    info(">>> submit with value " + customerId + " <<<");
+				if (model.getObject().getCustomerId() != null) {
+					customerId = model.getObject().getCustomerId();
 
-                } else {
-                    info(">>> clicked without value <<<");
-                }
-            }
+					info(">>> submit with value " + customerId + " <<<");
 
-        });
-        add(form);
+				} else {
+					info(">>> clicked without value <<<");
+				}
+			}
 
-        PageableListView<Customer> listView = new PageableListView<Customer>(LISTVIEW_ID, customerListModel, 5) {
+		});
+		add(form);
 
-            @Override
-            protected void populateItem(ListItem<Customer> item) {
-                Customer cust = item.getModelObject();
-                item.add(new Label("customerId", Model.of(cust.getCustomerId())));
-                item.add(new Label("firstName", Model.of(cust.getFirstName())));
-                item.add(new Label("lastName", Model.of(cust.getLastName())));
+		PageableListView<Customer> listView = new PageableListView<Customer>(LISTVIEW_ID, customerListModel, 5) {
 
-            }
+			@Override
+			protected void populateItem(ListItem<Customer> item) {
+				Customer cust = item.getModelObject();
+				item.add(new Label("customerId", Model.of(cust.getCustomerId())));
+				item.add(new Label("firstName", Model.of(cust.getFirstName())));
+				item.add(new Label("lastName", Model.of(cust.getLastName())));
 
-        };
-        add(listView);
-    }
+			}
+
+		};
+		add(listView);
+	}
 }
