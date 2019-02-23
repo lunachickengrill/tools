@@ -11,6 +11,10 @@ import eu.vrtime.bootwicketwebapptwo.model.Customer;
 
 public class CustomerSpecification implements Specification<Customer> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8683956488746333808L;
 	private Customer filter;
 
 	public CustomerSpecification(final Customer filter) {
@@ -19,24 +23,28 @@ public class CustomerSpecification implements Specification<Customer> {
 	}
 
 	@Override
-	public Predicate toPredicate(Root<Customer> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+	public Predicate toPredicate(Root<Customer> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
-		Predicate predicate = criteriaBuilder.conjunction();
+		Predicate predicate = cb.conjunction();
 
 		if (filter.getCustomerId() != null) {
-			predicate.getExpressions().add(criteriaBuilder.equal(root.get("customerId"), filter.getCustomerId()));
+			predicate.getExpressions().add(cb.equal(root.get("customerId"), filter.getCustomerId()));
 		}
 
 		if (filter.getFirstName() != null) {
-			predicate.getExpressions().add(criteriaBuilder.like(root.get("firstName"), filter.getFirstName()));
+			predicate.getExpressions()
+					.add(cb.like(cb.lower(root.get("firstName")), "%" + filter.getFirstName().toLowerCase() + "%"));
 		}
 
 		if (filter.getLastName() != null) {
-			predicate.getExpressions().add(criteriaBuilder.like(root.get("lastName"), filter.getLastName()));
+			// predicate.getExpressions().add(cb.like(root.get("lastName"), filter.getLastName()));
+			predicate.getExpressions()
+					.add(cb.like(cb.lower(root.get("lastName")), "%" + filter.getLastName().toLowerCase() + "%"));
 		}
 
 		if (filter.getCustomerId() == null & filter.getFirstName() == null && filter.getLastName() == null) {
-			predicate.getExpressions().add(criteriaBuilder.equal(root.get("customerId"), -1));
+			predicate.getExpressions().add(cb.equal(root.get("customerId"), -1));
+
 		}
 		return predicate;
 	}

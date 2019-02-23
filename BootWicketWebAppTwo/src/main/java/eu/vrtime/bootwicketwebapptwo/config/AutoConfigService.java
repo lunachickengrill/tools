@@ -21,7 +21,7 @@ public class AutoConfigService {
 	private static final String CUST1_LASTNAME = "Meier";
 	
 	private static final Long CUST2_ID = new Long("456");
-	private static final String CUST2_FIRSTNAME ="Hugo";
+	private static final String CUST2_FIRSTNAME ="Freddi";
 	private static final String CUST2_LASTNAME = "Pürstl";
 	
 	private List<Customer> customerList = new ArrayList<>();
