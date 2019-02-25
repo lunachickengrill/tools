@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
+import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -37,21 +38,18 @@ public class AdminPage extends AbstractBasePage {
 	private static final String FORM_FIRSTNAME = "firstName";
 	private static final String FORM_LASTNAME = "lastName";
 	private static final String FORM_SUBMIT = "submit";
+	private static final String NAVIGATOR = "navigator";
 	private FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
 
-	// private Long customerId;
-	// private String firstName;
-	// private String lastName;
-
 	private Long customerId;
-	
+
 	private Specification<Customer> spec;
 
 	private IModel<List<Customer>> customerListModel = new LoadableDetachableModel<List<Customer>>() {
 		@Override
 		protected List<Customer> load() {
 //			return customerId != null ? customerRepository.findByCustomerId(customerId) : emptyList();
-			return customerRepository.findAll(spec);
+			return spec != null ? customerRepository.findAll(spec) : emptyList();
 		}
 	};
 
@@ -75,18 +73,7 @@ public class AdminPage extends AbstractBasePage {
 		add(feedbackPanel);
 
 		Form form = new Form(FORM_ID);
-
-		/**
-		 * changing the CompoundPropertyModel from Customer.class to AdminPage.class
-		 */
 		CompoundPropertyModel<Customer> model = new CompoundPropertyModel<Customer>(customer);
-
-		/**
-		 * switching to CompoundPropertyModel AdminPage to Customer to test JPA
-		 * specifications
-		 */
-		// CompoundPropertyModel<AdminPage> model = new
-		// CompoundPropertyModel<AdminPage>(this);
 
 		form.setDefaultModel(model);
 		form.add(new TextField<>(FORM_CUSTOMERID));
@@ -98,23 +85,15 @@ public class AdminPage extends AbstractBasePage {
 
 			@Override
 			public void onSubmit() {
-				
+
 				spec = new CustomerSpecification(customer);
 
-//				if (model.getObject().getCustomerId() != null) {
-//					customerId = model.getObject().getCustomerId();
-//
-//					info(">>> submit with value " + customerId + " <<<");
-//
-//				} else {
-//					info(">>> clicked without value <<<");
-//				}
 			}
 
 		});
 		add(form);
 
-		PageableListView<Customer> listView = new PageableListView<Customer>(LISTVIEW_ID, customerListModel, 5) {
+		PageableListView<Customer> listView = new PageableListView<Customer>(LISTVIEW_ID, customerListModel, 3) {
 
 			@Override
 			protected void populateItem(ListItem<Customer> item) {
@@ -127,6 +106,7 @@ public class AdminPage extends AbstractBasePage {
 
 		};
 		add(listView);
+		add(new PagingNavigator(NAVIGATOR, listView));
 	}
 
 	public Long getCustomerId() {
@@ -136,25 +116,5 @@ public class AdminPage extends AbstractBasePage {
 	public void setCustomerId(Long customerId) {
 		this.customerId = customerId;
 	}
-
-	/**
-	 * switching to CompoundPropertyModel AdminPage to Customer to test JPA
-	 * specifications
-	 */
-	// public String getFirstName() {
-	// return firstName;
-	// }
-	//
-	// public void setFirstName(String firstName) {
-	// this.firstName = firstName;
-	// }
-	//
-	// public String getLastName() {
-	// return lastName;
-	// }
-	//
-	// public void setLastName(String lastName) {
-	// this.lastName = lastName;
-	// }
 
 }
