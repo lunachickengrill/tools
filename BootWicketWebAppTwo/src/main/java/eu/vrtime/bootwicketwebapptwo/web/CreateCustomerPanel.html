@@ -1,13 +1,12 @@
 <wicket:panel>
-	<span wicket:id="feedback">feedbackmessages will be put here</span>
+	<div class="well" wicket:id="feedback"></div>
 	<div wicket:id="createCustomerPanelLabel"></div>
-	<form wicket:id="createCustomerForm">
+	<form class="well" wicket:id="createCustomerForm">
 		<div class="form-group">
-			<label>CustomerId</label><br />
-			<input wicket:id="customerId"><br /> <label>FirstName</label><br />
-			<input wicket:id="firstName"><br /> <label>Lastname</label><br />
-			<input wicket:id="lastName"><br /> <label>Email</label><br />
-			<input wicket:id="emailAddress"><br />
+			<label>CustomerId</label><br /> <input wicket:id="customerId"><br />
+			<label>FirstName</label><br /> <input wicket:id="firstName"><br />
+			<label>Lastname</label><br /> <input wicket:id="lastName"><br />
+			<label>Email</label><br /> <input wicket:id="emailAddress"><br />
 		</div>
 		<div>
 			<br /> <input class="btn btn-default" wicket:id="createCustomer"

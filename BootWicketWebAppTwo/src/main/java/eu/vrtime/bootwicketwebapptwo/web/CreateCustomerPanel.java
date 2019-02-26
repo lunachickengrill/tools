@@ -19,14 +19,15 @@ public class CreateCustomerPanel extends Panel {
 	 * 
 	 */
 	private static final long serialVersionUID = -6374929067460432106L;
-	public static final String FORM_ID = "createCustomerForm";
-	public static final String CUSTOMERID_ID = "customerId";
-	public static final String FIRSTNAME_ID = "firstName";
-	public static final String LASTNAME_ID = "lastName";
-	public static final String EMAIL_ID = "emailAddress";
-	public static final String CREATEBTN_ID = "createCustomer";
-	public static final String FEEDBACKPANEL = "feedback";
+	private static final String FORM_ID = "createCustomerForm";
+	private static final String CUSTOMERID_ID = "customerId";
+	private static final String FIRSTNAME_ID = "firstName";
+	private static final String LASTNAME_ID = "lastName";
+	private static final String EMAIL_ID = "emailAddress";
+	private static final String CREATEBTN_ID = "createCustomer";
+	private static final String FEEDBACKPANEL_ID = "feedback";
 	private FeedbackPanel feedbackPanel;
+
 
 	private Customer customer = new Customer();
 
@@ -37,9 +38,8 @@ public class CreateCustomerPanel extends Panel {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
+		add(feedbackPanel = new FeedbackPanel(FEEDBACKPANEL_ID));
 		add(new Label("createCustomerPanelLabel", "the create customer panel label"));
-		feedbackPanel = new FeedbackPanel(FEEDBACKPANEL);
-		add(feedbackPanel);
 
 		Form<Customer> createCustomerForm = new Form<Customer>(FORM_ID);
 		createCustomerForm.setDefaultModel(new CompoundPropertyModel<>(customer));
