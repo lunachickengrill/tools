@@ -7,6 +7,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.modelmapper.ModelMapper;
 
 import eu.vrtime.BootWicketWebApp.model.Customer;
@@ -35,10 +36,10 @@ public class CreateCustomerPanel extends Panel {
 	
 	private CompoundPropertyModel<CustomerDTO> model;
 
-	@Inject
+	@SpringBean
 	private CustomerRepository customerRepository;
 
-	@Inject
+	@SpringBean
 	private ModelMapper mapper;
 
 	public CreateCustomerPanel(String id) {

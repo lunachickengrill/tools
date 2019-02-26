@@ -37,13 +37,17 @@ public class CustomerSpecification implements Specification<Customer> {
 		}
 
 		if (filter.getLastName() != null) {
-			// predicate.getExpressions().add(cb.like(root.get("lastName"), filter.getLastName()));
 			predicate.getExpressions()
 					.add(cb.like(cb.lower(root.get("lastName")), "%" + filter.getLastName().toLowerCase() + "%"));
 		}
 
-		if (filter.getCustomerId() == null & filter.getFirstName() == null && filter.getLastName() == null) {
-			predicate.getExpressions().add(cb.equal(root.get("customerId"), -1));
+		if (filter.getEmailAddress() != null) {
+			predicate.getExpressions()
+					.add(cb.like(cb.lower(root.get("emailAddress")), "%" + filter.getEmailAddress().toLowerCase() + "%"));
+		}
+
+		if (filter.getCustomerId() == null & filter.getFirstName() == null && filter.getLastName() == null && filter.getEmailAddress() == null) {
+			predicate.getExpressions().add(cb.equal(root.get("oid"), -1));
 
 		}
 		return predicate;

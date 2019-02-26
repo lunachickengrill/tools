@@ -28,17 +28,27 @@ public class Customer extends AbstractBaseEntity implements Serializable {
 	@Column(nullable = true, unique = false, updatable = true)
 	private String lastName;
 
+	@Column(nullable = true, unique = true, updatable = true)
+	private String emailAddress;
+
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<CustomerService> services = new HashSet<>();
 
 	public Customer(final Long customerId) {
 		this.customerId = customerId;
 	}
-	
+
 	public Customer(final Long customerId, final String firstName, final String lastName) {
-		this.customerId=customerId;
-		this.firstName=firstName;
-		this.lastName=lastName;
+		this.customerId = customerId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+
+	public Customer(final Long customerId, final String firstName, final String lastName, final String emailAddress) {
+		this.customerId = customerId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.emailAddress = emailAddress;
 	}
 
 	public Long getCustomerId() {
@@ -63,6 +73,14 @@ public class Customer extends AbstractBaseEntity implements Serializable {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	public String getEmailAddress() {
+		return emailAddress;
+	}
+
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
 	}
 
 	public Set<CustomerService> getServices() {
