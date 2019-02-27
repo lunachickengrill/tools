@@ -28,7 +28,7 @@ public class Customer extends AbstractBaseEntity implements Serializable {
 	@Column(nullable = true, unique = false, updatable = true)
 	private String lastName;
 
-	@Column(nullable = true, unique = true, updatable = true)
+	@Column(nullable = false, unique = true, updatable = true)
 	private String emailAddress;
 
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -4,14 +4,17 @@ import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddres
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.RangeValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 
 import eu.vrtime.bootwicketwebapptwo.model.Customer;
+import eu.vrtime.bootwicketwebapptwo.repositories.CustomerRepository;
 
 public class CreateCustomerPanel extends Panel {
 
@@ -28,11 +31,16 @@ public class CreateCustomerPanel extends Panel {
 	private static final String FEEDBACKPANEL_ID = "feedback";
 	private FeedbackPanel feedbackPanel;
 
+	private Customer customer;
 
-	private Customer customer = new Customer();
+
+	@SpringBean
+	private CustomerRepository customerRepository;
 
 	public CreateCustomerPanel(final String id) {
 		super(id);
+		this.customer= new Customer();
+
 	}
 
 	@Override
@@ -42,7 +50,9 @@ public class CreateCustomerPanel extends Panel {
 		add(new Label("createCustomerPanelLabel", "the create customer panel label"));
 
 		Form<Customer> createCustomerForm = new Form<Customer>(FORM_ID);
-		createCustomerForm.setDefaultModel(new CompoundPropertyModel<>(customer));
+		
+		CompoundPropertyModel<Customer> model = new CompoundPropertyModel<Customer>(customer);
+		createCustomerForm.setDefaultModel(model);
 
 		TextField tfCustomerId = new TextField<>(CUSTOMERID_ID);
 		tfCustomerId.add(new RangeValidator<Long>(new Long("100"), new Long("99999")));
@@ -53,7 +63,7 @@ public class CreateCustomerPanel extends Panel {
 		TextField tfLastName = new TextField<>(LASTNAME_ID);
 		tfLastName.add(StringValidator.lengthBetween(2, 18));
 
-		TextField tfEmail = new TextField<>(EMAIL_ID);
+		TextField tfEmail = new RequiredTextField(EMAIL_ID);
 		tfEmail.add(RfcCompliantEmailAddressValidator.getInstance());
 
 		createCustomerForm.add(tfCustomerId);
@@ -66,6 +76,9 @@ public class CreateCustomerPanel extends Panel {
 			@Override
 			public void onSubmit() {
 				super.onSubmit();
+				Customer cust = (Customer) model.getObject();
+				Customer dbCustomer = customerRepository.saveAndFlush(cust);
+
 				feedbackPanel.info(customer.getCustomerId() + " " + customer.getFirstName() + " "
 						+ customer.getLastName() + " " + customer.getEmailAddress());
 			}

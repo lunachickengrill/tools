@@ -3,27 +3,42 @@
 
 	<span wicket:id="feedback">feedbackmessages will be put here</span>
 
+
 	<form wicket:id="form">
+
 		<div class="form-group">
-			<label>CustomerId</label><br /> <input wicket:id="customerId">
+			<label>CustomerId</label><br /> <input
+				wicket:id="customerId"><br />
 		</div>
+
 		<div class="form-group">
-			<label>Firstname</label><br /> <input wicket:id="firstName"><br />
+			<label>Firstname</label><br /> <input
+				wicket:id="firstName"><br />
 		</div>
+
 		<div class="form-group">
-			<label>Lastname</label><br /> <input wicket:id="lastName"><br />
+			<label>Lastname</label><br /> <input
+				wicket:id="lastName"><br />
 		</div>
+
 		<div class="form-group">
-			<label>Email</label><br /> <input wicket:id="emailAddress"><br />
+			<label>Email</label><br /> <input
+				wicket:id="emailAddress"><br />
 		</div>
+
 		<div>
 			<br /> <input class="btn btn-default" wicket:id="submit"
 				type="submit" value="search">
 		</div>
+
 	</form>
+
 	<div>
 		<a href="#" class="btn btn-default" wicket:id="createCustomerLink">create</a>
-	</div><br/>
+	</div>
+
+	<br />
+
 	<div wicket:id="createCustomerWindow"></div>
 
 	<div class="col-md-12">
@@ -31,6 +46,7 @@
 			<th>CustomerID</th>
 			<th>Firstname</th>
 			<th>Lastname</th>
+			<th>email</th>
 			<tr wicket:id="listView">
 				<td><span wicket:id="customerId"></span></td>
 				<td><span wicket:id="firstName"></span></td>
