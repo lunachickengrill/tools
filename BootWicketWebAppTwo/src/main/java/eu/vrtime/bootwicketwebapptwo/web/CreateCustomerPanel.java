@@ -12,6 +12,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.RangeValidator;
 import org.apache.wicket.validation.validator.StringValidator;
@@ -32,7 +33,9 @@ public class CreateCustomerPanel extends Panel {
 	private static final String EMAIL_ID = "emailAddress";
 	private static final String CREATEBTN_ID = "createCustomer";
 	private static final String FEEDBACKPANEL_ID = "feedback";
+	private static final String PANEL_LABEL_ID = "createCustomerPanelLabel";
 	private FeedbackPanel feedbackPanel;
+	private Label panelLabel;
 	private CompoundPropertyModel<Customer> model;
 
 	private Customer customer;
@@ -46,18 +49,20 @@ public class CreateCustomerPanel extends Panel {
 		this.customer = new Customer();
 		feedbackPanel = new FeedbackPanel(FEEDBACKPANEL_ID);
 	}
-
+	
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
 
 		feedbackPanel.setOutputMarkupId(true);
 		add(feedbackPanel);
-		add(new Label("createCustomerPanelLabel", "the create customer panel label"));
+		panelLabel = new Label(PANEL_LABEL_ID, "create a customer");
+		panelLabel.setOutputMarkupId(true);
+		add(panelLabel);
 
 		createCustomerForm = new Form<Customer>(FORM_ID);
 
-		model = new CompoundPropertyModel<Customer>(new Customer());
+		model = new CompoundPropertyModel<Customer>(customer);
 		createCustomerForm.setDefaultModel(model);
 
 		TextField tfCustomerId = new TextField<>(CUSTOMERID_ID);
@@ -87,12 +92,33 @@ public class CreateCustomerPanel extends Panel {
 				Customer cust = (Customer) model.getObject();
 				Customer dbCustomer = customerRepository.saveAndFlush(cust);
 
-				feedbackPanel.info(dbCustomer.toString());
+//				feedbackPanel.info(dbCustomer.toString());
+			
+				/**
+				 * updating the label with a new model
+				 */
+				
+				panelLabel.setDefaultModel(Model.of("customer with oid " + dbCustomer.getOid() + " created."));
+				
+				/**
+				 * set the current model to null,create a new one with a new customer object and set it as the defaultModel in order to reset textfields when modalwindow is opened the time
+				 */
+				
 				createCustomerForm.setModel(null);
 				model=new CompoundPropertyModel<Customer>(new Customer());
 				createCustomerForm.setDefaultModel(model);
-
+				
+				/**
+				 * adding the components that should be updated by the AjaxRequestTarget
+				 */
+				
+				target.add(panelLabel);
 				target.add(feedbackPanel);
+				
+				/**
+				 * what should this do? It should actually refresh the whole CreateCustomerPanel component. I expect that the textfields are null after the Ajax OnSubmit. However it is not working.
+				 */
+				
 				target.add(this);
 
 			}
