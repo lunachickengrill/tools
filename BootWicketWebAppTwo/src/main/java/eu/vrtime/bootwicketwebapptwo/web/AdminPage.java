@@ -83,6 +83,93 @@ public class AdminPage extends AbstractBasePage {
 
 		add(new Label(LABEL_ADMINPAGE_ID, LABLE_ADMINPAGE_MODEL));
 		add(feedbackPanel);
+		add(createForm(FORM_ID));
+		PageableListView<Customer> listView = createPageableListView(LISTVIEW_ID);
+		add(listView);
+		add(new PagingNavigator(NAVIGATOR, listView));
+		add(createModalWindow(CREATECUSTOMERWINDOW_ID));
+
+//
+//
+//		Form form = new Form(FORM_ID);
+//		CompoundPropertyModel<Customer> model = new CompoundPropertyModel<Customer>(customer);
+//
+//		form.setDefaultModel(model);
+//		form.add(new TextField<>(FORM_CUSTOMERID).setType(Long.class));
+//		form.add(new TextField<>(FORM_FIRSTNAME).add(StringValidator.lengthBetween(2, 18)));
+//		form.add(new TextField<>(FORM_LASTNAME).add(StringValidator.lengthBetween(2, 18)));
+//		form.add(new TextField<>(FORM_MAIL));
+//
+//		form.add(new Button(FORM_SUBMIT) {
+//
+//			private static final long serialVersionUID = -2644986353744688237L;
+//
+//			@Override
+//			public void onSubmit() {
+//
+//				spec = new CustomerSpecification(customer);
+//
+//			}
+//
+//		});
+//
+//		add(form);
+//
+//		/**
+//		 * the PageableListView and PagingNavigator
+//		 */
+//
+//		PageableListView<Customer> listView = new PageableListView<Customer>(LISTVIEW_ID, customerListModel, 3) {
+//
+//			/**
+//			 * 
+//			 */
+//			private static final long serialVersionUID = 1882207820286898651L;
+//
+//			@Override
+//			protected void populateItem(ListItem<Customer> item) {
+//				Customer cust = item.getModelObject();
+//				item.add(new Label("customerId", Model.of(cust.getCustomerId())));
+//				item.add(new Label("firstName", Model.of(cust.getFirstName())));
+//				item.add(new Label("lastName", Model.of(cust.getLastName())));
+//				item.add(new Label("emailAddress", Model.of(cust.getEmailAddress())));
+//
+//			}
+//
+//		};
+//		add(listView);
+//		add(new PagingNavigator(NAVIGATOR, listView));
+//
+//		/**
+//		 * the ModalWindow
+//		 */
+//
+//		createCustomerWindow = new ModalWindow(CREATECUSTOMERWINDOW_ID);
+//		CreateCustomerPanel createCustomerPanel = new CreateCustomerPanel(createCustomerWindow.getContentId());
+//		createCustomerWindow.setContent(createCustomerPanel);
+//		createCustomerWindow.setCookieName("modal-1");
+//		createCustomerWindow.setTitle(Model.of("create customer"));
+//		add(createCustomerWindow);
+//		setOutputMarkupId(true);
+//
+//		add(new AjaxLink<Void>(LINK_CREATE_CUSTOMER) {
+//
+//			/**
+//			 * 
+//			 */
+//			private static final long serialVersionUID = 5218474796306160615L;
+//
+//			@Override
+//			public void onClick(AjaxRequestTarget target) {
+//				createCustomerWindow.show(target);
+//
+//			}
+//
+//		});
+
+	}
+
+	private Form createForm(final String id) {
 
 		/**
 		 * the form
@@ -109,8 +196,10 @@ public class AdminPage extends AbstractBasePage {
 			}
 
 		});
+		return form;
+	}
 
-		add(form);
+	private PageableListView<Customer> createPageableListView(final String id) {
 
 		/**
 		 * the PageableListView and PagingNavigator
@@ -118,9 +207,6 @@ public class AdminPage extends AbstractBasePage {
 
 		PageableListView<Customer> listView = new PageableListView<Customer>(LISTVIEW_ID, customerListModel, 3) {
 
-			/**
-			 * 
-			 */
 			private static final long serialVersionUID = 1882207820286898651L;
 
 			@Override
@@ -134,8 +220,10 @@ public class AdminPage extends AbstractBasePage {
 			}
 
 		};
-		add(listView);
-		add(new PagingNavigator(NAVIGATOR, listView));
+		return listView;
+	}
+
+	private ModalWindow createModalWindow(final String id) {
 
 		/**
 		 * the ModalWindow
@@ -163,8 +251,7 @@ public class AdminPage extends AbstractBasePage {
 			}
 
 		});
-
-		
+		return createCustomerWindow;
 
 	}
 

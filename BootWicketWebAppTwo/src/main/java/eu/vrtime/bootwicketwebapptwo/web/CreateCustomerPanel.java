@@ -1,11 +1,14 @@
 package eu.vrtime.bootwicketwebapptwo.web;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -30,28 +33,31 @@ public class CreateCustomerPanel extends Panel {
 	private static final String CREATEBTN_ID = "createCustomer";
 	private static final String FEEDBACKPANEL_ID = "feedback";
 	private FeedbackPanel feedbackPanel;
+	private CompoundPropertyModel<Customer> model;
 
 	private Customer customer;
-
+	private Form<Customer> createCustomerForm;
 
 	@SpringBean
 	private CustomerRepository customerRepository;
 
 	public CreateCustomerPanel(final String id) {
 		super(id);
-		this.customer= new Customer();
-
+		this.customer = new Customer();
+		feedbackPanel = new FeedbackPanel(FEEDBACKPANEL_ID);
 	}
 
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		add(feedbackPanel = new FeedbackPanel(FEEDBACKPANEL_ID));
+
+		feedbackPanel.setOutputMarkupId(true);
+		add(feedbackPanel);
 		add(new Label("createCustomerPanelLabel", "the create customer panel label"));
 
-		Form<Customer> createCustomerForm = new Form<Customer>(FORM_ID);
-		
-		CompoundPropertyModel<Customer> model = new CompoundPropertyModel<Customer>(customer);
+		createCustomerForm = new Form<Customer>(FORM_ID);
+
+		model = new CompoundPropertyModel<Customer>(new Customer());
 		createCustomerForm.setDefaultModel(model);
 
 		TextField tfCustomerId = new TextField<>(CUSTOMERID_ID);
@@ -63,7 +69,7 @@ public class CreateCustomerPanel extends Panel {
 		TextField tfLastName = new TextField<>(LASTNAME_ID);
 		tfLastName.add(StringValidator.lengthBetween(2, 18));
 
-		TextField tfEmail = new RequiredTextField(EMAIL_ID);
+		TextField tfEmail = new RequiredTextField<>(EMAIL_ID);
 		tfEmail.add(RfcCompliantEmailAddressValidator.getInstance());
 
 		createCustomerForm.add(tfCustomerId);
@@ -71,20 +77,28 @@ public class CreateCustomerPanel extends Panel {
 		createCustomerForm.add(tfLastName);
 		createCustomerForm.add(tfEmail);
 
-		Button createBtn = new Button(CREATEBTN_ID) {
+		createCustomerForm.add(new AjaxButton(CREATEBTN_ID) {
+
+			private static final long serialVersionUID = 6305472785650865717L;
 
 			@Override
-			public void onSubmit() {
+			public void onSubmit(AjaxRequestTarget target) {
 				super.onSubmit();
 				Customer cust = (Customer) model.getObject();
 				Customer dbCustomer = customerRepository.saveAndFlush(cust);
 
-				feedbackPanel.info(customer.getCustomerId() + " " + customer.getFirstName() + " "
-						+ customer.getLastName() + " " + customer.getEmailAddress());
+				feedbackPanel.info(dbCustomer.toString());
+				createCustomerForm.setModel(null);
+				model=new CompoundPropertyModel<Customer>(new Customer());
+				createCustomerForm.setDefaultModel(model);
+
+				target.add(feedbackPanel);
+				target.add(this);
+
 			}
 
-		};
-		createCustomerForm.add(createBtn);
+		});
+		setOutputMarkupId(true);
 		add(createCustomerForm);
 
 	}
