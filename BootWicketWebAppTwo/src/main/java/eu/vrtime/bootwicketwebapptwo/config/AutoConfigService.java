@@ -38,13 +38,19 @@ public class AutoConfigService {
 	private static final String CUST5_FIRSTNAME = "Franz";
 	private static final String CUST5_LASTNAME = "Hofer";
 	private static final String CUST5_MAIL = "franz.hofer@upc.at";
+	
+	private static final Long CUST6_ID = new Long("753");
+	private static final String CUST6_FIRSTNAME = "Susi";
+	private static final String CUST6_LASTNAME = "Hotti";
+	private static final String CUST6_MAIL = "susiishot@upc.at";
 
 	private List<Customer> customers = Arrays.asList(
 			new Customer(CUST1_ID, CUST1_FIRSTNAME, CUST1_LASTNAME, CUST1_MAIL),
 			new Customer(CUST2_ID, CUST2_FIRSTNAME, CUST2_LASTNAME, CUST2_MAIL),
 			new Customer(CUST3_ID, CUST3_FIRSTNAME, CUST3_LASTNAME, CUST3_MAIL),
 			new Customer(CUST4_ID, CUST4_FIRSTNAME, CUST4_LASTNAME, CUST4_MAIL),
-			new Customer(CUST5_ID, CUST5_FIRSTNAME, CUST5_LASTNAME, CUST5_MAIL));
+			new Customer(CUST5_ID, CUST5_FIRSTNAME, CUST5_LASTNAME, CUST5_MAIL),
+			new Customer(CUST6_ID, CUST6_FIRSTNAME, CUST6_LASTNAME, CUST6_MAIL));
 
 	private CustomerRepository customerRepository;
 
