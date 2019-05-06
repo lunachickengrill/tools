@@ -16,7 +16,7 @@ public class Product extends AbstractBaseEntity {
 
 	@Column(nullable = true, unique = false, updatable = true)
 	private String description;
-
+	
 	public Product(final String productId, final ProductStatus productStatus) {
 		this.productId = productId;
 		this.productStatus = productStatus;

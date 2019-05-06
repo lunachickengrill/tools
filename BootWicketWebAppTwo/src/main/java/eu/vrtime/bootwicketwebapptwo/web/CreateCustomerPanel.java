@@ -34,6 +34,12 @@ public class CreateCustomerPanel extends Panel {
 	private static final String CREATEBTN_ID = "createCustomer";
 	private static final String FEEDBACKPANEL_ID = "feedback";
 	private static final String PANEL_LABEL_ID = "createCustomerPanelLabel";
+
+	TextField tfCustomerId = new TextField<>(CUSTOMERID_ID);
+	TextField tfFirstName = new TextField<>(FIRSTNAME_ID);
+	TextField tfLastName = new TextField<>(LASTNAME_ID);
+	TextField tfEmail = new RequiredTextField<>(EMAIL_ID);
+
 	private FeedbackPanel feedbackPanel;
 	private Label panelLabel;
 	private CompoundPropertyModel<Customer> model;
@@ -49,7 +55,7 @@ public class CreateCustomerPanel extends Panel {
 		this.customer = new Customer();
 		feedbackPanel = new FeedbackPanel(FEEDBACKPANEL_ID);
 	}
-	
+
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
@@ -65,16 +71,16 @@ public class CreateCustomerPanel extends Panel {
 		model = new CompoundPropertyModel<Customer>(customer);
 		createCustomerForm.setDefaultModel(model);
 
-		TextField tfCustomerId = new TextField<>(CUSTOMERID_ID);
+//		TextField tfCustomerId = new TextField<>(CUSTOMERID_ID);
 		tfCustomerId.add(new RangeValidator<Long>(new Long("100"), new Long("99999")));
 
-		TextField tfFirstName = new TextField<>(FIRSTNAME_ID);
-		tfFirstName.add(StringValidator.lengthBetween(2, 18));
+//		TextField tfFirstName = new TextField<>(FIRSTNAME_ID);
+		tfFirstName.add(StringValidator.lengthBetween(0, 18));
 
-		TextField tfLastName = new TextField<>(LASTNAME_ID);
-		tfLastName.add(StringValidator.lengthBetween(2, 18));
+//		TextField tfLastName = new TextField<>(LASTNAME_ID);
+		tfLastName.add(StringValidator.lengthBetween(0, 18));
 
-		TextField tfEmail = new RequiredTextField<>(EMAIL_ID);
+//		TextField tfEmail = new RequiredTextField<>(EMAIL_ID);
 		tfEmail.add(RfcCompliantEmailAddressValidator.getInstance());
 
 		createCustomerForm.add(tfCustomerId);
@@ -92,38 +98,41 @@ public class CreateCustomerPanel extends Panel {
 				Customer cust = (Customer) model.getObject();
 				Customer dbCustomer = customerRepository.saveAndFlush(cust);
 
-//				feedbackPanel.info(dbCustomer.toString());
-			
 				/**
 				 * updating the label with a new model
 				 */
-				
+				feedbackPanel.info("Customer created");
 				panelLabel.setDefaultModel(Model.of("customer with oid " + dbCustomer.getOid() + " created."));
-				
+
 				/**
-				 * set the current model to null,create a new one with a new customer object and set it as the defaultModel in order to reset textfields when modalwindow is opened the time
+				 * set the current model to null,create a new one with a new customer object and
+				 * set it as the defaultModel in order to reset textfields when modalwindow is
+				 * opened the time
 				 */
-				
-				createCustomerForm.setModel(null);
-				model=new CompoundPropertyModel<Customer>(new Customer());
+
+				model = new CompoundPropertyModel<Customer>(new Customer());
 				createCustomerForm.setDefaultModel(model);
-				
+
 				/**
 				 * adding the components that should be updated by the AjaxRequestTarget
 				 */
-				
+
 				target.add(panelLabel);
 				target.add(feedbackPanel);
-				
+
 				/**
-				 * what should this do? It should actually refresh the whole CreateCustomerPanel component. I expect that the textfields are null after the Ajax OnSubmit. However it is not working.
+				 * what should this do? It should actually refresh the whole CreateCustomerPanel
+				 * component. I expect that the textfields are null after the Ajax OnSubmit.
+				 * However it is not working.
 				 */
-				
+
 				target.add(this);
 
 			}
 
-		});
+		}
+
+		);
 		setOutputMarkupId(true);
 		add(createCustomerForm);
 

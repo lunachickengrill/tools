@@ -1,7 +1,6 @@
 package eu.vrtime.bootwicketwebapptwo.web;
 
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.panel.Panel;
 
 public abstract class AbstractBasePage extends WebPage {
 
