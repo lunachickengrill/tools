@@ -92,11 +92,8 @@ public class AdminPage extends AbstractBasePage {
 		add(listView);
 		add(new PagingNavigator(NAVIGATOR, listView));
 		add(createModalWindow(CREATECUSTOMERWINDOW_ID));
-		add(createNewCustomerLink(LINK_CREATE_CUSTOMER));
 
 	}
-	
-	
 
 	@Override
 	protected void onConfigure() {
@@ -164,7 +161,7 @@ public class AdminPage extends AbstractBasePage {
 		 * the ModalWindow
 		 */
 
-//		createCustomerWindow = new ModalWindow(CREATECUSTOMERWINDOW_ID);
+		// createCustomerWindow = new ModalWindow(CREATECUSTOMERWINDOW_ID);
 		CreateCustomerPanel createCustomerPanel = new CreateCustomerPanel(createCustomerWindow.getContentId(),
 				createCustomerWindow);
 		createCustomerWindow.setContent(createCustomerPanel);
@@ -172,23 +169,7 @@ public class AdminPage extends AbstractBasePage {
 		createCustomerWindow.setTitle(Model.of("create customer"));
 		setOutputMarkupId(true);
 
-		return createCustomerWindow;
-
-<<<<<<< HEAD
-			/**
-			*
-			*/
-=======
-	}
-
-	private AjaxLink<Void> createNewCustomerLink(final String id) {
-
-		/**
-		 * the link to open the modalwindow
-		 */
-
-		return new AjaxLink<Void>(id) {
->>>>>>> branch 'master' of https://github.com/lunachickengrill/JavaStuff.git
+		add(new AjaxLink<Void>(LINK_CREATE_CUSTOMER) {
 			private static final long serialVersionUID = 5218474796306160615L;
 
 			@Override
@@ -197,7 +178,10 @@ public class AdminPage extends AbstractBasePage {
 
 			}
 
-		};
+		});
+
+		return createCustomerWindow;
+
 	}
 
 }
