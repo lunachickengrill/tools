@@ -13,6 +13,7 @@ public class WicketApplication extends WebApplication {
 	protected void init() {
 		super.init();
 		getComponentInstantiationListeners().add(new SpringComponentInjector(this));
+		mountPage("/admin", AdminPage.class);
 	}
 
 	@Override

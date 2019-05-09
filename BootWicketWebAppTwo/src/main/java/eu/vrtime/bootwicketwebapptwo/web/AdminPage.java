@@ -50,7 +50,7 @@ public class AdminPage extends AbstractBasePage {
 	private static final String CREATECUSTOMERWINDOW_ID = "createCustomerWindow";
 
 	private ModalWindow createCustomerWindow;
-	private FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
+	private FeedbackPanel feedbackPanel;
 	private Specification<Customer> spec;
 
 	private IModel<List<Customer>> customerListModel = new LoadableDetachableModel<List<Customer>>() {
@@ -71,6 +71,9 @@ public class AdminPage extends AbstractBasePage {
 
 	public AdminPage() {
 		super();
+
+		createCustomerWindow = new ModalWindow(CREATECUSTOMERWINDOW_ID);
+		feedbackPanel = new FeedbackPanel("feedback");
 	}
 
 	@Override
@@ -88,6 +91,7 @@ public class AdminPage extends AbstractBasePage {
 		add(listView);
 		add(new PagingNavigator(NAVIGATOR, listView));
 		add(createModalWindow(CREATECUSTOMERWINDOW_ID));
+		add(createNewCustomerLink(LINK_CREATE_CUSTOMER));
 
 	}
 
@@ -97,7 +101,7 @@ public class AdminPage extends AbstractBasePage {
 		 * the form
 		 */
 
-		Form form = new Form(FORM_ID);
+		Form form = new Form(id);
 		CompoundPropertyModel<Customer> model = new CompoundPropertyModel<Customer>(customer);
 
 		form.setDefaultModel(model);
@@ -151,19 +155,25 @@ public class AdminPage extends AbstractBasePage {
 		 * the ModalWindow
 		 */
 
-		createCustomerWindow = new ModalWindow(CREATECUSTOMERWINDOW_ID);
-		CreateCustomerPanel createCustomerPanel = new CreateCustomerPanel(createCustomerWindow.getContentId());
+//		createCustomerWindow = new ModalWindow(CREATECUSTOMERWINDOW_ID);
+		CreateCustomerPanel createCustomerPanel = new CreateCustomerPanel(createCustomerWindow.getContentId(),
+				createCustomerWindow);
 		createCustomerWindow.setContent(createCustomerPanel);
 		createCustomerWindow.setCookieName("modal-1");
 		createCustomerWindow.setTitle(Model.of("create customer"));
-		add(createCustomerWindow);
 		setOutputMarkupId(true);
 
-		add(new AjaxLink<Void>(LINK_CREATE_CUSTOMER) {
+		return createCustomerWindow;
 
-			/**
-			 * 
-			 */
+	}
+
+	private AjaxLink<Void> createNewCustomerLink(final String id) {
+
+		/**
+		 * the link to open the modalwindow
+		 */
+
+		return new AjaxLink<Void>(id) {
 			private static final long serialVersionUID = 5218474796306160615L;
 
 			@Override
@@ -172,9 +182,7 @@ public class AdminPage extends AbstractBasePage {
 
 			}
 
-		});
-		return createCustomerWindow;
-
+		};
 	}
 
 }
