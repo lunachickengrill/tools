@@ -27,13 +27,14 @@ public class CustomerSpecification implements Specification<Customer> {
 
 		Predicate predicate = cb.conjunction();
 
-//		if (filter.getCustomerId() != null) {
-//			predicate.getExpressions().add(cb.equal(root.get("customerId"), filter.getCustomerId()));
-//		}
-		
-		if (filter.getCustomerId() !=null) {
-			predicate.getExpressions().add(cb.like(root.get("customerId"),"%" + filter.getCustomerId() + "%"));
+		if (filter.getCustomerId() != null) {
+			predicate.getExpressions().add(cb.equal(root.get("customerId"), filter.getCustomerId()));
 		}
+
+		// if (filter.getCustomerId() !=null) {
+		// predicate.getExpressions().add(cb.like(root.get("customerId"),"%" +
+		// filter.getCustomerId() + "%"));
+		// }
 
 		if (filter.getFirstName() != null) {
 			predicate.getExpressions()
