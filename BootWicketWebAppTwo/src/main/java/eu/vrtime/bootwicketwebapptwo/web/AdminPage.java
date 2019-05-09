@@ -56,7 +56,8 @@ public class AdminPage extends AbstractBasePage {
 	private IModel<List<Customer>> customerListModel = new LoadableDetachableModel<List<Customer>>() {
 		@Override
 		protected List<Customer> load() {
-//			return customerId != null ? customerRepository.findByCustomerId(customerId) : emptyList();
+			// return customerId != null ? customerRepository.findByCustomerId(customerId) :
+			// emptyList();
 			return spec != null ? customerRepository.findAll(spec) : emptyList();
 		}
 	};
@@ -89,6 +90,14 @@ public class AdminPage extends AbstractBasePage {
 		add(new PagingNavigator(NAVIGATOR, listView));
 		add(createModalWindow(CREATECUSTOMERWINDOW_ID));
 
+	}
+	
+	
+
+	@Override
+	protected void onConfigure() {
+		// TODO Auto-generated method stub
+		super.onConfigure();
 	}
 
 	private Form createForm(final String id) {
@@ -162,8 +171,8 @@ public class AdminPage extends AbstractBasePage {
 		add(new AjaxLink<Void>(LINK_CREATE_CUSTOMER) {
 
 			/**
-			 * 
-			 */
+			*
+			*/
 			private static final long serialVersionUID = 5218474796306160615L;
 
 			@Override
