@@ -27,8 +27,12 @@ public class CustomerSpecification implements Specification<Customer> {
 
 		Predicate predicate = cb.conjunction();
 
-		if (filter.getCustomerId() != null) {
-			predicate.getExpressions().add(cb.equal(root.get("customerId"), filter.getCustomerId()));
+//		if (filter.getCustomerId() != null) {
+//			predicate.getExpressions().add(cb.equal(root.get("customerId"), filter.getCustomerId()));
+//		}
+		
+		if (filter.getCustomerId() !=null) {
+			predicate.getExpressions().add(cb.like(root.get("customerId"),"%" + filter.getCustomerId() + "%"));
 		}
 
 		if (filter.getFirstName() != null) {
@@ -42,11 +46,12 @@ public class CustomerSpecification implements Specification<Customer> {
 		}
 
 		if (filter.getEmailAddress() != null) {
-			predicate.getExpressions()
-					.add(cb.like(cb.lower(root.get("emailAddress")), "%" + filter.getEmailAddress().toLowerCase() + "%"));
+			predicate.getExpressions().add(
+					cb.like(cb.lower(root.get("emailAddress")), "%" + filter.getEmailAddress().toLowerCase() + "%"));
 		}
 
-		if (filter.getCustomerId() == null & filter.getFirstName() == null && filter.getLastName() == null && filter.getEmailAddress() == null) {
+		if (filter.getCustomerId() == null & filter.getFirstName() == null && filter.getLastName() == null
+				&& filter.getEmailAddress() == null) {
 			predicate.getExpressions().add(cb.equal(root.get("oid"), -1));
 
 		}
