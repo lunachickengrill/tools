@@ -5,6 +5,7 @@ import static java.util.Collections.emptyList;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -13,6 +14,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
@@ -92,6 +94,21 @@ public class AdminPage extends AbstractBasePage {
 		add(listView);
 		add(new PagingNavigator(NAVIGATOR, listView));
 		add(createModalWindow(CREATECUSTOMERWINDOW_ID));
+
+		add(new Link<Void>("sandboxLink") {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -121928308648337583L;
+
+			@Override
+			public void onClick() {
+				setResponsePage(SandboxPage.class);
+
+			}
+
+		});
 
 	}
 

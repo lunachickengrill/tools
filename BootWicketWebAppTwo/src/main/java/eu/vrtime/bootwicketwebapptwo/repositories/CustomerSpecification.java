@@ -31,10 +31,9 @@ public class CustomerSpecification implements Specification<Customer> {
 			predicate.getExpressions().add(cb.equal(root.get("customerId"), filter.getCustomerId()));
 		}
 
-		// if (filter.getCustomerId() !=null) {
-		// predicate.getExpressions().add(cb.like(root.get("customerId"),"%" +
-		// filter.getCustomerId() + "%"));
-		// }
+//		 if (filter.getCustomerId() !=null) {
+//		 predicate.getExpressions().add(cb.like(root.get("customerId"), "'" + filter.getCustomerId() + "%'"));
+//		 }
 
 		if (filter.getFirstName() != null) {
 			predicate.getExpressions()

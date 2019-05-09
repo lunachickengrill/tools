@@ -99,6 +99,7 @@ public class CreateCustomerPanel extends Panel {
 				Customer cust = (Customer) model.getObject();
 				Customer dbCustomer = customerRepository.saveAndFlush(cust);
 				
+							
 				/**
 				 * set the current model to null,create a new one with a new customer object and
 				 * set it as the defaultModel in order to reset textfields when modalwindow is
