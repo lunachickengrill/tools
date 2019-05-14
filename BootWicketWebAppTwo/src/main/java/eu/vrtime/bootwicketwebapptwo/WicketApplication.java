@@ -6,6 +6,7 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 
 import eu.vrtime.bootwicketwebapptwo.web.AdminPage;
+import eu.vrtime.bootwicketwebapptwo.web.SandboxPage;
 
 public class WicketApplication extends WebApplication {
 
@@ -14,6 +15,7 @@ public class WicketApplication extends WebApplication {
 		super.init();
 		getComponentInstantiationListeners().add(new SpringComponentInjector(this));
 		mountPage("/admin", AdminPage.class);
+		mountPage("/sandbox", SandboxPage.class);
 	}
 
 	@Override

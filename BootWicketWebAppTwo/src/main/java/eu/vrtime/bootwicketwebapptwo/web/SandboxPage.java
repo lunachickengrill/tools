@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 public class SandboxPage extends AbstractBasePage {
@@ -17,22 +18,73 @@ public class SandboxPage extends AbstractBasePage {
 	private static final String FEEDBACK_ID = "feedback";
 	private static final String PAGELABEL_ID = "pageLabel";
 	private static final String PAGELABEL_MODEL = "SandboxPage";
+	private static final String PANEL_ID = "panel";
+	private static final String MARKUPCONTAINER_ID = "group";
+	private static final String LINKPANEL_ONE_ID = "linkPanelOne";
+	private static final String LINKPANEL_TWO_ID = "linkPanelTwo";
 
 	private FeedbackPanel feedback;
 	private Label pageLabel;
 	private WebMarkupContainer group;
 
+	private Panel panelOne = new PanelOne(PANEL_ID);
+	private Panel panelTwo = new PanelTwo(PANEL_ID);
+	private Panel current = panelOne;
+
 	public SandboxPage() {
 		super();
-		// TODO Auto-generated constructor stub
+
 		feedback = new FeedbackPanel(FEEDBACK_ID);
 		pageLabel = new Label(PAGELABEL_ID, PAGELABEL_MODEL);
-		group = new WebMarkupContainer("group");
+		group = new WebMarkupContainer(MARKUPCONTAINER_ID);
+
+		add(new Link<Void>(LINKPANEL_ONE_ID) {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4033525299364905213L;
+
+			@Override
+			public void onClick() {
+				current.replaceWith(panelOne);
+				current = panelOne;
+
+			}
+
+			@Override
+			public boolean isEnabled() {
+				return current != panelOne;
+			}
+
+		});
+
+		add(new Link<Void>(LINKPANEL_TWO_ID) {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -8194997222731355977L;
+
+			@Override
+			public void onClick() {
+				current.replaceWith(panelTwo);
+				current = panelTwo;
+
+			}
+
+			@Override
+			public boolean isEnabled() {
+				return current != panelTwo;
+			}
+
+		});
+
 	}
 
 	@Override
 	protected void onInitialize() {
-		// TODO Auto-generated method stub
+
 		super.onInitialize();
 		add(feedback);
 		add(pageLabel);
@@ -42,26 +94,8 @@ public class SandboxPage extends AbstractBasePage {
 		group.setVisible(false);
 		group.setOutputMarkupPlaceholderTag(true);
 		add(group);
-		
-// why is this not working??? Its apparently the same but an AjaxLink instead of AjaxFallbackLink!
-//		add(new AjaxLink<Void>("link") {
-//
-//			/**
-//			 * 
-//			 */
-//			private static final long serialVersionUID = 1L;
-//
-//			@Override
-//			public void onClick(AjaxRequestTarget target) {
-//				group.setVisibilityAllowed(!group.isVisible());
-//				if (target != null) {
-//					target.add(group);
-//				}
-//
-//			}
-//
-//		});
-		
+		add(current);
+
 		add(new AjaxFallbackLink<Void>("link") {
 
 			@Override
@@ -72,8 +106,7 @@ public class SandboxPage extends AbstractBasePage {
 					target.get().add(group);
 				}
 			}
-			
-			
+
 		});
 
 	}
