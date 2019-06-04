@@ -32,6 +32,14 @@ import eu.vrtime.bootwicketwebapptwo.repositories.CustomerRepository;
 import eu.vrtime.bootwicketwebapptwo.repositories.CustomerServiceRepository;
 import eu.vrtime.bootwicketwebapptwo.repositories.CustomerSpecification;
 
+/**
+ * The Admin page of this application. Extends AbstractBasePage for consistent look and feel.
+ * This page has a form on it to query customers. For this it uses an LoadableDetachableModel. This Model uses a CustomerSpecification object as model to query the repository based on the values provided.
+ * In addition the Admin page allows to create customers via a modal window.
+ * @author babis
+ *
+ */
+
 public class AdminPage extends AbstractBasePage {
 
 	/**
@@ -58,8 +66,11 @@ public class AdminPage extends AbstractBasePage {
 	private IModel<List<Customer>> customerListModel = new LoadableDetachableModel<List<Customer>>() {
 		@Override
 		protected List<Customer> load() {
+
 			// return customerId != null ? customerRepository.findByCustomerId(customerId) :
 			// emptyList();
+			
+			// using a custom specification
 			return spec != null ? customerRepository.findAll(spec) : emptyList();
 		}
 	};
@@ -125,6 +136,8 @@ public class AdminPage extends AbstractBasePage {
 		 */
 
 		Form form = new Form(id);
+		
+		// Using a customer object as CompoundPropertyModel
 		CompoundPropertyModel<Customer> model = new CompoundPropertyModel<Customer>(customer);
 
 		form.setDefaultModel(model);
@@ -140,8 +153,13 @@ public class AdminPage extends AbstractBasePage {
 			@Override
 			public void onSubmit() {
 
-				spec = new CustomerSpecification(customer);
-
+				
+				// We shall not use this. Instead we should use the model of this form and get the model object.
+				//spec = new CustomerSpecification(customer);			
+				
+				// onSubmit create a CustomerSpecification object based on the compoundPropertyModel
+				Customer cust = (Customer)form.getModelObject();
+				spec = new CustomerSpecification(cust);
 			}
 
 		});
