@@ -9,6 +9,13 @@ import org.springframework.data.jpa.domain.Specification;
 
 import eu.vrtime.bootwicketwebapptwo.model.Product;
 
+/**
+ * An implementation of {@link #Specification} for searching Product objects
+ * @author babis
+ *
+ */
+
+
 public class ProductSpecification implements Specification<Product> {
 
 	/**
