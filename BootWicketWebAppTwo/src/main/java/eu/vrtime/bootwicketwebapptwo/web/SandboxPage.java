@@ -13,6 +13,12 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
+/**
+ * A sandbox page to play around with some wicket features.
+ * @author babis
+ *
+ */
+
 public class SandboxPage extends AbstractBasePage {
 
 	private static final String FEEDBACK_ID = "feedback";

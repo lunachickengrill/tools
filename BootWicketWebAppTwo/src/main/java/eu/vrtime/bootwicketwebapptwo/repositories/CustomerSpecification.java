@@ -9,6 +9,11 @@ import org.springframework.data.jpa.domain.Specification;
 
 import eu.vrtime.bootwicketwebapptwo.model.Customer;
 
+/**
+ * A implementation of {@see #Specification} to search for Customer objects in repository.
+ * @author babis
+ *
+ */
 public class CustomerSpecification implements Specification<Customer> {
 
 	/**
