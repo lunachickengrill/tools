@@ -20,15 +20,28 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 @SpringBootTest
 public class SpElStuffApplicationTests {
 
-	public static final String TEMPLATE = "<root>"
-			+ "<firstname>#{[Person].firstname}</firstname>"
-			+ "<lastname>#{[Person].lastname}</lastname>"
-			+ "<value>#{[Person].value}</value>"
-			+ "<age>#{[Person].property.age}</age>"
-			+ "<mail>#{[Person].property.mail}</mail>"
-			+ "</root>";
-	
-	private Person person = new Person("Tom", "Turbo", "is supaaaa", 41,"asdf@yxcv.com");
+	public static final String TEMPLATE = "<root>" +"\n"
+										+ "<firstname>#{[Person].firstname}</firstname>" +"\n"
+										+ "<lastname>#{[Person].lastname}</lastname>" +"\n"
+										+ "<value>#{[Person].value}</value>" +"\n"
+										+ "<age>#{[Person].property.age}</age>" +"\n"
+										+ "<mail>#{[Person].property.mail}</mail>" +"\n"
+										+ "</root>";
+
+	public static final String TEXT_TEMPLATE = "static0: abc\n"
+											 + "static1: yxc\n"
+											 + "static2: qwe\n"
+											 + "firstname: #{[Person].firstname}\n"
+											 + "lastname: #{[Person].lastname}\n" 
+											 + "value: #{[Person].value}\n"
+											 + "age: #{[Person].property.age}\n"
+											 + "mail: #{[Person].property.mail}\n"
+											 + "system: #{[ExternalProperty].system}\n"
+											 + "reason: #{[ExternalProperty].reason}\n"
+											 + "dummy: dummy\n";
+
+	private Person person = new Person("Tom", "Turbo", "is supaaaa", 41, "asdf@yxcv.com");
+	private ExternalProperty extProp = new ExternalProperty("eclipse", "jUnit test");
 
 	@Autowired
 	private TemplateSpelParser templateParser;
@@ -50,7 +63,7 @@ public class SpElStuffApplicationTests {
 	@Ignore
 	@Test
 	public void testSpelOnObject() {
-	
+
 		ExpressionParser parser = new SpelExpressionParser();
 		Expression exp = parser.parseExpression("firstname");
 
@@ -79,13 +92,30 @@ public class SpElStuffApplicationTests {
 
 	@Test
 	public void testSpelParserService() {
-		System.out.println(TEMPLATE);
+		
+		System.out.println("SOURCE TEMPLATE: " + "\n" + TEMPLATE + "\n");
 
 		Map<String, Object> contextMap = new HashMap<>();
+		
 		contextMap.put(person.getClass().getSimpleName(), person);
-		String evaluated = templateParser.evaluateTemplate(contextMap, TEMPLATE);
+		String evaluatedTemplate = templateParser.evaluateTemplate(contextMap, TEMPLATE);
 
-		System.out.println(evaluated);
+		System.out.println("EVALUATED TEMPLATE: " + "\n" +  evaluatedTemplate + "\n");
+	}
+
+	@Test
+	public void testSpelParserServiceTextTemplate() {
+
+		System.out.println("SOURCE TEMPLATE: " + "\n" + TEXT_TEMPLATE + "\n");
+
+		Map<String, Object> contextMap = new HashMap<>();
+
+		contextMap.put(person.getClass().getSimpleName(), person);
+		contextMap.put(extProp.getClass().getSimpleName(), extProp);
+
+		String evaluatedTemplate = templateParser.evaluateTemplate(contextMap, TEXT_TEMPLATE);
+
+		System.out.println("EVALUATED TEMPLATE: " + "\n" + evaluatedTemplate + "\n");
 	}
 
 }

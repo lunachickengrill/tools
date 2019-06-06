@@ -34,14 +34,11 @@ public class SpElStuffApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		
-		System.out.println("using template: " + "\n" + TEMPLATE + "\n");
-		
+			
 		objectMap.put(Person.class.getSimpleName(), new Person("Tom", "Turbo", "is supa", 41, "asdf@asdf.com"));
 		String evaluatedTemplate = spelParser.evaluateTemplate(objectMap, TEMPLATE);
 
-		System.out.println("evaluated template: " + "\n" + evaluatedTemplate);
-
+		
 	}
 
 }
