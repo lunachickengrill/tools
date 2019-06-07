@@ -62,6 +62,7 @@ public class AdminPage extends AbstractBasePage {
 	private ModalWindow createCustomerWindow;
 	private FeedbackPanel feedbackPanel;
 	private Specification<Customer> spec;
+	private Customer customer = new Customer();
 
 	private IModel<List<Customer>> customerListModel = new LoadableDetachableModel<List<Customer>>() {
 		@Override
@@ -75,7 +76,7 @@ public class AdminPage extends AbstractBasePage {
 		}
 	};
 
-	Customer customer = new Customer();
+
 
 	@SpringBean
 	private CustomerRepository customerRepository;
@@ -153,12 +154,9 @@ public class AdminPage extends AbstractBasePage {
 			@Override
 			public void onSubmit() {
 
-				
-				// We shall not use this. Instead we should use the model of this form and get the model object.
-				//spec = new CustomerSpecification(customer);			
-				
-				// onSubmit create a CustomerSpecification object based on the compoundPropertyModel
 				Customer cust = (Customer)form.getModelObject();
+				System.out.println("Customer: " + customer);
+				System.out.println("Model: " +cust.toString());
 				spec = new CustomerSpecification(cust);
 			}
 

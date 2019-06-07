@@ -105,8 +105,7 @@ public class Customer extends AbstractBaseEntity implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Customer [customerId=" + customerId + ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", toStringId()=" + toStringOid() + "]";
+		return "Customer [customerId=" + customerId + ", firstName=" + firstName + ", lastName=" + lastName + "]";
 	}
 
 	public Customer() {

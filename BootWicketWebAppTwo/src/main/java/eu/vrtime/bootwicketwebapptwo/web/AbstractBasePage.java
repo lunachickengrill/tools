@@ -28,7 +28,7 @@ public abstract class AbstractBasePage extends WebPage {
 	}
 
 	private LinkPanel createLinkPanel(String id) {
-		LinkPanel panel = new LinkPanel(id);
+		LinkPanel panel = new LinkPanel(id, this);
 		return panel;
 	}
 
