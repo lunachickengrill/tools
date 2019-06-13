@@ -1,0 +1,36 @@
+<html>
+<head></head>
+<wicket:panel>
+<div wicket:id="feedback"></div>
+<div>
+<form wicket:id="searchDeviceForm">
+<div class="form-group">
+<br/><label>MAC</label><br/><input wicket:id="mac">
+<br/><label>SERIAL</label><br/><input wicket:id="serial">
+<br/><label>TYPE</label><br/><input wicket:id="type">
+<!-- <br><label>TYPE</label><br/><select wicket:id="type" class="input-medium"></select> -->
+<br/>
+</div>
+<div>
+<input wicket:id="submit" type="submit" class="btn btn-default" value="search">
+
+</div>
+</form>
+</div>
+<table wicket:id="deviceDataTable"></table>
+<!-- 
+<div class="col-md-12">
+		<table class="table table-hover table-bordered">
+			<th>MAC</th>
+			<th>SERIAL</th>
+			<th>TYPE</th>
+			<tr wicket:id=deviceList>
+				<td><span wicket:id="mac"></span></td>
+				<td><span wicket:id="sn"></span></td>
+				<td><span wicket:id="type"></span></td>
+			</tr>
+		</table>
+	</div>
+ -->
+</wicket:panel>
+</html>
