@@ -7,8 +7,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DefaultDataTable;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.HeadersToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
@@ -22,6 +28,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.markup.repeater.data.ListDataProvider;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -53,6 +60,7 @@ public class DevicePanel extends Panel {
 	private static final String FORM_TYPE_ID = "type";
 	private static final String FEEDBACK_ID = "feedback";
 	private static final String DATATABLE_ID = "deviceDataTable";
+	private static final String EDIT_LINK_ID = "editLink";
 
 	private FeedbackPanel feedback;
 	private DataTable deviceTable;
@@ -118,13 +126,30 @@ public class DevicePanel extends Panel {
 	private DataTable<Device, String> createDataTable(String id, int rows) {
 
 		final List<IColumn<Device, String>> columns = new ArrayList<>();
+
 		columns.add(new PropertyColumn(new Model("MAC"), "mac"));
 		columns.add(new PropertyColumn(new Model("SERIAL"), "serial"));
 		columns.add(new PropertyColumn(new Model("TYPE"), "type"));
 
-		deviceTable = new DefaultDataTable<>(id, columns, new DeviceDataProvider(deviceRepo, specification), rows);
+		columns.add(new PropertyColumn(new Model("edit"), "edit") {
+
+			@Override
+			public void populateItem(Item item, String componentId, IModel rowModel) {
+				item.add(new EditLinkPanel(componentId));
+			}
+
+		});
+
+		deviceTable = new DataTable<>(id, columns, new DeviceDataProvider(deviceRepo, specification), rows);
+		deviceTable.addTopToolbar(new HeadersToolbar<>(deviceTable, null));
 		return deviceTable;
 
 	}
+
+	private IColumn<Device, String> createEditColumn() {
+		// to be implemented
+		// should create the column with the edit link
+		return null;
+		}
 
 }
