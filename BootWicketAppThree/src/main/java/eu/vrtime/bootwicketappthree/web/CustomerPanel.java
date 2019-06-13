@@ -75,7 +75,6 @@ public class CustomerPanel extends Panel {
 	private Form createCustomerForm(String id) {
 
 		Form form = new Form(id);
-//		CompoundPropertyModel<Customer> model = new CompoundPropertyModel<Customer>(customer);
 		CompoundPropertyModel<CustomerSpecification> model = new CompoundPropertyModel<CustomerSpecification>(
 				customerSpec);
 		form.setDefaultModel(model);
@@ -92,8 +91,6 @@ public class CustomerPanel extends Panel {
 			public void onSubmit() {
 
 				super.onSubmit();
-
-				System.out.println("INSIDE onSubmit");
 
 			}
 
