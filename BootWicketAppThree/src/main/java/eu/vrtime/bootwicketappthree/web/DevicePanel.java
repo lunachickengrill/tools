@@ -131,7 +131,7 @@ public class DevicePanel extends Panel {
 		columns.add(new PropertyColumn(new Model("SERIAL"), "serial"));
 		columns.add(new PropertyColumn(new Model("TYPE"), "type"));
 
-		columns.add(new PropertyColumn(new Model("edit"), "edit") {
+		columns.add(new PropertyColumn(new Model(""), "") {
 
 			@Override
 			public void populateItem(Item item, String componentId, IModel rowModel) {
