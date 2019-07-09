@@ -13,6 +13,7 @@ public class AdminPage extends WebPage {
 	private LinkPanel linkPanel;
 	private Panel customerPanel = new CustomerPanel(PANEL_ID);
 	private Panel devicePanel = new DevicePanel(PANEL_ID);
+	private Panel TestPanel = new TestPanel(PANEL_ID);
 	private Panel current = customerPanel;
 
 	public AdminPage() {
@@ -44,6 +45,14 @@ public class AdminPage extends WebPage {
 
 	public void setDevicePanel(Panel devicePanel) {
 		this.devicePanel = devicePanel;
+	}
+
+	public Panel getTestPanel() {
+		return TestPanel;
+	}
+
+	public void setTestPanel(Panel testPanel) {
+		this.TestPanel = testPanel;
 	}
 
 	public Panel getCurrent() {

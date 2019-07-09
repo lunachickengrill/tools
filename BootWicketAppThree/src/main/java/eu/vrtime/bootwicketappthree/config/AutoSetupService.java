@@ -45,6 +45,8 @@ public class AutoSetupService {
 		devices.add(new Device("00:05:99:EE:41:46", "ABC0004", "CM"));
 		devices.add(new Device("00:05:99:FF:46:49", "ABC0004", "CM"));
 		devices.add(new Device("00:05:99:AA:46:76", "ABC0004", "CM"));
+		devices.add(new Device("00:01:99:AA:22:22", "ABC0005", "MTA"));
+		devices.add(new Device("00:01:99:AA:33:33", "ABC0005", "MTA"));
 
 		deviceRepo.saveAll(devices);
 

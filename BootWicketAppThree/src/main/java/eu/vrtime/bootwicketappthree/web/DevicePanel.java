@@ -61,6 +61,7 @@ public class DevicePanel extends Panel {
 	private static final String FEEDBACK_ID = "feedback";
 	private static final String DATATABLE_ID = "deviceDataTable";
 	private static final String EDIT_LINK_ID = "editLink";
+	private static final String DROPDOWN_ID = "drpChoice";
 
 	private FeedbackPanel feedback;
 	private DataTable deviceTable;
@@ -90,7 +91,8 @@ public class DevicePanel extends Panel {
 		setDefaultModel(model);
 		form.add(new TextField<>(FORM_MAC_ID));
 		form.add(new TextField<>(FORM_SN_ID));
-		form.add(new TextField<>(FORM_TYPE_ID));
+//		form.add(new TextField<>(FORM_TYPE_ID));
+		form.add(createDeviceTypeChoice(FORM_TYPE_ID));
 
 		form.add(new Button(FORM_BTN_ID) {
 

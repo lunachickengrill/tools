@@ -14,6 +14,7 @@ public class LinkPanel extends Panel {
 	private static final long serialVersionUID = 8814587385870154347L;
 	private static final String CUSTOMERLINK_ID = "customerLink";
 	private static final String DEVICELINK_ID = "deviceLink";
+	private static final String TESTLINK_ID = "testLink";
 	private AdminPage parentPage;
 
 	public LinkPanel(String id, AdminPage parent) {
@@ -28,6 +29,8 @@ public class LinkPanel extends Panel {
 		super.onInitialize();
 		add(createLink(CUSTOMERLINK_ID, parentPage.getCustomerPanel()));
 		add(createLink(DEVICELINK_ID, parentPage.getDevicePanel()));
+		add(createLink(TESTLINK_ID, parentPage.getTestPanel()));
+
 
 	}
 
