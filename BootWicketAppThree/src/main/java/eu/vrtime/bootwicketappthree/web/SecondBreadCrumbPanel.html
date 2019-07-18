@@ -1,12 +1,22 @@
 <html>
 <head></head>
 <wicket:panel>
-	<div>
+	<span>
 		<form wicket:id="form">
-			<input wicket:id="firstName" type="text"><br />
-			<input wicket:id="lastName" type="text"><br />
-			<input wicket:id="next" type="submit" value="next">
+			<div class="form-group">
+				<label for="firstName">Firstname</label><br/>
+				<input wicket:id="firstName" class="form-control" id="firstName" type="text" aria-descibedby="firstNameHelp"><br/>
+				<small id="firstNameHelp" class="form-text text-muted">This	is where you have to enter your firstname</small>
+			</div>
+			<div class="form-group">
+			<label for="lastName">Lastname</label><br/>
+				<input wicket:id="lastName" class="form-control" id="lastName" type="text" aria-describedby="lastNameHelp"><br/>
+				<small id="lastNameHelp" class="form-text text-muted">This is where you have to enter your lastname</small>
+			</div>
+			<div class="form-group">
+				<input wicket:id="next" class="btn btn-primary" type="submit" value="next">
+			</div>
 		</form>
-	</div>
+	</span>
 </wicket:panel>
 </html>

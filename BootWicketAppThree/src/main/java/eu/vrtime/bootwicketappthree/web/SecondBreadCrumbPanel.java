@@ -1,5 +1,6 @@
 package eu.vrtime.bootwicketappthree.web;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.extensions.breadcrumb.IBreadCrumbModel;
 import org.apache.wicket.extensions.breadcrumb.panel.BreadCrumbPanel;
 import org.apache.wicket.extensions.breadcrumb.panel.IBreadCrumbPanelFactory;
@@ -30,8 +31,14 @@ public class SecondBreadCrumbPanel extends BreadCrumbPanel {
 
 	private Form createForm(final String id) {
 		Form form = new Form(id);
-		form.add(new TextField<>(FIRSTNAME_ID, new PropertyModel<>(this, "firstName")));
-		form.add(new TextField<>(LASTNAME_ID, new PropertyModel<>(this, "lastName")));
+		TextField firstNameTf = new TextField<>(FIRSTNAME_ID, new PropertyModel<>(this, "firstName"));
+		firstNameTf.add(new AttributeModifier("placeholder", "Enter lastname"));
+		form.add(firstNameTf);
+	
+		TextField lastNameTf = new TextField<>(LASTNAME_ID, new PropertyModel<>(this, "lastName"));
+		lastNameTf.add(new AttributeModifier("placeholder", "Enter lastname"));
+		form.add(lastNameTf);
+
 		form.add(new Button(BUTTON_ID) {
 
 			private static final long serialVersionUID = 1L;
@@ -42,7 +49,6 @@ public class SecondBreadCrumbPanel extends BreadCrumbPanel {
 
 					@Override
 					public BreadCrumbPanel create(String componentId, IBreadCrumbModel breadCrumbModel) {
-						// TODO Auto-generated method stub
 						return new ResultPanel(componentId, breadCrumbModel, firstName, lastName);
 					}
 				});

@@ -20,6 +20,13 @@
 	</properties>
 
 	<dependencies>
+	<!-- https://mvnrepository.com/artifact/de.agilecoders.wicket/wicket-bootstrap-core -->
+<dependency>
+    <groupId>de.agilecoders.wicket</groupId>
+    <artifactId>wicket-bootstrap-core</artifactId>
+    <version>3.0.0-M11</version>
+</dependency>
+	
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
