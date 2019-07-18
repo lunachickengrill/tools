@@ -18,13 +18,14 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.SetModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import eu.vrtime.bootwicketappthree.model.Device;
 import eu.vrtime.bootwicketappthree.repositories.DeviceRepository;
 
 public class TestPanel extends Panel {
 
-	@Inject
+	@SpringBean
 	private DeviceRepository repo;
 
 	private static final String FEEDBACK_ID = "feedback";

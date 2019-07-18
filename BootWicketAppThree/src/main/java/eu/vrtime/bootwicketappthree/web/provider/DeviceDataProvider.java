@@ -50,7 +50,6 @@ public class DeviceDataProvider extends SortableDataProvider<Device, String> {
 		if (rows == null || rows ==0 ) {
 			rows = filter != null ? repo.count(filter) : repo.count();
 		}
-		System.out.println("ROWS " + rows);
 		return rows;
 	}
 

@@ -6,6 +6,7 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 
 import eu.vrtime.bootwicketappthree.web.AdminPage;
+import eu.vrtime.bootwicketappthree.web.BreadCrumbPage;
 
 public class WicketApplication extends WebApplication {
 
@@ -18,6 +19,7 @@ public class WicketApplication extends WebApplication {
 		super.init();
 		getComponentInstantiationListeners().add(new SpringComponentInjector(this));
 		mountPage("/admin", AdminPage.class);
+		mountPage("breadcrumb", BreadCrumbPage.class);
 
 	}
 
