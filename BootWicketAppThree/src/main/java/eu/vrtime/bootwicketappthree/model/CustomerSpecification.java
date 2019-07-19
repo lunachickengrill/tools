@@ -52,7 +52,7 @@ public class CustomerSpecification implements Specification<Customer> {
 		Predicate predicate = criteriaBuilder.conjunction();
 
 		if (customerId != null) {
-			predicate.getExpressions().add(criteriaBuilder.equal(root.get("customerId"), customerId));
+			predicate.getExpressions().add(criteriaBuilder.like(root.get("customerId"), customerId + "%"));
 		}
 
 		if (firstName != null) {

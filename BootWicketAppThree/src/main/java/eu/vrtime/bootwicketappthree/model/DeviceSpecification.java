@@ -59,8 +59,8 @@ public class DeviceSpecification implements Specification<Device> {
 
 		if (serial != null) {
 
-			predicate.getExpressions().add(
-					criteriaBuilder.like(criteriaBuilder.lower(root.get("serial")), "%" + serial.toLowerCase() + "%"));
+			predicate.getExpressions()
+					.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("serial")), "%" + serial.toLowerCase() + "%"));
 		}
 
 		if (type != null) {

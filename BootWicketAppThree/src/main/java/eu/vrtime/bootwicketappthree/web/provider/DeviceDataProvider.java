@@ -13,6 +13,13 @@ import eu.vrtime.bootwicketappthree.model.Device;
 import eu.vrtime.bootwicketappthree.model.DeviceSpecification;
 import eu.vrtime.bootwicketappthree.repositories.DeviceRepository;
 
+/**
+ * The device data provider.
+ * Sort needs to be implemented.
+ * @author tschwaiger
+ *
+ */
+
 public class DeviceDataProvider extends SortableDataProvider<Device, String> {
 
 	/**
@@ -24,6 +31,7 @@ public class DeviceDataProvider extends SortableDataProvider<Device, String> {
 	private DeviceSpecification filter;
 	private Long rows;
 
+	
 	public DeviceDataProvider(DeviceRepository repo, DeviceSpecification filter) {
 		this.repo = repo;
 		this.filter = filter;
@@ -52,6 +60,8 @@ public class DeviceDataProvider extends SortableDataProvider<Device, String> {
 		}
 		return rows;
 	}
+	
+	
 
 	@Override
 	public IModel<Device> model(final Device device) {

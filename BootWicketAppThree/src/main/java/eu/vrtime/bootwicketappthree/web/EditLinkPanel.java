@@ -18,7 +18,7 @@ public class EditLinkPanel extends Panel {
 
 	private FeedbackPanel feedback = new FeedbackPanel("feedback");
 
-	public EditLinkPanel(String id) {
+	public EditLinkPanel(final String id) {
 		super(id);
 		add(feedback);
 

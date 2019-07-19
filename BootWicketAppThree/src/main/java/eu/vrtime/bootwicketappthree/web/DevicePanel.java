@@ -6,9 +6,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractToolbar;
@@ -16,6 +18,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.HeadersToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.NavigationToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.markup.html.basic.Label;
@@ -66,6 +69,10 @@ public class DevicePanel extends Panel {
 	private FeedbackPanel feedback;
 	private DataTable deviceTable;
 	private DeviceSpecification specification = new DeviceSpecification();
+	
+	private String deviceMac = new String();
+	private String deviceSn = new String();
+	private String deviceType = new String();
 
 	public DevicePanel(final String id) {
 		super(id);
@@ -89,9 +96,15 @@ public class DevicePanel extends Panel {
 		CompoundPropertyModel<DeviceSpecification> model = new CompoundPropertyModel<DeviceSpecification>(
 				specification);
 		setDefaultModel(model);
-		form.add(new TextField<>(FORM_MAC_ID));
-		form.add(new TextField<>(FORM_SN_ID));
-//		form.add(new TextField<>(FORM_TYPE_ID));
+		
+		TextField<String> macField = new TextField<>(FORM_MAC_ID);
+		macField.add(new AttributeModifier("placeholder", "device MAC address"));
+		form.add(macField);
+
+		TextField<String> snField = new TextField<>(FORM_SN_ID);
+		snField.add(new AttributeModifier("placeholder", "device Serialnumber"));
+		form.add(snField);
+		
 		form.add(createDeviceTypeChoice(FORM_TYPE_ID));
 
 		form.add(new Button(FORM_BTN_ID) {
@@ -100,13 +113,15 @@ public class DevicePanel extends Panel {
 
 			@Override
 			public void onSubmit() {
-				super.onSubmit();
-				System.out.println("INSIDE onSubmit");
 
+				super.onSubmit();
+				deviceTable.setVisible(true);
+
+				
 			}
 
 		});
-
+			
 		return form;
 	}
 
@@ -141,9 +156,14 @@ public class DevicePanel extends Panel {
 			}
 
 		});
-
-		deviceTable = new DataTable<>(id, columns, new DeviceDataProvider(deviceRepo, specification), rows);
-		deviceTable.addTopToolbar(new HeadersToolbar<>(deviceTable, null));
+		DeviceDataProvider dataProvider = new DeviceDataProvider(deviceRepo,specification);
+//		deviceTable = new DataTable<>(id, columns, new DeviceDataProvider(deviceRepo, specification), rows);
+//		deviceTable.addTopToolbar(new HeadersToolbar<>(deviceTable, null));
+		
+		deviceTable = new DataTable<>(id, columns, dataProvider,rows);
+		deviceTable.addTopToolbar(new HeadersToolbar<>(deviceTable, dataProvider));
+		deviceTable.addBottomToolbar(new NavigationToolbar(deviceTable));
+		deviceTable.setVisible(false);
 		return deviceTable;
 
 	}
