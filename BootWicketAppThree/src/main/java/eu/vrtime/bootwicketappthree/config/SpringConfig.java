@@ -1,9 +1,11 @@
 package eu.vrtime.bootwicketappthree.config;
 
+import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.protocol.http.WicketFilter;
+import org.apache.wicket.spring.SpringWebApplicationFactory;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,16 +28,19 @@ public class SpringConfig {
 //	}
 	
 	@Bean
-	public FilterRegistrationBean<WicketFilter> getWicketFilter(){
+	public FilterRegistrationBean<WicketFilter> wicketFilterRegistration(){
 		WicketApplication webApplication = new WicketApplication();
 		webApplication.setConfigurationType(RuntimeConfigurationType.DEVELOPMENT);
 		
 		WicketFilter filter = new WicketFilter(webApplication);
 		filter.setFilterPath("/");
 		
-		FilterRegistrationBean<WicketFilter> registrationBean = new FilterRegistrationBean<>();
-		registrationBean.setFilter(filter);
-		return registrationBean;
+		FilterRegistrationBean<WicketFilter> registration = new FilterRegistrationBean<>();
+		registration.setFilter(filter);
+		registration.addInitParameter(WicketFilter.APP_FACT_PARAM, SpringWebApplicationFactory.class.getName());
+		registration.setDispatcherTypes(DispatcherType.REQUEST, DispatcherType.FORWARD);
+		
+		return registration;
 	}
 
 }
