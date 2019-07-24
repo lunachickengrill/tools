@@ -3,12 +3,13 @@ package eu.vrtime.bootwicketappthree.web.auth;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import eu.vrtime.bootwicketappthree.model.AppUser;
 import eu.vrtime.bootwicketappthree.repositories.AppUserRepository;
 
-@Service
+@Service("authService")
 public class AppUserAuthServiceImpl implements AppUserAuthService {
 
 	private AppUserRepository userRepo;
