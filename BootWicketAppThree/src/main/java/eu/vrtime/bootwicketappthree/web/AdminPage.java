@@ -4,6 +4,7 @@ import org.apache.wicket.Application;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 
 import eu.vrtime.bootwicketappthree.web.login.LoginPage;
@@ -15,6 +16,7 @@ public class AdminPage extends WebPage {
 	 */
 	private static final long serialVersionUID = -854204171725844717L;
 	private static final String PANEL_ID = "panel";
+	private static final String LOGOUTLINK_ID = "logout";
 	private LinkPanel linkPanel;
 	private Panel customerPanel = new CustomerPanel(PANEL_ID);
 	private Panel devicePanel = new DevicePanel(PANEL_ID);
@@ -33,6 +35,7 @@ public class AdminPage extends WebPage {
 		linkPanel = new LinkPanel("linkPanel", this);
 		add(linkPanel);
 		add(current);
+		add(createLogoutLink(LOGOUTLINK_ID));
 
 	}
 
@@ -44,6 +47,34 @@ public class AdminPage extends WebPage {
 		if (!AuthenticatedWebSession.get().isSignedIn()) {
 			app.restartResponseAtSignInPage();
 		}
+	}
+	
+	private Link<Void> createLogoutLink(final String id) {
+		Link<Void> logoutLink = new Link<Void>(id) {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick() {
+				AuthenticatedWebSession.get().invalidate();
+				setResponsePage(AdminPage.class);
+				
+			}
+			
+		};
+		
+		return logoutLink;
+//		add(new Link("logOut") {
+//
+//	         @Override
+//	         public void onClick() {
+//	            AuthenticatedWebSession.get().invalidate();
+//	            setResponsePage(getApplication().getHomePage());
+//	         }
+//	      });
 	}
 
 	public Panel getCustomerPanel() {

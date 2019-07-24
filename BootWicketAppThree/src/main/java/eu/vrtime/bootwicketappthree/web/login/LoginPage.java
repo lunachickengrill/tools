@@ -22,8 +22,8 @@ public class LoginPage extends WebPage {
 	private String username;
 	private String password;
 
-	public LoginPage(PageParameters parameters) {
-		super(parameters);
+	public LoginPage() {
+		super();
 	}
 
 	@Override
