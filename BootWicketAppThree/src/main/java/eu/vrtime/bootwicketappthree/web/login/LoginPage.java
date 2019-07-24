@@ -1,5 +1,6 @@
 package eu.vrtime.bootwicketappthree.web.login;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.Button;
@@ -35,8 +36,14 @@ public class LoginPage extends WebPage {
 	private StatelessForm<Void> createForm(final String id) {
 		StatelessForm<Void> form = new StatelessForm<Void>(id);
 		form.setDefaultModel(new CompoundPropertyModel(this));
-		form.add(new TextField(USERNAME_ID));
-		form.add(new PasswordTextField(PASSWORD_ID));
+		TextField usernameTf = new TextField(USERNAME_ID);
+		usernameTf.add(new AttributeModifier("placeholder", "Username"));
+		form.add(usernameTf);
+		
+		PasswordTextField passwordTf = new PasswordTextField(PASSWORD_ID);
+		passwordTf.add(new AttributeModifier("placeholder", "Password"));
+		form.add(passwordTf);		
+
 		form.add(new Button(BUTTON_ID) {
 
 			@Override

@@ -35,7 +35,7 @@ public class AdminPage extends WebPage {
 		linkPanel = new LinkPanel("linkPanel", this);
 		add(linkPanel);
 		add(current);
-		add(createLogoutLink(LOGOUTLINK_ID));
+//		add(createLogoutLink(LOGOUTLINK_ID));
 
 	}
 
@@ -49,33 +49,25 @@ public class AdminPage extends WebPage {
 		}
 	}
 	
-	private Link<Void> createLogoutLink(final String id) {
-		Link<Void> logoutLink = new Link<Void>(id) {
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick() {
-				AuthenticatedWebSession.get().invalidate();
-				setResponsePage(AdminPage.class);
-				
-			}
-			
-		};
-		
-		return logoutLink;
-//		add(new Link("logOut") {
+//	private Link<Void> createLogoutLink(final String id) {
+//		Link<Void> logoutLink = new Link<Void>(id) {
 //
-//	         @Override
-//	         public void onClick() {
-//	            AuthenticatedWebSession.get().invalidate();
-//	            setResponsePage(getApplication().getHomePage());
-//	         }
-//	      });
-	}
+//			/**
+//			 * 
+//			 */
+//			private static final long serialVersionUID = 1L;
+//
+//			@Override
+//			public void onClick() {
+//				AuthenticatedWebSession.get().invalidate();
+//				setResponsePage(AdminPage.class);
+//				
+//			}
+//			
+//		};
+//		
+//		return logoutLink;
+//	}
 
 	public Panel getCustomerPanel() {
 		return customerPanel;
