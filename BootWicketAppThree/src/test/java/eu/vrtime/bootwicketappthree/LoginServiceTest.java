@@ -13,28 +13,14 @@ import eu.vrtime.bootwicketappthree.web.auth.AppUserAuthService;
 
 public class LoginServiceTest extends AbstractTestBase {
 
-	public AppUser appUser = new AppUser("Tom", "Turbo", "tom", "lgs123");
-
-	@Autowired
-	private AppUserRepository userRepo;
 
 	@Autowired
 	private AppUserAuthService authService;
 
-	@Test
-	public void createAppUserTest() {
-		AppUser dbAppUser = userRepo.saveAndFlush(appUser);
-		assertNotNull(dbAppUser);
-
-		assertNotNull(dbAppUser.getId());
-		
-		userRepo.delete(dbAppUser);
-
-	}
 
 	@Test
 	public void appUserLoginTest() {
-		AppUser dbAppUser = userRepo.saveAndFlush(appUser);
+
 
 		Boolean isAuthenticated = authService.checkLogin("tom", "lgs123");
 		assertTrue(isAuthenticated);
@@ -45,7 +31,10 @@ public class LoginServiceTest extends AbstractTestBase {
 		isAuthenticated = authService.checkLogin("asdfasd", "lgs123");
 		assertFalse(isAuthenticated);
 		
-		userRepo.delete(dbAppUser);
+		isAuthenticated = authService.checkLogin("asdfasd", null);
+		assertFalse(isAuthenticated);
+		
+
 
 	}
 

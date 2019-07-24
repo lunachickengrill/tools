@@ -8,8 +8,10 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import eu.vrtime.bootwicketappthree.model.AppUser;
 import eu.vrtime.bootwicketappthree.model.Customer;
 import eu.vrtime.bootwicketappthree.model.Device;
+import eu.vrtime.bootwicketappthree.repositories.AppUserRepository;
 import eu.vrtime.bootwicketappthree.repositories.CustomerRepository;
 import eu.vrtime.bootwicketappthree.repositories.DeviceRepository;
 
@@ -18,11 +20,14 @@ public class AutoSetupService {
 
 	private CustomerRepository customerRepo;
 	private DeviceRepository deviceRepo;
+	private AppUserRepository userRepo;
 
 	@Autowired
-	public AutoSetupService(final CustomerRepository customerRepository, final DeviceRepository deviceRepository) {
+	public AutoSetupService(final CustomerRepository customerRepository, final DeviceRepository deviceRepository,
+			final AppUserRepository userRepository) {
 		this.customerRepo = customerRepository;
 		this.deviceRepo = deviceRepository;
+		this.userRepo = userRepository;
 	}
 
 	@PostConstruct
@@ -30,7 +35,17 @@ public class AutoSetupService {
 
 		createDevices();
 		createCustomer();
+		createUser();
 
+	}
+
+	private void createUser() {
+		Set<AppUser> users = new HashSet<>();
+
+		users.add(new AppUser("test", "lgs123"));
+		users.add(new AppUser("tom", "turbo", "tom", "lgs123"));
+
+		userRepo.saveAll(users);
 	}
 
 	private void createDevices() {

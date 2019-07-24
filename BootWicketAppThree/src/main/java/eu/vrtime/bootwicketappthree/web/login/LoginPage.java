@@ -41,13 +41,17 @@ public class LoginPage extends WebPage {
 
 			@Override
 			public void onSubmit() {
-				if (Strings.isEmpty(username))
+				if (Strings.isEmpty(username) || Strings.isEmpty(password))
 					return;
+				
+				System.out.println("INSIDE SUBMIT");
+				System.out.println(username + " " + password);
 
 				boolean authResult = AuthenticatedWebSession.get().signIn(username, password);
 
 				if (authResult)
 					continueToOriginalDestination();
+					
 			}
 
 		});

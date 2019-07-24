@@ -1,7 +1,12 @@
 package eu.vrtime.bootwicketappthree.web;
 
+import org.apache.wicket.Application;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.panel.Panel;
+
+import eu.vrtime.bootwicketappthree.web.login.LoginPage;
 
 public class AdminPage extends WebPage {
 
@@ -29,6 +34,16 @@ public class AdminPage extends WebPage {
 		add(linkPanel);
 		add(current);
 
+	}
+
+	@Override
+	protected void onConfigure() {
+		super.onConfigure();
+
+		AuthenticatedWebApplication app = (AuthenticatedWebApplication) Application.get();
+		if (!AuthenticatedWebSession.get().isSignedIn()) {
+			app.restartResponseAtSignInPage();
+		}
 	}
 
 	public Panel getCustomerPanel() {

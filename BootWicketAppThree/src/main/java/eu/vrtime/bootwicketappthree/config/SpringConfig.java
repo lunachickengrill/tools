@@ -8,19 +8,25 @@ import org.apache.wicket.protocol.http.WicketFilter;
 import org.apache.wicket.spring.SpringWebApplicationFactory;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import eu.vrtime.bootwicketappthree.WicketApplication;
 
 @Configuration
 @Import({PersistenceConfig.class})
+@ComponentScan(basePackages="eu.vrtime.bootwicketappthree.web.auth")
 public class SpringConfig {
+	
+	// Either using Filter or FilterRegistrationBean is not working anymore
 	
 //	@Bean
 //	public Filter getWicketFilter() {
 //		WicketApplication webApplication = new WicketApplication();
 //		webApplication.setConfigurationType(RuntimeConfigurationType.DEVELOPMENT);
+//
 //		WicketFilter filter = new WicketFilter(webApplication);
 //		filter.setFilterPath("/");
 //		return filter;
@@ -34,12 +40,13 @@ public class SpringConfig {
 		
 		WicketFilter filter = new WicketFilter(webApplication);
 		filter.setFilterPath("/");
-		
+			
 		FilterRegistrationBean<WicketFilter> registration = new FilterRegistrationBean<>();
 		registration.setFilter(filter);
 		registration.addInitParameter(WicketFilter.APP_FACT_PARAM, SpringWebApplicationFactory.class.getName());
 		registration.setDispatcherTypes(DispatcherType.REQUEST, DispatcherType.FORWARD);
-		
+		registration.addUrlPatterns("/*");
+			
 		return registration;
 	}
 

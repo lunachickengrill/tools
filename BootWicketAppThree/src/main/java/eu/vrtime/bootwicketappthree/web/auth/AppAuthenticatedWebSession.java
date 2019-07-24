@@ -11,14 +11,19 @@ public class AppAuthenticatedWebSession extends AuthenticatedWebSession {
 
 	@SpringBean
 	private AppUserAuthService authService;
-
+	
+	
+	
 	public AppAuthenticatedWebSession(Request request) {
 		super(request);
 	}
 
 	@Override
 	protected boolean authenticate(String username, String password) {
+//		return (username.equals("tom") && password.equals("lgs123"));
 		return authService.checkLogin(username, password);
+
+
 	}
 
 	@Override
