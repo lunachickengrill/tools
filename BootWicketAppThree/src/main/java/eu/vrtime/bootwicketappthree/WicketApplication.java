@@ -16,8 +16,13 @@ import eu.vrtime.bootwicketappthree.web.BreadCrumbPage;
 import eu.vrtime.bootwicketappthree.web.auth.AppAuthenticatedWebSession;
 import eu.vrtime.bootwicketappthree.web.login.LoginPage;
 
+
+// when extending AuthenticatedWebApplication it is not working anymore
 public class WicketApplication extends WebApplication {
 
+	
+	
+	
 	public WicketApplication() {
 		super.init();
 	}
@@ -29,9 +34,6 @@ public class WicketApplication extends WebApplication {
 		mountPage("/admin", AdminPage.class);
 		mountPage("/breadcrumb", BreadCrumbPage.class);
 		mountPage("/login", LoginPage.class);
-		
-
-		
 
 	}
 
