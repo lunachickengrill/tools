@@ -34,7 +34,6 @@ public class LinkPanel extends Panel {
 		add(createLink(TESTLINK_ID, parentPage.getTestPanel()));
 		add(createLogoutLink(LOGOUTLINK_ID));
 
-
 	}
 
 	public AdminPage getParentPage() {

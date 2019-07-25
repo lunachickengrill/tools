@@ -13,6 +13,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 
 import eu.vrtime.bootwicketappthree.web.AdminPage;
+import eu.vrtime.bootwicketappthree.web.auth.AppAuthenticatedWebSession;
 
 public class LoginPage extends WebPage {
 	
@@ -34,8 +35,10 @@ public class LoginPage extends WebPage {
 	}
 
 	private StatelessForm<Void> createForm(final String id) {
+		
 		StatelessForm<Void> form = new StatelessForm<Void>(id);
 		form.setDefaultModel(new CompoundPropertyModel(this));
+		
 		TextField usernameTf = new TextField(USERNAME_ID);
 		usernameTf.add(new AttributeModifier("placeholder", "Username"));
 		form.add(usernameTf);
@@ -49,22 +52,23 @@ public class LoginPage extends WebPage {
 			@Override
 			public void onSubmit() {
 				if (Strings.isEmpty(username) || Strings.isEmpty(password))
-					return;
-				
-				System.out.println("INSIDE SUBMIT");
-				System.out.println(username + " " + password);
+					return;				
 
-				boolean authResult = AuthenticatedWebSession.get().signIn(username, password);
+				boolean authResult = getCurrentSession().signIn(username, password);
 
 				if (authResult)
-					continueToOriginalDestination();
-					
+//					continueToOriginalDestination();
+					setResponsePage(AdminPage.class);
 			}
 
 		});
 
 		return form;
 
+	}
+	
+	private AppAuthenticatedWebSession getCurrentSession() {
+		return (AppAuthenticatedWebSession) AuthenticatedWebSession.get();
 	}
 
 }

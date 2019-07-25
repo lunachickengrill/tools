@@ -7,6 +7,8 @@ import org.apache.wicket.extensions.breadcrumb.BreadCrumbBar;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.Link;
 
+import eu.vrtime.bootwicketappthree.web.login.LoginPage;
+
 public class BreadCrumbPage extends WebPage {
 
 	/**
@@ -33,10 +35,6 @@ public class BreadCrumbPage extends WebPage {
 	@Override
 	protected void onConfigure() {
 		super.onConfigure();
-		AuthenticatedWebApplication app = (AuthenticatedWebApplication) Application.get();
-		if (!AuthenticatedWebSession.get().isSignedIn()) {
-			app.restartResponseAtSignInPage();
-		}
 	}
 
 	private Link<Void> createLogoutLink(final String id) {
@@ -45,7 +43,7 @@ public class BreadCrumbPage extends WebPage {
 			@Override
 			public void onClick() {
 				AuthenticatedWebSession.get().invalidateNow();
-				setResponsePage(BreadCrumbPage.class);
+				setResponsePage(LoginPage.class);
 
 			}
 

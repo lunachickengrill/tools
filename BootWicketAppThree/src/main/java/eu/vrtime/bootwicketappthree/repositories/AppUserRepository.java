@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import eu.vrtime.bootwicketappthree.model.AppUser;
 
-@Repository
+@Repository("AppUserRepository")
 public interface AppUserRepository extends JpaRepository<AppUser, Long>, JpaSpecificationExecutor<AppUser> {
 
 	public long count();

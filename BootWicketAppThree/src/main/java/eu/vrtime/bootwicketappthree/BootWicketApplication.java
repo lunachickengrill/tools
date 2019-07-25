@@ -20,6 +20,7 @@ public class BootWicketApplication {
 	public static void checkForBean(ApplicationContext ctx) {
 
 		System.out.println("BEAN EXISTS: " + ctx.containsBean("authService"));
+		System.out.println("BEAN EXISTS: " + ctx.containsBean("AppUserRepository"));
 
 	}
 
