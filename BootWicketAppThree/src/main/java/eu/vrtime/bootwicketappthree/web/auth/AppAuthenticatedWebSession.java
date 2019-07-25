@@ -1,10 +1,13 @@
 package eu.vrtime.bootwicketappthree.web.auth;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.hibernate.service.spi.InjectService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.Assert;
 
@@ -12,14 +15,15 @@ public class AppAuthenticatedWebSession extends AuthenticatedWebSession {
 
 	private static final long serialVersionUID = -8841219806164597147L;
 
-	@SpringBean
+	@Inject
 	@Qualifier("authService")
 	private AppUserAuthService authService;
 
 	public AppAuthenticatedWebSession(Request request) {
 		super(request);
 		
-//		Injecting Spring Beans with @SpringBean annotation works ONLY on wicket componets. Any other wicket object like session or model need to inject manually		
+//		Injecting Spring Beans with @SpringBean annotation works ONLY on wicket componets. 
+//		Any other wicket object like session or model need to inject manually		
 		Injector.get().inject(this);
 	}
 
