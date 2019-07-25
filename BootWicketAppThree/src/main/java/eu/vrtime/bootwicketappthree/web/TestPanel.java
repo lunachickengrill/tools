@@ -54,6 +54,7 @@ public class TestPanel extends Panel {
 	public TestPanel(final String id) {
 		super(id);
 		feedback = new FeedbackPanel(FEEDBACK_ID);
+		dateFormat = new SimpleDateFormat("hh:mm:ss");
 	}
 
 	@Override
@@ -81,7 +82,6 @@ public class TestPanel extends Panel {
 
 	
 	private Label createDateLabel(final String id) {
-		dateFormat = new SimpleDateFormat("hh:mm:ss");
 		currentTime = dateFormat.format(new Date());
 		PropertyModel model = new PropertyModel<>(this, "currentTime");
 		return new Label(id, model);
