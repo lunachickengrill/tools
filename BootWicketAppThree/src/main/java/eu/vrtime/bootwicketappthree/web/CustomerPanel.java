@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.collections4.iterators.EmptyListIterator;
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -18,6 +20,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.springframework.util.Assert;
 
 import eu.vrtime.bootwicketappthree.model.Customer;
 import eu.vrtime.bootwicketappthree.model.CustomerSpecification;
@@ -46,7 +49,7 @@ public class CustomerPanel extends Panel {
 	private CustomerSpecification customerSpec = new CustomerSpecification();
 	private PageableListView<Customer> listView;
 //	private IModel customerModel = new CustomerModel(customerRepository, customerSpec);
-	
+
 //	private IModel<List<Customer>> customerListModel = new LoadableDetachableModel<List<Customer>>() {
 //
 //		@Override
@@ -76,16 +79,24 @@ public class CustomerPanel extends Panel {
 		add(listView);
 	}
 
-	private Form createCustomerForm(String id) {
+	private Form<Void> createCustomerForm(String id) {
 
-		Form form = new Form(id);
+		Form<Void> form = new Form<>(id);
 		CompoundPropertyModel<CustomerSpecification> model = new CompoundPropertyModel<CustomerSpecification>(
 				customerSpec);
 		form.setDefaultModel(model);
 
-		form.add(new TextField<>(FORM_CUSTOMERID_ID));
-		form.add(new TextField<>(FORM_FIRSTNAME_ID));
-		form.add(new TextField<>(FORM_LASTNAME_ID));
+		TextField<Void> tfCustomerId = new TextField<>(FORM_CUSTOMERID_ID);
+		tfCustomerId.add(new AttributeModifier("placeholder", "123"));
+		form.add(tfCustomerId);
+
+		TextField<Void> tfFirstname = new TextField<>(FORM_FIRSTNAME_ID);
+		tfFirstname.add(new AttributeModifier("placeholder", "Tom"));
+		form.add(tfFirstname);
+
+		TextField<Void> tfLastname = new TextField<>(FORM_LASTNAME_ID);
+		tfLastname.add(new AttributeModifier("placeholder", "Turbo"));
+		form.add(tfLastname);
 
 		form.add(new Button(FORM_BUTTON_ID) {
 
@@ -106,15 +117,15 @@ public class CustomerPanel extends Panel {
 
 	private PageableListView<Customer> createListView(String id) {
 
-			
-		PageableListView<Customer> listView = new PageableListView<Customer>(id, new CustomerModel(customerRepository, customerSpec),10) {
+		PageableListView<Customer> listView = new PageableListView<Customer>(id,
+				new CustomerModel(customerRepository, customerSpec), 10) {
 
 			private static final long serialVersionUID = 6795844460169152926L;
 
 			@Override
 			protected void populateItem(ListItem<Customer> item) {
 				Customer cust = (Customer) item.getModelObject();
-				
+
 				item.add(new Label("customerId", Model.of(cust.getCustomerId())));
 				item.add(new Label("firstName", Model.of(cust.getFirstName())));
 				item.add(new Label("lastName", Model.of(cust.getLastName())));
@@ -122,7 +133,7 @@ public class CustomerPanel extends Panel {
 			}
 
 		};
-		
+
 		return listView;
 	}
 

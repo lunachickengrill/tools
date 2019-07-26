@@ -98,11 +98,11 @@ public class DevicePanel extends Panel {
 		setDefaultModel(model);
 		
 		TextField<String> macField = new TextField<>(FORM_MAC_ID);
-		macField.add(new AttributeModifier("placeholder", "device MAC address"));
+		macField.add(new AttributeModifier("placeholder", "00:00:00:00:00:00"));
 		form.add(macField);
 
 		TextField<String> snField = new TextField<>(FORM_SN_ID);
-		snField.add(new AttributeModifier("placeholder", "device Serialnumber"));
+		snField.add(new AttributeModifier("placeholder", "SN0123456789"));
 		form.add(snField);
 		
 		form.add(createDeviceTypeChoice(FORM_TYPE_ID));
