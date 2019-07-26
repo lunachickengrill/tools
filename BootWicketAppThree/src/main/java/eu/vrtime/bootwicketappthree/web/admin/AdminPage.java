@@ -1,4 +1,4 @@
-package eu.vrtime.bootwicketappthree.web;
+package eu.vrtime.bootwicketappthree.web.admin;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
@@ -7,6 +7,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 
+import eu.vrtime.bootwicketappthree.web.TestPanel;
 import eu.vrtime.bootwicketappthree.web.login.LoginPage;
 
 public class AdminPage extends WebPage {

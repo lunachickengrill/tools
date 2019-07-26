@@ -1,4 +1,4 @@
-package eu.vrtime.bootwicketappthree.web;
+package eu.vrtime.bootwicketappthree.web.admin;
 
 import java.util.Collections;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.collections4.iterators.EmptyListIterator;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -48,6 +49,8 @@ public class CustomerPanel extends Panel {
 	private Customer customer;
 	private CustomerSpecification customerSpec = new CustomerSpecification();
 	private PageableListView<Customer> listView;
+	private ModalWindow createCustomerWindow;
+	
 //	private IModel customerModel = new CustomerModel(customerRepository, customerSpec);
 
 //	private IModel<List<Customer>> customerListModel = new LoadableDetachableModel<List<Customer>>() {
@@ -77,6 +80,7 @@ public class CustomerPanel extends Panel {
 		add(createCustomerForm(FORM_ID));
 		listView = createListView(CUSTOMERLIST_ID);
 		add(listView);
+		createCustomerWindow = new ModalWindow("modalWindow");
 	}
 
 	private Form<Void> createCustomerForm(String id) {

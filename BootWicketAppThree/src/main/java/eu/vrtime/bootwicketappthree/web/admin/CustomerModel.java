@@ -1,4 +1,4 @@
-package eu.vrtime.bootwicketappthree.web;
+package eu.vrtime.bootwicketappthree.web.admin;
 
 import java.util.Collections;
 import java.util.List;

@@ -14,14 +14,14 @@ public class BootWicketApplication {
 
 	public static void main(String[] args) {
 		ApplicationContext ctx = SpringApplication.run(BootWicketApplication.class, args);
-		checkForBean(ctx);
+//		checkForBean(ctx);
 	}
 
-	public static void checkForBean(ApplicationContext ctx) {
-
-		System.out.println("BEAN EXISTS: " + ctx.containsBean("authService"));
-		System.out.println("BEAN EXISTS: " + ctx.containsBean("AppUserRepository"));
-
-	}
+//	public static void checkForBean(ApplicationContext ctx) {
+//
+//		System.out.println("BEAN EXISTS: " + ctx.containsBean("authService"));
+//		System.out.println("BEAN EXISTS: " + ctx.containsBean("AppUserRepository"));
+//
+//	}
 
 }

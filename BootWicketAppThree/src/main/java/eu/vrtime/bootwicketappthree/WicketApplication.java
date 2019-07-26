@@ -8,8 +8,8 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 
-import eu.vrtime.bootwicketappthree.web.AdminPage;
 import eu.vrtime.bootwicketappthree.web.BreadCrumbPage;
+import eu.vrtime.bootwicketappthree.web.admin.AdminPage;
 import eu.vrtime.bootwicketappthree.web.auth.AppAuthenticatedWebSession;
 import eu.vrtime.bootwicketappthree.web.login.LoginPage;
 

@@ -12,7 +12,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 
-import eu.vrtime.bootwicketappthree.web.AdminPage;
+import eu.vrtime.bootwicketappthree.web.admin.AdminPage;
 import eu.vrtime.bootwicketappthree.web.auth.AppAuthenticatedWebSession;
 
 public class LoginPage extends WebPage {

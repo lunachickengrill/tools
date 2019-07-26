@@ -1,4 +1,4 @@
-package eu.vrtime.bootwicketappthree.web;
+package eu.vrtime.bootwicketappthree.web.admin;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
