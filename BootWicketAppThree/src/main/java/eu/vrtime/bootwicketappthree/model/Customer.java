@@ -11,13 +11,13 @@ import javax.persistence.OneToMany;
 @Entity
 public class Customer extends AbstractBaseEntity {
 
-	@Column(nullable = false)
+	@Column(nullable = false,updatable=false, unique=true)
 	private String customerId;
 
-	@Column
+	@Column(nullable=false, updatable=true,unique=false)
 	private String firstName;
 
-	@Column
+	@Column(nullable=false, updatable=true, unique=false)
 	private String lastName;
 
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -71,5 +71,12 @@ public class Customer extends AbstractBaseEntity {
 		service.setCustomer(null);
 		services.remove(service);
 	}
+
+	@Override
+	public String toString() {
+		return "Customer [customerId=" + customerId + ", firstName=" + firstName + ", lastName=" + lastName + "]";
+	}
+	
+	
 
 }

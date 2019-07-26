@@ -70,11 +70,13 @@ public class AutoSetupService {
 	private void createCustomer() {
 		Set<Customer> customers = new HashSet<>();
 
-		customers.add(new Customer("123", "asdf", "asdf"));
-		customers.add(new Customer("456", "qwer", "qwer"));
-		customers.add(new Customer("789", "yxcxv", "yxyv"));
-
+		customers.add(new Customer("123111", "Hansi", "Hinterseer"));
+		customers.add(new Customer("456111", "Andreas", "Gabalier"));
+		customers.add(new Customer("789111", "Hoshi", "Schlagerstar"));
+		customers.add(new Customer("123222", "Melanie", "Ringelblüte"));
+		customers.add(new Customer("456222", "Susi", "Riesenmops"));
 		customerRepo.saveAll(customers);
 	}
 
 }
+

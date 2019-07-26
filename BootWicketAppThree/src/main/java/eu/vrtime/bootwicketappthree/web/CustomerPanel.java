@@ -44,18 +44,21 @@ public class CustomerPanel extends Panel {
 	private FeedbackPanel feedbackPanel;
 	private Customer customer;
 	private CustomerSpecification customerSpec = new CustomerSpecification();
-	private IModel<List<Customer>> customerListModel = new LoadableDetachableModel<List<Customer>>() {
-
-		@Override
-		protected List<Customer> load() {
-
-			return (customerSpec != null && ((customerSpec.getCustomerId() != null)
-					|| (customerSpec.getFirstName() != null) || (customerSpec.getLastName() != null)))
-							? customerRepository.findAll(customerSpec)
-							: Collections.emptyList();
-		}
-
-	};
+	private PageableListView<Customer> listView;
+//	private IModel customerModel = new CustomerModel(customerRepository, customerSpec);
+	
+//	private IModel<List<Customer>> customerListModel = new LoadableDetachableModel<List<Customer>>() {
+//
+//		@Override
+//		protected List<Customer> load() {
+//
+//			return (customerSpec != null && ((customerSpec.getCustomerId() != null)
+//					|| (customerSpec.getFirstName() != null) || (customerSpec.getLastName() != null)))
+//							? customerRepository.findAll(customerSpec)
+//							: Collections.emptyList();
+//		}
+//
+//	};
 
 	public CustomerPanel(String id) {
 		super(id);
@@ -69,7 +72,8 @@ public class CustomerPanel extends Panel {
 		super.onInitialize();
 		add(feedbackPanel);
 		add(createCustomerForm(FORM_ID));
-		add(createListView(CUSTOMERLIST_ID));
+		listView = createListView(CUSTOMERLIST_ID);
+		add(listView);
 	}
 
 	private Form createCustomerForm(String id) {
@@ -102,11 +106,15 @@ public class CustomerPanel extends Panel {
 
 	private PageableListView<Customer> createListView(String id) {
 
-		PageableListView<Customer> listView = new PageableListView<Customer>(id, customerListModel, 5) {
+			
+		PageableListView<Customer> listView = new PageableListView<Customer>(id, new CustomerModel(customerRepository, customerSpec),10) {
+
+			private static final long serialVersionUID = 6795844460169152926L;
 
 			@Override
 			protected void populateItem(ListItem<Customer> item) {
 				Customer cust = (Customer) item.getModelObject();
+				
 				item.add(new Label("customerId", Model.of(cust.getCustomerId())));
 				item.add(new Label("firstName", Model.of(cust.getFirstName())));
 				item.add(new Label("lastName", Model.of(cust.getLastName())));
@@ -114,7 +122,7 @@ public class CustomerPanel extends Panel {
 			}
 
 		};
-
+		
 		return listView;
 	}
 
