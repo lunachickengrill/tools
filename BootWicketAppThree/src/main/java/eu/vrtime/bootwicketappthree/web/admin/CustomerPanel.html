@@ -1,30 +1,39 @@
 <html>
 <head></head>
 <wicket:panel>
-	<div wicket:id="feedback"></div>
-	<div>
+	<div wicket:id="feedback">feedback</div>
+
 		<form wicket:id="searchCustomerForm">
-			<div class="form-group">
-				<br />
-				<label>CustomerId</label><br />
-				<input wicket:id="customerId" type="text" class="input-medium">
-				<br />
-				<label>Firstname</label><br />
-				<input wicket:id="firstName" type="text" class="input-medium">
-				<br />
-				<label>Lastname</label><br />
-				<input wicket:id="lastName" type="text" class="input-medium">
-				<br />
+
+			<div class="form-group row">
+				<div class="col-md-2">
+					<label for="customerIdField" class="form-control-label">CustomerId</label>
+					<input wicket:id="customerId" type="text" id="customerIdField" class="form-control">
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-md-2">
+					<label for="firstNameField" class="form-control-label">Firstname</label>
+					<input wicket:id="firstName" type="text" id="firstNameField" class="form-control">
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-md-2">
+					<label for="lastNameField" class="form-control-label">Lastname</label>
+					<input wicket:id="lastName" type="text" id="lastNameField"	class="form-control">
+				</div>
 			</div>
 			<div>
-				<input wicket:id="submit" class="btn btn-default" type="submit"
-					value="search">
+				<input wicket:id="submit" class="btn btn-default" type="submit"	value="search">
 			</div>
 		</form>
-		<a href="#" class="btn btn-default" wicket:id="createCustomerLink">create</a>
-	</div>
+		
+		<span>
+			<a href="#" class="btn btn-default" wicket:id="createCustomerLink">create</a>
+		</span>
 
-	<div class="col-md-12">
+	
+	<div class="container-fluid">
 		<table class="table table-hover table-bordered">
 			<th>CustomerID</th>
 			<th>Firstname</th>
