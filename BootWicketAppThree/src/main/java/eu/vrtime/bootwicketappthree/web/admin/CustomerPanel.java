@@ -133,7 +133,7 @@ public class CustomerPanel extends Panel {
 	private PageableListView<Customer> createListView(String id) {
 
 		PageableListView<Customer> listView = new PageableListView<Customer>(id,
-				new CustomerModel(customerRepository, customerSpec), 10) {
+				new LoadableCustomerModel(customerRepository, customerSpec), 10) {
 
 			private static final long serialVersionUID = 6795844460169152926L;
 
@@ -156,8 +156,9 @@ public class CustomerPanel extends Panel {
 
 		CreateCustomerPanel createCustomerPanel = new CreateCustomerPanel(window.getContentId(), repository);
 		window.setContent(createCustomerPanel);
-		window.setCookieName("modal-createCustomer");
+		window.setCookieName(this.getClass().getSimpleName());
 		window.setTitle(Model.of("Create Customer"));
+		window.setCssClassName(ModalWindow.CSS_CLASS_BLUE);
 
 		add(new AjaxLink<Void>(LINK_CREATE_CUSTOMER) {
 			private static final long serialVersionUID = 5218474796306160615L;

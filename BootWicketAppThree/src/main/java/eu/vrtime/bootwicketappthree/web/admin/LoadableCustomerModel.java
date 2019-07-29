@@ -9,14 +9,14 @@ import eu.vrtime.bootwicketappthree.model.Customer;
 import eu.vrtime.bootwicketappthree.model.CustomerSpecification;
 import eu.vrtime.bootwicketappthree.repositories.CustomerRepository;
 
-public class CustomerModel extends LoadableDetachableModel<List<Customer>> {
+public class LoadableCustomerModel extends LoadableDetachableModel<List<Customer>> {
 
 	private static final long serialVersionUID = 1L;
 
 	private CustomerRepository customerRepository;
 	private CustomerSpecification customerSpecification;
 
-	public CustomerModel(CustomerRepository customerRepository, CustomerSpecification customerSpecification) {
+	public LoadableCustomerModel(CustomerRepository customerRepository, CustomerSpecification customerSpecification) {
 		this.customerRepository = customerRepository;
 		this.customerSpecification = customerSpecification;
 	}
