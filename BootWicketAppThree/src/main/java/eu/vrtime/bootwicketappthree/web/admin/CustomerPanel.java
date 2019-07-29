@@ -144,7 +144,7 @@ public class CustomerPanel extends Panel {
 				item.add(new Label("customerId", Model.of(cust.getCustomerId())));
 				item.add(new Label("firstName", Model.of(cust.getFirstName())));
 				item.add(new Label("lastName", Model.of(cust.getLastName())));
-
+				item.add(new EditLinkPanel("editLink"));
 			}
 
 		};
