@@ -16,6 +16,8 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.list.PageableListView;
+import org.apache.wicket.markup.html.navigation.paging.PagingNavigation;
+import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -47,6 +49,7 @@ public class CustomerPanel extends Panel {
 	private static final String FEEDBACKPANEL_ID = "feedback";
 	private static final String CUSTOMERLIST_ID = "customerList";
 	private static final String LINK_CREATE_CUSTOMER = "createCustomerLink";
+	private static final String NAVIGATOR_ID = "navigator";
 
 	private FeedbackPanel feedbackPanel;
 	private Customer customer;
@@ -84,6 +87,7 @@ public class CustomerPanel extends Panel {
 		add(createCustomerForm(FORM_ID));
 		listView = createListView(CUSTOMERLIST_ID);
 		add(listView);
+		add(new PagingNavigator(NAVIGATOR_ID, listView));
 		
 		// should be refactored. Should be in AdminPage but only visible if Customer Panel is active.
 		add(addCreateCustomerWindow(createCustomerWindow, customerRepository));
@@ -121,7 +125,7 @@ public class CustomerPanel extends Panel {
 			}
 
 		});
-
+		
 		return form;
 
 	}

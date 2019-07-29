@@ -15,7 +15,7 @@ public class EditLinkPanel extends Panel {
 	 * 
 	 */
 	private static final long serialVersionUID = 3716268701155912873L;
-
+	private static final String EDITLINK_ID = "editLink";
 	private FeedbackPanel feedback = new FeedbackPanel("feedback");
 
 	public EditLinkPanel(final String id) {
@@ -23,7 +23,7 @@ public class EditLinkPanel extends Panel {
 		add(feedback);
 
 		setOutputMarkupId(true);
-		AjaxLink<Void> link = new AjaxLink<Void>("link") {
+		AjaxLink<Void> link = new AjaxLink<Void>(EDITLINK_ID) {
 
 			private static final long serialVersionUID = -6261776607009230556L;
 
@@ -34,7 +34,7 @@ public class EditLinkPanel extends Panel {
 
 		};
 
-		link.add(new Label("label", "edit"));
+//		link.add(new Label("label", "edit"));
 		add(link);
 	}
 
