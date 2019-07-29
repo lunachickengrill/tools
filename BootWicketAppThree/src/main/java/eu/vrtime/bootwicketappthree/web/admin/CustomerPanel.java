@@ -46,14 +46,14 @@ public class CustomerPanel extends Panel {
 	private static final String FORM_BUTTON_ID = "submit";
 	private static final String FEEDBACKPANEL_ID = "feedback";
 	private static final String CUSTOMERLIST_ID = "customerList";
-	private static final String LINK_CREATE_CUSTOMER ="createCustomerLink";
+	private static final String LINK_CREATE_CUSTOMER = "createCustomerLink";
 
 	private FeedbackPanel feedbackPanel;
 	private Customer customer;
 	private CustomerSpecification customerSpec = new CustomerSpecification();
 	private PageableListView<Customer> listView;
 	private ModalWindow createCustomerWindow;
-	
+
 //	private IModel customerModel = new CustomerModel(customerRepository, customerSpec);
 
 //	private IModel<List<Customer>> customerListModel = new LoadableDetachableModel<List<Customer>>() {
@@ -84,6 +84,8 @@ public class CustomerPanel extends Panel {
 		add(createCustomerForm(FORM_ID));
 		listView = createListView(CUSTOMERLIST_ID);
 		add(listView);
+		
+		// should be refactored. Should be in AdminPage but only visible if Customer Panel is active.
 		add(addCreateCustomerWindow(createCustomerWindow, customerRepository));
 
 	}
@@ -145,28 +147,28 @@ public class CustomerPanel extends Panel {
 
 		return listView;
 	}
-	
-private ModalWindow addCreateCustomerWindow(final ModalWindow window, final CustomerRepository repository) {
-	
-	CreateCustomerPanel createCustomerPanel = new CreateCustomerPanel(window.getContentId(), repository);
-	window.setContent(createCustomerPanel);
-	window.setCookieName("modal-createCustomer");
-	window.setTitle(Model.of("Create Customer"));
-	
-	add(new AjaxLink<Void>(LINK_CREATE_CUSTOMER) {
-		private static final long serialVersionUID = 5218474796306160615L;
 
-		@Override
-		public void onClick(AjaxRequestTarget target) {
-			createCustomerWindow.show(target);
+	private ModalWindow addCreateCustomerWindow(final ModalWindow window, final CustomerRepository repository) {
 
-		}
+		CreateCustomerPanel createCustomerPanel = new CreateCustomerPanel(window.getContentId(), repository);
+		window.setContent(createCustomerPanel);
+		window.setCookieName("modal-createCustomer");
+		window.setTitle(Model.of("Create Customer"));
 
-	});
-	
-	window.setOutputMarkupId(true);
-	
-	return window;
-	
-}
+		add(new AjaxLink<Void>(LINK_CREATE_CUSTOMER) {
+			private static final long serialVersionUID = 5218474796306160615L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				createCustomerWindow.show(target);
+
+			}
+
+		});
+
+		window.setOutputMarkupId(true);
+
+		return window;
+
+	}
 }
