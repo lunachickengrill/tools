@@ -6,6 +6,8 @@ import java.util.List;
 import org.apache.commons.collections4.iterators.EmptyListIterator;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -44,6 +46,7 @@ public class CustomerPanel extends Panel {
 	private static final String FORM_BUTTON_ID = "submit";
 	private static final String FEEDBACKPANEL_ID = "feedback";
 	private static final String CUSTOMERLIST_ID = "customerList";
+	private static final String LINK_CREATE_CUSTOMER ="createCustomerLink";
 
 	private FeedbackPanel feedbackPanel;
 	private Customer customer;
@@ -70,6 +73,7 @@ public class CustomerPanel extends Panel {
 		super(id);
 		feedbackPanel = new FeedbackPanel(FEEDBACKPANEL_ID);
 		customer = new Customer();
+		createCustomerWindow = new ModalWindow("modalWindow");
 	}
 
 	@Override
@@ -80,7 +84,8 @@ public class CustomerPanel extends Panel {
 		add(createCustomerForm(FORM_ID));
 		listView = createListView(CUSTOMERLIST_ID);
 		add(listView);
-		createCustomerWindow = new ModalWindow("modalWindow");
+		add(addCreateCustomerWindow(createCustomerWindow, customerRepository));
+
 	}
 
 	private Form<Void> createCustomerForm(String id) {
@@ -140,5 +145,28 @@ public class CustomerPanel extends Panel {
 
 		return listView;
 	}
+	
+private ModalWindow addCreateCustomerWindow(final ModalWindow window, final CustomerRepository repository) {
+	
+	CreateCustomerPanel createCustomerPanel = new CreateCustomerPanel(window.getContentId(), repository);
+	window.setContent(createCustomerPanel);
+	window.setCookieName("modal-createCustomer");
+	window.setTitle(Model.of("Create Customer"));
+	
+	add(new AjaxLink<Void>(LINK_CREATE_CUSTOMER) {
+		private static final long serialVersionUID = 5218474796306160615L;
 
+		@Override
+		public void onClick(AjaxRequestTarget target) {
+			createCustomerWindow.show(target);
+
+		}
+
+	});
+	
+	window.setOutputMarkupId(true);
+	
+	return window;
+	
+}
 }

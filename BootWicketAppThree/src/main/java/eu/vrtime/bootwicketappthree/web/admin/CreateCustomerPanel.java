@@ -27,14 +27,13 @@ public class CreateCustomerPanel extends Panel {
 	private String firstName;
 	private String lastName;
 	
-	private PageParameters parameters;
 	private CustomerRepository repository;
 	
 	private FeedbackPanel feedback;
 
-	public CreateCustomerPanel(final String id, PageParameters parameters, CustomerRepository repository) {
+	public CreateCustomerPanel(final String id,  CustomerRepository repository) {
 		super(id);
-		this.parameters=parameters;
+
 		this.repository = repository;
 		feedback = new FeedbackPanel(FEEDBACK_ID);
 	}
