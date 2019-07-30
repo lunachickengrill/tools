@@ -27,6 +27,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.util.Assert;
 
+import eu.vrtime.bootwicketappthree.model.AppUser;
 import eu.vrtime.bootwicketappthree.model.Customer;
 import eu.vrtime.bootwicketappthree.model.CustomerSpecification;
 import eu.vrtime.bootwicketappthree.repositories.CustomerRepository;
@@ -77,6 +78,7 @@ public class CustomerPanel extends Panel {
 		feedbackPanel = new FeedbackPanel(FEEDBACKPANEL_ID);
 		customer = new Customer();
 		createCustomerWindow = new ModalWindow("modalWindow");
+
 	}
 
 	@Override

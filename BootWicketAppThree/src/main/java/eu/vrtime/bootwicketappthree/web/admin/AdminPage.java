@@ -7,7 +7,9 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 
+import eu.vrtime.bootwicketappthree.model.AppUser;
 import eu.vrtime.bootwicketappthree.web.TestPanel;
+import eu.vrtime.bootwicketappthree.web.auth.AppAuthenticatedWebSession;
 import eu.vrtime.bootwicketappthree.web.login.LoginPage;
 
 public class AdminPage extends WebPage {
@@ -23,6 +25,8 @@ public class AdminPage extends WebPage {
 	private Panel devicePanel = new DevicePanel(PANEL_ID);
 	private Panel TestPanel = new TestPanel(PANEL_ID);
 	private Panel current = customerPanel;
+	
+	private AppAuthenticatedWebSession session;
 
 	public AdminPage() {
 		super();
@@ -45,6 +49,10 @@ public class AdminPage extends WebPage {
 		AuthenticatedWebApplication app = (AuthenticatedWebApplication) Application.get();
 		if (!AuthenticatedWebSession.get().isSignedIn()) {
 			app.restartResponseAtSignInPage();
+		}
+		
+		if(AuthenticatedWebSession.get().isSignedIn()) {
+			this.session = (AppAuthenticatedWebSession) AuthenticatedWebSession.get();
 		}
 	}
 	
@@ -80,6 +88,10 @@ public class AdminPage extends WebPage {
 
 	public void setCurrent(Panel panel) {
 		this.current = panel;
+	}
+	
+	protected AppUser getUser() {
+		return session.getAppUser();
 	}
 
 }
