@@ -2,32 +2,36 @@
 <head></head>
 <wicket:panel>
 	<div wicket:id="feedback"></div>
-	<div>
-		<form wicket:id="searchDeviceForm">
-			<div class="form-group row">
-				<div class="col-md-2">
-					<label for="macField" class="form-control-label">MAC</label>
-					<input wicket:id="mac" type="text" id="macField" class="form-control">
+	<div class="container">
+		<div class="row">
+			<form wicket:id="searchDeviceForm">
+				<div class="form-group row">
+					<div class="col-md-2">
+						<label for="macField" class="form-control-label">MAC</label> <input
+							wicket:id="mac" type="text" id="macField" class="form-control">
+					</div>
 				</div>
-			</div>
-			<div class="form-group row">
-				<div class="col-md-2">				
-					<label for="snField" class="form-control-label">Serial</label>
-					<input wicket:id="serial" type="text" id="snField" class="form-control">
+				<div class="form-group row">
+					<div class="col-md-2">
+						<label for="snField" class="form-control-label">Serial</label> <input
+							wicket:id="serial" type="text" id="snField" class="form-control">
+					</div>
 				</div>
-			</div>
-			<div class="form-group row">
-				<div class="col-md-2">
-					<label for="typeField" class="form-contro-label">Type</label>
-					<select wicket:id="type" name="type" class="form-control"></select>
+				<div class="form-group row">
+					<div class="col-md-2">
+						<label for="typeField" class="form-contro-label">Type</label> <select
+							wicket:id="type" name="type" class="form-control"></select>
+					</div>
 				</div>
-			</div>
-			<input wicket:id="submit" type="submit" class="btn btn-default" value="search">
-		</form>
+				<input wicket:id="submit" type="submit" class="btn btn-primary"
+					value="search">
+			</form>
+		</div>
 	</div>
 
 	<div>
-		<table wicket:id="deviceDataTable"	class="table table-hover table-borderless"></table>
+		<table wicket:id="deviceDataTable"
+			class="table table-hover table-borderless"></table>
 	</div>
 </wicket:panel>
 </html>
