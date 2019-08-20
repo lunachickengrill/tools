@@ -25,7 +25,6 @@ public class AdminPage extends WebPage {
 	private Panel devicePanel = new DevicePanel(PANEL_ID);
 	private Panel TestPanel = new TestPanel(PANEL_ID);
 	private Panel current = customerPanel;
-	
 	private AppAuthenticatedWebSession session;
 
 	public AdminPage() {
@@ -39,6 +38,7 @@ public class AdminPage extends WebPage {
 		linkPanel = new LinkPanel("linkPanel", this);
 		add(linkPanel);
 		add(current);
+		add(new AppUserPanel("userInfoPanel"));
 
 	}
 
