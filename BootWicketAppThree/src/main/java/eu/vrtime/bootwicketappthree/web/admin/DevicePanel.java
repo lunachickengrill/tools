@@ -144,9 +144,9 @@ public class DevicePanel extends Panel {
 
 		final List<IColumn<Device, String>> columns = new ArrayList<>();
 
-		columns.add(new PropertyColumn(new Model("MAC"), "mac"));
-		columns.add(new PropertyColumn(new Model("SERIAL"), "serial"));
-		columns.add(new PropertyColumn(new Model("TYPE"), "type"));
+		columns.add(new PropertyColumn(Model.of("MAC"), "mac","mac"));
+		columns.add(new PropertyColumn(Model.of("SN"), "serial","serial"));
+		columns.add(new PropertyColumn(Model.of("Type"), "type","type"));
 
 		columns.add(new PropertyColumn(new Model(""), "") {
 

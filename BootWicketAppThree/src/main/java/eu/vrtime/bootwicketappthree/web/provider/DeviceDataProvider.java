@@ -2,9 +2,11 @@ package eu.vrtime.bootwicketappthree.web.provider;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -20,7 +22,7 @@ import eu.vrtime.bootwicketappthree.repositories.DeviceRepository;
  *
  */
 
-public class DeviceDataProvider extends SortableDataProvider<Device, String> {
+public class DeviceDataProvider extends SortableDataProvider<Device,String> {
 
 	/**
 	 * 
@@ -35,7 +37,7 @@ public class DeviceDataProvider extends SortableDataProvider<Device, String> {
 	public DeviceDataProvider(DeviceRepository repo, DeviceSpecification filter) {
 		this.repo = repo;
 		this.filter = filter;
-
+		setSort("mac", SortOrder.ASCENDING);
 	}
 
 	private List<Device> find() {
@@ -49,6 +51,16 @@ public class DeviceDataProvider extends SortableDataProvider<Device, String> {
 	@Override
 	public Iterator<Device> iterator(long first, long count) {
 		List<Device> devices = find();
+		
+		Collections.sort(devices, new Comparator<Device>() {
+			
+			public int compare(Device d1, Device d2) {
+				int dir = getSort().isAscending() ? 1 : -1;
+						
+				return dir * (d1.getMac().compareTo(d2.getMac()));
+			}
+		});
+		
 		return devices.iterator();
 	}
 
