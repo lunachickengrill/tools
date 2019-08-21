@@ -20,7 +20,7 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 @SpringBootTest
 public class SpElStuffApplicationTests {
 
-	public static final String TEMPLATE = "<root>" +"\n"
+	public static final String XML_TEMPLATE = "<root>" +"\n"
 										+ "<firstname>#{[Person].firstname}</firstname>" +"\n"
 										+ "<lastname>#{[Person].lastname}</lastname>" +"\n"
 										+ "<value>#{[Person].value}</value>" +"\n"
@@ -44,7 +44,7 @@ public class SpElStuffApplicationTests {
 	private ExternalProperty extProp = new ExternalProperty("eclipse", "jUnit test");
 
 	@Autowired
-	private TemplateSpelParser templateParser;
+	private TemplateSpelParserServiceImpl templateParser;
 
 	@Test
 	public void contextLoads() {
@@ -83,7 +83,7 @@ public class SpElStuffApplicationTests {
 		TemplateParserContext templateContext = new TemplateParserContext();
 
 		ExpressionParser parser = new SpelExpressionParser();
-		Expression exp = parser.parseExpression(TEMPLATE, templateContext);
+		Expression exp = parser.parseExpression(XML_TEMPLATE, templateContext);
 
 		String evaluated = exp.getValue(evalContext, String.class);
 
@@ -91,20 +91,20 @@ public class SpElStuffApplicationTests {
 	}
 
 	@Test
-	public void testSpelParserService() {
+	public void testSpelParserServiceXML() {
 		
-		System.out.println("SOURCE TEMPLATE: " + "\n" + TEMPLATE + "\n");
+		System.out.println("SOURCE TEMPLATE: " + "\n" + XML_TEMPLATE + "\n");
 
 		Map<String, Object> contextMap = new HashMap<>();
 		
 		contextMap.put(person.getClass().getSimpleName(), person);
-		String evaluatedTemplate = templateParser.evaluateTemplate(contextMap, TEMPLATE);
+		String evaluatedTemplate = templateParser.parse(contextMap, XML_TEMPLATE);
 
 		System.out.println("EVALUATED TEMPLATE: " + "\n" +  evaluatedTemplate + "\n");
 	}
 
 	@Test
-	public void testSpelParserServiceTextTemplate() {
+	public void testSpelParserServiceText() {
 
 		System.out.println("SOURCE TEMPLATE: " + "\n" + TEXT_TEMPLATE + "\n");
 
@@ -113,7 +113,7 @@ public class SpElStuffApplicationTests {
 		contextMap.put(person.getClass().getSimpleName(), person);
 		contextMap.put(extProp.getClass().getSimpleName(), extProp);
 
-		String evaluatedTemplate = templateParser.evaluateTemplate(contextMap, TEXT_TEMPLATE);
+		String evaluatedTemplate = templateParser.parse(contextMap, TEXT_TEMPLATE);
 
 		System.out.println("EVALUATED TEMPLATE: " + "\n" + evaluatedTemplate + "\n");
 	}
