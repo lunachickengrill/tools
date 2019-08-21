@@ -22,7 +22,7 @@ public class SpElStuffApplication implements CommandLineRunner {
 			+ "</root>";
 
 	@Autowired
-	private TemplateSpelParser spelParser;
+	private TemplateSpelParserServiceImpl spelParser;
 
 	private Map<String, Object> objectMap = new HashMap<String, Object>();
 
@@ -36,7 +36,7 @@ public class SpElStuffApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 			
 		objectMap.put(Person.class.getSimpleName(), new Person("Tom", "Turbo", "is supa", 41, "asdf@asdf.com"));
-		String evaluatedTemplate = spelParser.evaluateTemplate(objectMap, TEMPLATE);
+		String evaluatedTemplate = spelParser.parse(objectMap, TEMPLATE);
 
 		
 	}
