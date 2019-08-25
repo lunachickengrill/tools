@@ -7,6 +7,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.vrtime.bootwicketappthree.model.AppUser;
 import eu.vrtime.bootwicketappthree.web.auth.AppAuthenticatedWebSession;
@@ -17,37 +19,29 @@ public class AppUserPanel extends Panel {
 	 * 
 	 */
 	private static final long serialVersionUID = 382955354848113614L;
-		
+
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+
 	private AppUser appUser;
-	private IModel<String> firstname;
-	private IModel<String> lastname;
-	
+	private IModel<String> user;
+
 	private AppAuthenticatedWebSession session = (AppAuthenticatedWebSession) AuthenticatedWebSession.get();
 
 	public AppUserPanel(final String id) {
 		super(id);
 		session = (AppAuthenticatedWebSession) AuthenticatedWebSession.get();
+
 	}
 
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		
-		add(new Label("lblFirstname", firstname));
-		add(new Label("lblLastname", lastname));
-
-	
+		if (session.isSignedIn()) {
+			appUser = session.getAppUser();
+			add(new Label("lblUser", appUser.getUsername()));
+		}
+		logger.info("Session user " + appUser.getUsername() + " is signed in");
 
 	}
-
-	@Override
-	protected void onConfigure() {
-		super.onConfigure();
-		this.firstname = Model.of(new String(session.getAppUser().getFirstName()));
-		this.lastname = Model.of(new String(session.getAppUser().getLastName()));
-		
-	}
-	
-	
 
 }
