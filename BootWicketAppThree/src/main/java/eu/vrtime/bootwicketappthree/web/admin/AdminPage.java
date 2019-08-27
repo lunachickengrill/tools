@@ -6,6 +6,8 @@ import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.vrtime.bootwicketappthree.model.AppUser;
 import eu.vrtime.bootwicketappthree.web.TestPanel;
@@ -17,6 +19,8 @@ public class AdminPage extends WebPage {
 	/**
 	 * 
 	 */
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	private static final long serialVersionUID = -854204171725844717L;
 	private static final String PANEL_ID = "panel";
 	private static final String LOGOUTLINK_ID = "logout";
@@ -38,7 +42,7 @@ public class AdminPage extends WebPage {
 		linkPanel = new LinkPanel("linkPanel", this);
 		add(linkPanel);
 		add(current);
-//		add(new AppUserPanel("userInfoPanel"));
+		add(new UserInfoPanel("userInfoPanel"));
 
 	}
 
@@ -54,6 +58,8 @@ public class AdminPage extends WebPage {
 		if(AuthenticatedWebSession.get().isSignedIn()) {
 			this.session = (AppAuthenticatedWebSession) AuthenticatedWebSession.get();
 		}
+		
+		logger.info("AdminPage configured");
 	}
 	
 

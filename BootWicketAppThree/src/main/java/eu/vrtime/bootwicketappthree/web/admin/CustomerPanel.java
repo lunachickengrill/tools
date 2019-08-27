@@ -58,8 +58,9 @@ public class CustomerPanel extends Panel {
 	private PageableListView<Customer> listView;
 	private ModalWindow createCustomerWindow;
 
-//	private IModel customerModel = new CustomerModel(customerRepository, customerSpec);
 
+//	Use LoadableCustomerModel instead
+//	
 //	private IModel<List<Customer>> customerListModel = new LoadableDetachableModel<List<Customer>>() {
 //
 //		@Override
@@ -83,16 +84,15 @@ public class CustomerPanel extends Panel {
 
 	@Override
 	protected void onInitialize() {
-		// TODO Auto-generated method stub
+
 		super.onInitialize();
 		add(feedbackPanel);
 		add(createCustomerForm(FORM_ID));
 		listView = createListView(CUSTOMERLIST_ID);
 		add(listView);
 		add(new PagingNavigator(NAVIGATOR_ID, listView));
-		
-		// should be refactored. Should be in AdminPage but only visible if Customer Panel is active.
 		add(addCreateCustomerWindow(createCustomerWindow, customerRepository));
+		add(createCustomerLink(LINK_CREATE_CUSTOMER, createCustomerWindow));
 
 	}
 
@@ -162,20 +162,35 @@ public class CustomerPanel extends Panel {
 		window.setTitle(Model.of("Create Customer"));
 		window.setCssClassName(ModalWindow.CSS_CLASS_BLUE);
 
-		add(new AjaxLink<Void>(LINK_CREATE_CUSTOMER) {
-			private static final long serialVersionUID = 5218474796306160615L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				createCustomerWindow.show(target);
-
-			}
-
-		});
+//		add(new AjaxLink<Void>(LINK_CREATE_CUSTOMER) {
+//			private static final long serialVersionUID = 5218474796306160615L;
+//
+//			@Override
+//			public void onClick(AjaxRequestTarget target) {
+//				createCustomerWindow.show(target);
+//
+//			}
+//
+//		});
 
 		window.setOutputMarkupId(true);
 
 		return window;
 
+	}
+	
+	private AjaxLink<Void> createCustomerLink(String id, ModalWindow window) {
+		
+		AjaxLink<Void> link = new AjaxLink<Void>(id) {
+			private static final long serialVersionUID = 5218474796306160615L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				window.show(target);
+				
+			}		
+		};
+		
+		return link;
 	}
 }
