@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import eu.vrtime.bootwicketappthree.model.AppUser;
 import eu.vrtime.bootwicketappthree.web.auth.AppAuthenticatedWebSession;
 
-public class AppUserPanel extends Panel {
+public class UserInfoPanel extends Panel {
 
 	/**
 	 * 
@@ -21,13 +21,12 @@ public class AppUserPanel extends Panel {
 	private static final long serialVersionUID = 382955354848113614L;
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
-
 	private AppUser appUser;
-	private IModel<String> user;
-
 	private AppAuthenticatedWebSession session = (AppAuthenticatedWebSession) AuthenticatedWebSession.get();
+	private Label lblUserFirstName;
+	private Label lblUserLastName;
 
-	public AppUserPanel(final String id) {
+	public UserInfoPanel(final String id) {
 		super(id);
 		session = (AppAuthenticatedWebSession) AuthenticatedWebSession.get();
 
@@ -36,12 +35,21 @@ public class AppUserPanel extends Panel {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
+		lblUserFirstName = new Label("lblUserFirstName");
+		lblUserLastName = new Label("lblUserLastName");
+		add(lblUserFirstName);
+		add(lblUserLastName);
+
+	}
+
+	@Override
+	protected void onBeforeRender() {
+		super.onBeforeRender();
 		if (session.isSignedIn()) {
 			appUser = session.getAppUser();
-			add(new Label("lblUser", appUser.getUsername()));
+			lblUserFirstName.setDefaultModel(new PropertyModel<AppUser>(appUser, "firstName"));
+			lblUserLastName.setDefaultModel(new PropertyModel<AppUser>(appUser, "lastName"));
 		}
-		logger.info("Session user " + appUser.getUsername() + " is signed in");
-
 	}
 
 }

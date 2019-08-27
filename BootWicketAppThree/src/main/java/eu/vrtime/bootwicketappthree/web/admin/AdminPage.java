@@ -42,7 +42,7 @@ public class AdminPage extends WebPage {
 		linkPanel = new LinkPanel("linkPanel", this);
 		add(linkPanel);
 		add(current);
-//		add(new AppUserPanel("userInfoPanel"));
+		add(new UserInfoPanel("userInfoPanel"));
 
 	}
 
