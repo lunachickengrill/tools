@@ -11,6 +11,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractToolbar;
@@ -69,7 +70,7 @@ public class DevicePanel extends Panel {
 	private FeedbackPanel feedback;
 	private DataTable deviceTable;
 	private DeviceSpecification specification = new DeviceSpecification();
-	
+
 	private String deviceMac = new String();
 	private String deviceSn = new String();
 	private String deviceType = new String();
@@ -96,7 +97,7 @@ public class DevicePanel extends Panel {
 		CompoundPropertyModel<DeviceSpecification> model = new CompoundPropertyModel<DeviceSpecification>(
 				specification);
 		setDefaultModel(model);
-		
+
 		TextField<String> macField = new TextField<>(FORM_MAC_ID);
 		macField.add(new AttributeModifier("placeholder", "00:00:00:00:00:00"));
 		form.add(macField);
@@ -104,7 +105,7 @@ public class DevicePanel extends Panel {
 		TextField<String> snField = new TextField<>(FORM_SN_ID);
 		snField.add(new AttributeModifier("placeholder", "SN0123456789"));
 		form.add(snField);
-		
+
 		form.add(createDeviceTypeChoice(FORM_TYPE_ID));
 
 		form.add(new Button(FORM_BTN_ID) {
@@ -116,12 +117,9 @@ public class DevicePanel extends Panel {
 
 				super.onSubmit();
 				deviceTable.setVisible(true);
-
-				
 			}
-
 		});
-			
+
 		return form;
 	}
 
@@ -133,7 +131,6 @@ public class DevicePanel extends Panel {
 			protected List<String> load() {
 				return deviceRepo.listDeviceTypes();
 			}
-
 		};
 
 		return new DropDownChoice<>(id, deviceTypes);
@@ -144,11 +141,13 @@ public class DevicePanel extends Panel {
 
 		final List<IColumn<Device, String>> columns = new ArrayList<>();
 
-		columns.add(new PropertyColumn(Model.of("MAC"), "mac","mac"));
-		columns.add(new PropertyColumn(Model.of("SN"), "serial","serial"));
-		columns.add(new PropertyColumn(Model.of("Type"), "type","type"));
+		columns.add(new PropertyColumn<>(Model.of("MAC"), "mac", "mac"));
+		columns.add(new PropertyColumn<>(Model.of("SN"), "serial", "serial"));
+		columns.add(new PropertyColumn<>(Model.of("Type"), "type", "type"));
 
 		columns.add(new PropertyColumn(new Model(""), "") {
+
+			private static final long serialVersionUID = -7813266441720935690L;
 
 			@Override
 			public void populateItem(Item item, String componentId, IModel rowModel) {
@@ -156,11 +155,9 @@ public class DevicePanel extends Panel {
 			}
 
 		});
-		DeviceDataProvider dataProvider = new DeviceDataProvider(deviceRepo,specification);
-//		deviceTable = new DataTable<>(id, columns, new DeviceDataProvider(deviceRepo, specification), rows);
-//		deviceTable.addTopToolbar(new HeadersToolbar<>(deviceTable, null));
-		
-		deviceTable = new DataTable<>(id, columns, dataProvider,rows);
+		DeviceDataProvider dataProvider = new DeviceDataProvider(deviceRepo, specification);
+
+		deviceTable = new DataTable<>(id, columns, dataProvider, rows);
 		deviceTable.addTopToolbar(new HeadersToolbar<>(deviceTable, dataProvider));
 		deviceTable.addBottomToolbar(new NavigationToolbar(deviceTable));
 		deviceTable.setVisible(false);
@@ -172,6 +169,6 @@ public class DevicePanel extends Panel {
 		// to be implemented
 		// should create the column with the edit link
 		return null;
-		}
+	}
 
 }

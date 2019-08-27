@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.Assert;
 
 import eu.vrtime.bootwicketappthree.model.AppUser;
+import eu.vrtime.bootwicketappthree.repositories.AppRoles;
 import eu.vrtime.bootwicketappthree.repositories.AppUserRepository;
 
 public class AppAuthenticatedWebSession extends AuthenticatedWebSession {
@@ -65,7 +66,19 @@ public class AppAuthenticatedWebSession extends AuthenticatedWebSession {
 
 	@Override
 	public Roles getRoles() {
-		return new Roles();
+		Roles roles = new Roles();
+
+		if (isSignedIn()) {
+			roles.add(AppRoles.SIGNED_IN.toString());
+		}
+		roles.add(appUser.getRole().toString());
+
+		return roles;
+
+	}
+
+	public boolean isAdmin() {
+		return appUser.getRole().equals(AppRoles.ADMIN);
 	}
 
 	public AppUser getAppUser() {
