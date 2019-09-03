@@ -11,7 +11,11 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+<<<<<<< HEAD
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+=======
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+>>>>>>> branch 'master' of https://github.com/lunachickengrill/JavaStuff.git
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractToolbar;
@@ -71,9 +75,15 @@ public class DevicePanel extends Panel {
 	private DataTable<Device, String> deviceTable;
 	private DeviceSpecification specification = new DeviceSpecification();
 
+<<<<<<< HEAD
 //	private String deviceMac = new String();
 //	private String deviceSn = new String();
 //	private String deviceType = new String();
+=======
+	private String deviceMac = new String();
+	private String deviceSn = new String();
+	private String deviceType = new String();
+>>>>>>> branch 'master' of https://github.com/lunachickengrill/JavaStuff.git
 
 	public DevicePanel(final String id) {
 		super(id);
@@ -117,9 +127,7 @@ public class DevicePanel extends Panel {
 
 				super.onSubmit();
 				deviceTable.setVisible(true);
-
 			}
-
 		});
 
 		return form;
@@ -133,7 +141,6 @@ public class DevicePanel extends Panel {
 			protected List<String> load() {
 				return deviceRepo.listDeviceTypes();
 			}
-
 		};
 
 		return new DropDownChoice<>(id, deviceTypes);
@@ -144,11 +151,13 @@ public class DevicePanel extends Panel {
 
 		final List<IColumn<Device, String>> columns = new ArrayList<>();
 
-		columns.add(new PropertyColumn(new Model("MAC"), "mac"));
-		columns.add(new PropertyColumn(new Model("SERIAL"), "serial"));
-		columns.add(new PropertyColumn(new Model("TYPE"), "type"));
+		columns.add(new PropertyColumn<>(Model.of("MAC"), "mac", "mac"));
+		columns.add(new PropertyColumn<>(Model.of("SN"), "serial", "serial"));
+		columns.add(new PropertyColumn<>(Model.of("Type"), "type", "type"));
 
 		columns.add(new PropertyColumn(new Model(""), "") {
+
+			private static final long serialVersionUID = -7813266441720935690L;
 
 			@Override
 			public void populateItem(Item item, String componentId, IModel rowModel) {

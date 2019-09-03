@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import eu.vrtime.bootwicketappthree.model.AppUser;
 import eu.vrtime.bootwicketappthree.model.Customer;
 import eu.vrtime.bootwicketappthree.model.Device;
+import eu.vrtime.bootwicketappthree.repositories.AppRoles;
 import eu.vrtime.bootwicketappthree.repositories.AppUserRepository;
 import eu.vrtime.bootwicketappthree.repositories.CustomerRepository;
 import eu.vrtime.bootwicketappthree.repositories.DeviceRepository;
@@ -42,8 +43,8 @@ public class AutoSetupService {
 	private void createUser() {
 		Set<AppUser> users = new HashSet<>();
 
-		users.add(new AppUser("test", "lgs123"));
-		users.add(new AppUser("tom", "turbo", "tom", "lgs123"));
+		users.add(new AppUser("tom", "tester", "test", "lgs123", AppRoles.USER));
+		users.add(new AppUser("tom", "turbo", "tom", "lgs123", AppRoles.ADMIN));
 
 		userRepo.saveAll(users);
 	}
@@ -79,4 +80,3 @@ public class AutoSetupService {
 	}
 
 }
-

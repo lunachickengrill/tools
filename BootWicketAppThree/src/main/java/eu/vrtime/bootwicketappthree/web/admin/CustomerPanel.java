@@ -8,6 +8,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -32,6 +33,7 @@ import eu.vrtime.bootwicketappthree.model.AppUser;
 import eu.vrtime.bootwicketappthree.model.Customer;
 import eu.vrtime.bootwicketappthree.model.CustomerSpecification;
 import eu.vrtime.bootwicketappthree.repositories.CustomerRepository;
+
 
 public class CustomerPanel extends Panel {
 
@@ -162,6 +164,9 @@ public class CustomerPanel extends Panel {
 		window.setCookieName(this.getClass().getSimpleName());
 		window.setTitle(Model.of("Add a new Customer"));
 		window.setCssClassName(ModalWindow.CSS_CLASS_BLUE);
+		window.setInitialWidth(400);
+		window.setInitialHeight(400);
+
 		window.setOutputMarkupId(true);
 
 		return window;
