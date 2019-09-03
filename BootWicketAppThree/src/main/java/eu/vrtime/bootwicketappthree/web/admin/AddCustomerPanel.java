@@ -12,7 +12,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import eu.vrtime.bootwicketappthree.model.Customer;
 import eu.vrtime.bootwicketappthree.repositories.CustomerRepository;
 
-public class CreateCustomerPanel extends Panel {
+public class AddCustomerPanel extends Panel {
 
 	private static final long serialVersionUID = -4136949383848509483L;
 	
@@ -31,7 +31,7 @@ public class CreateCustomerPanel extends Panel {
 	
 	private FeedbackPanel feedback;
 
-	public CreateCustomerPanel(final String id,  CustomerRepository repository) {
+	public AddCustomerPanel(final String id,  CustomerRepository repository) {
 		super(id);
 
 		this.repository = repository;

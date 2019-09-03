@@ -8,6 +8,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 
 public class EditLinkPanel extends Panel {
 
@@ -37,5 +38,14 @@ public class EditLinkPanel extends Panel {
 //		link.add(new Label("label", "edit"));
 		add(link);
 	}
+
+	@Override
+	protected void onConfigure() {
+		super.onConfigure();
+		
+		
+	}
+	
+	
 
 }

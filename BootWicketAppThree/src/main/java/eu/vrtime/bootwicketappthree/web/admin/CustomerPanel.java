@@ -13,6 +13,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.list.PageableListView;
@@ -53,11 +54,10 @@ public class CustomerPanel extends Panel {
 	private static final String NAVIGATOR_ID = "navigator";
 
 	private FeedbackPanel feedbackPanel;
-	private Customer customer;
+//	private Customer customer;
 	private CustomerSpecification customerSpec = new CustomerSpecification();
 	private PageableListView<Customer> listView;
 	private ModalWindow createCustomerWindow;
-
 
 //	Use LoadableCustomerModel instead
 //	
@@ -77,7 +77,7 @@ public class CustomerPanel extends Panel {
 	public CustomerPanel(String id) {
 		super(id);
 		feedbackPanel = new FeedbackPanel(FEEDBACKPANEL_ID);
-		customer = new Customer();
+//		customer = new Customer();
 		createCustomerWindow = new ModalWindow("modalWindow");
 
 	}
@@ -127,7 +127,7 @@ public class CustomerPanel extends Panel {
 			}
 
 		});
-		
+
 		return form;
 
 	}
@@ -147,6 +147,7 @@ public class CustomerPanel extends Panel {
 				item.add(new Label("firstName", Model.of(cust.getFirstName())));
 				item.add(new Label("lastName", Model.of(cust.getLastName())));
 				item.add(new EditLinkPanel("editLink"));
+
 			}
 
 		};
@@ -156,41 +157,54 @@ public class CustomerPanel extends Panel {
 
 	private ModalWindow addCreateCustomerWindow(final ModalWindow window, final CustomerRepository repository) {
 
-		CreateCustomerPanel createCustomerPanel = new CreateCustomerPanel(window.getContentId(), repository);
-		window.setContent(createCustomerPanel);
+		AddCustomerPanel addCustomerPanel = new AddCustomerPanel(window.getContentId(), repository);
+		window.setContent(addCustomerPanel);
 		window.setCookieName(this.getClass().getSimpleName());
-		window.setTitle(Model.of("Create Customer"));
+		window.setTitle(Model.of("Add a new Customer"));
 		window.setCssClassName(ModalWindow.CSS_CLASS_BLUE);
-
-//		add(new AjaxLink<Void>(LINK_CREATE_CUSTOMER) {
-//			private static final long serialVersionUID = 5218474796306160615L;
-//
-//			@Override
-//			public void onClick(AjaxRequestTarget target) {
-//				createCustomerWindow.show(target);
-//
-//			}
-//
-//		});
-
 		window.setOutputMarkupId(true);
 
 		return window;
 
 	}
-	
+
 	private AjaxLink<Void> createCustomerLink(String id, ModalWindow window) {
-		
+
 		AjaxLink<Void> link = new AjaxLink<Void>(id) {
 			private static final long serialVersionUID = 5218474796306160615L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				window.show(target);
-				
-			}		
+
+			}
 		};
-		
+
 		return link;
+	}
+
+	private ModalWindow addEditCustomerWindow(final ModalWindow window, IModel<Customer> customerModel) {
+
+		EditCustomerPanel editCustomerPanel = new EditCustomerPanel(window.getContentId());
+
+		return window;
+	}
+
+	private AjaxLink<Void> editCustomerLink(String id, ModalWindow window, IModel<Customer> customerModel) {
+
+
+	}
+
+	private IModel<Customer> createCustomerModel(final Long oid) {
+		IModel<Customer> customerModel = new LoadableDetachableModel<Customer>() {
+
+			@Override
+			protected Customer load() {
+				return oid != null ? customerRepository.findByOid(oid).get() : new Customer();
+			}
+
+		};
+
+		return customerModel;
 	}
 }
