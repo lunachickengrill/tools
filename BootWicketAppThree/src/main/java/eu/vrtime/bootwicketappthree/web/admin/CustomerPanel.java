@@ -34,7 +34,6 @@ import eu.vrtime.bootwicketappthree.model.Customer;
 import eu.vrtime.bootwicketappthree.model.CustomerSpecification;
 import eu.vrtime.bootwicketappthree.repositories.CustomerRepository;
 
-
 public class CustomerPanel extends Panel {
 
 	/**
@@ -60,6 +59,7 @@ public class CustomerPanel extends Panel {
 	private CustomerSpecification customerSpec = new CustomerSpecification();
 	private PageableListView<Customer> listView;
 	private ModalWindow createCustomerWindow;
+	private ModalWindow editCustomerWindow;
 
 //	Use LoadableCustomerModel instead
 //	
@@ -81,6 +81,7 @@ public class CustomerPanel extends Panel {
 		feedbackPanel = new FeedbackPanel(FEEDBACKPANEL_ID);
 //		customer = new Customer();
 		createCustomerWindow = new ModalWindow("modalWindow");
+		editCustomerWindow = new ModalWindow("editCustomerWindow");
 
 	}
 
@@ -148,7 +149,8 @@ public class CustomerPanel extends Panel {
 				item.add(new Label("customerId", Model.of(cust.getCustomerId())));
 				item.add(new Label("firstName", Model.of(cust.getFirstName())));
 				item.add(new Label("lastName", Model.of(cust.getLastName())));
-				item.add(new EditLinkPanel("editLink"));
+//				item.add(new EditLinkPanel("editLink"));
+				
 
 			}
 
@@ -188,15 +190,23 @@ public class CustomerPanel extends Panel {
 		return link;
 	}
 
-	private ModalWindow addEditCustomerWindow(final ModalWindow window, IModel<Customer> customerModel) {
-
-		EditCustomerPanel editCustomerPanel = new EditCustomerPanel(window.getContentId());
-
-		return window;
-	}
-
 	private AjaxLink<Void> editCustomerLink(String id, ModalWindow window, IModel<Customer> customerModel) {
+		EditCustomerPanel editCustomerPanel = new EditCustomerPanel(id, customerModel);
+		window.setContent(editCustomerPanel);
+		window.setCookieName(this.getClass().getSimpleName());
 
+		AjaxLink<Void> link = new AjaxLink<Void>(id) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				window.show(target);
+
+			}
+
+		};
+
+		return link;
 
 	}
 
