@@ -11,11 +11,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-<<<<<<< HEAD
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
-=======
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
->>>>>>> branch 'master' of https://github.com/lunachickengrill/JavaStuff.git
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractToolbar;
@@ -75,15 +72,15 @@ public class DevicePanel extends Panel {
 	private DataTable<Device, String> deviceTable;
 	private DeviceSpecification specification = new DeviceSpecification();
 
-<<<<<<< HEAD
+
 //	private String deviceMac = new String();
 //	private String deviceSn = new String();
 //	private String deviceType = new String();
-=======
+
 	private String deviceMac = new String();
 	private String deviceSn = new String();
 	private String deviceType = new String();
->>>>>>> branch 'master' of https://github.com/lunachickengrill/JavaStuff.git
+
 
 	public DevicePanel(final String id) {
 		super(id);

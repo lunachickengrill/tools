@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.vrtime.bootwicketappthree.model.AppUser;
+import eu.vrtime.bootwicketappthree.repositories.AppRoles;
 import eu.vrtime.bootwicketappthree.web.TestPanel;
 import eu.vrtime.bootwicketappthree.web.auth.AppAuthenticatedWebSession;
 import eu.vrtime.bootwicketappthree.web.login.LoginPage;
@@ -24,7 +25,6 @@ public class AdminPage extends WebPage {
 	
 	private static final long serialVersionUID = -854204171725844717L;
 	private static final String PANEL_ID = "panel";
-	private static final String LOGOUTLINK_ID = "logout";
 	private LinkPanel linkPanel;
 	private Panel customerPanel = new CustomerPanel(PANEL_ID);
 	private Panel devicePanel = new DevicePanel(PANEL_ID);
@@ -60,7 +60,7 @@ public class AdminPage extends WebPage {
 			this.session = (AppAuthenticatedWebSession) AuthenticatedWebSession.get();
 		}
 		
-		logger.info("AdminPage configured");
+		logger.info("AdminPage onConfigure");
 	}
 	
 

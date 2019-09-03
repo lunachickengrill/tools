@@ -25,7 +25,7 @@ public class UserInfoPanel extends Panel {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	private AppUser appUser;
-	private AppAuthenticatedWebSession session = (AppAuthenticatedWebSession) AuthenticatedWebSession.get();
+//	private AppAuthenticatedWebSession session = (AppAuthenticatedWebSession) AuthenticatedWebSession.get();
 	private Label lblUserFirstName;
 	private Label lblUserLastName;
 	private Label lblUserRole;
@@ -50,7 +50,8 @@ public class UserInfoPanel extends Panel {
 	@Override
 	protected void onBeforeRender() {
 		super.onBeforeRender();
-		if (session.isSignedIn()) {
+		if (isVisible()) {
+			AppAuthenticatedWebSession session = (AppAuthenticatedWebSession) AuthenticatedWebSession.get();
 			appUser = session.getAppUser();
 			lblUserFirstName.setDefaultModel(new PropertyModel<AppUser>(appUser, "firstName"));
 			lblUserLastName.setDefaultModel(new PropertyModel<AppUser>(appUser, "lastName"));
@@ -61,7 +62,7 @@ public class UserInfoPanel extends Panel {
 
 	@Override
 	public boolean isVisible() {
-		return session.isAdmin();
+		return AuthenticatedWebSession.get().isSignedIn();
 	}
 
 }

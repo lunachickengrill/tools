@@ -35,7 +35,6 @@ public class EditLinkPanel extends Panel {
 
 		};
 
-//		link.add(new Label("label", "edit"));
 		add(link);
 	}
 

@@ -55,7 +55,6 @@ public class CustomerPanel extends Panel {
 	private static final String NAVIGATOR_ID = "navigator";
 
 	private FeedbackPanel feedbackPanel;
-//	private Customer customer;
 	private CustomerSpecification customerSpec = new CustomerSpecification();
 	private PageableListView<Customer> listView;
 	private ModalWindow createCustomerWindow;
@@ -79,7 +78,6 @@ public class CustomerPanel extends Panel {
 	public CustomerPanel(String id) {
 		super(id);
 		feedbackPanel = new FeedbackPanel(FEEDBACKPANEL_ID);
-//		customer = new Customer();
 		createCustomerWindow = new ModalWindow("modalWindow");
 		editCustomerWindow = new ModalWindow("editCustomerWindow");
 
@@ -96,6 +94,7 @@ public class CustomerPanel extends Panel {
 		add(new PagingNavigator(NAVIGATOR_ID, listView));
 		add(addCreateCustomerWindow(createCustomerWindow, customerRepository));
 		add(createCustomerLink(LINK_CREATE_CUSTOMER, createCustomerWindow));
+		add(editCustomerWindow);
 
 	}
 
@@ -149,8 +148,11 @@ public class CustomerPanel extends Panel {
 				item.add(new Label("customerId", Model.of(cust.getCustomerId())));
 				item.add(new Label("firstName", Model.of(cust.getFirstName())));
 				item.add(new Label("lastName", Model.of(cust.getLastName())));
+				
+//				maybe the better idea
 //				item.add(new EditLinkPanel("editLink"));
 				
+				item.add(editCustomerLink("editLink", editCustomerWindow, createCustomerModel(cust.getId())));
 
 			}
 
@@ -191,15 +193,22 @@ public class CustomerPanel extends Panel {
 	}
 
 	private AjaxLink<Void> editCustomerLink(String id, ModalWindow window, IModel<Customer> customerModel) {
-		EditCustomerPanel editCustomerPanel = new EditCustomerPanel(id, customerModel);
-		window.setContent(editCustomerPanel);
-		window.setCookieName(this.getClass().getSimpleName());
+		
+		
 
 		AjaxLink<Void> link = new AjaxLink<Void>(id) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
+				EditCustomerPanel editCustomerPanel = new EditCustomerPanel(window.getContentId(), customerModel);
+				window.setContent(editCustomerPanel);
+				window.setCookieName(this.getClass().getSimpleName());
+				window.setOutputMarkupId(true);
+				window.setTitle(Model.of("Edit a customer"));
+				window.setCssClassName(ModalWindow.CSS_CLASS_BLUE);
+				window.setInitialWidth(400);
+				window.setInitialHeight(400);
 				window.show(target);
 
 			}
