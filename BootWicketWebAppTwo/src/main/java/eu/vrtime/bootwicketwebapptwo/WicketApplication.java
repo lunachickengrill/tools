@@ -16,6 +16,7 @@ public class WicketApplication extends WebApplication {
 		getComponentInstantiationListeners().add(new SpringComponentInjector(this));
 		mountPage("/admin", AdminPage.class);
 		mountPage("/sandbox", SandboxPage.class);
+		System.out.println("INIT");
 	}
 
 	@Override

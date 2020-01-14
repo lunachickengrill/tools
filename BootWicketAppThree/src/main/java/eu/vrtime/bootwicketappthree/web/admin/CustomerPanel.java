@@ -193,9 +193,7 @@ public class CustomerPanel extends Panel {
 	}
 
 	private AjaxLink<Void> editCustomerLink(String id, ModalWindow window, IModel<Customer> customerModel) {
-		
-		
-
+	
 		AjaxLink<Void> link = new AjaxLink<Void>(id) {
 			private static final long serialVersionUID = 1L;
 
@@ -210,9 +208,7 @@ public class CustomerPanel extends Panel {
 				window.setInitialWidth(400);
 				window.setInitialHeight(400);
 				window.show(target);
-
 			}
-
 		};
 
 		return link;
@@ -221,6 +217,8 @@ public class CustomerPanel extends Panel {
 
 	private IModel<Customer> createCustomerModel(final Long oid) {
 		IModel<Customer> customerModel = new LoadableDetachableModel<Customer>() {
+
+			private static final long serialVersionUID = 5097041297307577352L;
 
 			@Override
 			protected Customer load() {
